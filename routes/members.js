@@ -6,33 +6,31 @@ var config = require('../config/database');
 var Member = require('../models/member.model');
 
 // Load
-/*
 router.get('/', function (req, res, next) {
-	console.log('loading orders.');
 	Order.find({}).exec(function (err, orders) {
 		if(err)
 			console.log('error loading orders.');
 		res.json(orders);
 	});
 });
-*/
+
 // Save
 router.post('/', function (req, res, next) {
 	var newMember = new Member({
-		gym: req.body.gym,
+		// Member Info
+		gymId: req.body.gymId,
 		name: req.body.name,
 		phoneNum: req.body.phoneNum,
-		email: req.body.email,
-		//dateStarted: new  Date(),
-		length: req.body.length,
-		type: req.body.type,
-		cost: req.body.cost,
-		paid: req.body.paid,
-		//datePaid: addToSet(new Date())
+		email: req.body.email
 	});
+	// Membership
+	newMember.startDate = new Date(2016, 1, 3, 1);
+	newMember.endDate = Member.calculateEndDate(newMember.startDate, req.body.length);
+	newMember.type = req.body.type;
+	newMember.cost = req.body.cost;
+	newMember.paid.push({date: new Date(2017,0,1,1), amount: req.body.amount});
+	newMember.debt = Member.calculateDebt(newMember.cost, newMember.paid);
 
-	console.log(newMember);
-	/*
 	Member.addMember(newMember, function (err, member) {
 		if(err)
 			res.json({
@@ -44,9 +42,8 @@ router.post('/', function (req, res, next) {
 			msg: 'New member added.'
 		});
 	});
-	*/
 });
-/*
+
 // Delete
 router.delete('/:id', function (req, res, next) {
 	Order.findOneAndRemove(
@@ -72,5 +69,5 @@ router.put('/:id', function (req, res, next) {
 		res.json(updatetedBook);
 	})
 });
-*/
+
 module.exports = router;
