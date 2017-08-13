@@ -37,12 +37,34 @@ var MemberSchema = mongoose.Schema({
 		date: Date,
 		amount: Number
 	}],
-	debt: Number
+	debt: {
+		type: Number,
+		required: true
+	}
 });
 
 var Member = module.exports = mongoose.model('Member', MemberSchema);
 
-module.exports.addMember = function (newMember, callback) {
+module.exports.addMember = function (userId, req, callback) {
+	var newMember = new Member();
+	var amount = (req.amount)?req.amount:0;
+	// Member Info
+	newMember.userId = userId;
+	newMember.name = req.name;
+	newMember.phoneNum = req.phoneNum;
+	newMember.email = req.email;
+	// Membership
+	if(req.type)
+		newMember.type = req.type;
+	newMember.startDate = new Date(req.sDate);
+	newMember.endDate = new Date(req.eDate);
+	newMember.cost = req.cost;
+	newMember.paid.push({
+		date: new Date(req.sDate), 
+		amount: amount
+	});
+	newMember.debt = req.cost - amount;
+	// Add New Member
 	newMember.save(callback);
 }
 
@@ -53,12 +75,9 @@ module.exports.removeMember = function(userId, memberId, callback){
 
 module.exports.removeMemberPayment = function(userId, memberId, paymentId, callback){
 	var query = {userId: userId, _id: memberId};
-	Member.findOneAndUpdate(query, 
-	{ 
-		$pull: {
-			_id: paymentId
-		}
-	}, callback);
+	var update = { $pull: { paid: { _id: paymentId }}};
+	
+	Member.findOneAndUpdate(query, update, callback);
 }
 
 module.exports.updateMemberInfo = function(userId, memberId, req, callback){
@@ -66,7 +85,7 @@ module.exports.updateMemberInfo = function(userId, memberId, req, callback){
 	var update = {
 		$set: {
 			name: req.name,
-			phone: req.phone,
+			phoneNum: req.phoneNum,
 			email: req.email
 		}
 	};
@@ -75,8 +94,9 @@ module.exports.updateMemberInfo = function(userId, memberId, req, callback){
 	Member.findOneAndUpdate(query, update, options, callback);
 }
 
-module.exports.updateMembership = function(userId, memberId, req, callback){
+module.exports.renewMembership = function(userId, memberId, req, callback){
 	var query = {userId: userId, _id: memberId};
+	var amount = (req.amount)?req.amount:0;
 	var update = {
 		$set: {
 			type: req.type,
@@ -84,6 +104,23 @@ module.exports.updateMembership = function(userId, memberId, req, callback){
 			endDate: new Date(req.eDate),
 			cost: req.cost,
 			debt: req.debt + (req.cost - req.amount)
+		},
+		$push: {
+			paid: {
+				date: req.sDate,
+				amount: amount
+			}
+		}
+	};
+
+	Member.findOneAndUpdate(query, update, callback);
+}
+
+module.exports.makePayment = function(userId, memberId, req, callback){
+	var query = {userId: userId, _id: memberId};
+	var update = {
+		$set: {
+			debt: req.debt - req.amount
 		},
 		$push: {
 			paid: {
@@ -96,32 +133,26 @@ module.exports.updateMembership = function(userId, memberId, req, callback){
 	Member.findOneAndUpdate(query, update, callback);
 }
 
-module.exports.updateMemberPayments = function(userId, memberId, req, callback){
+module.exports.undoPayment = function(userId, memberId, paymentId, req, callback){
+	var newDebt = req.debt - req.amount;
+
 	var query = {userId: userId, _id: memberId};
-	Member.findOneAndUpdate(query, 
-	{ 
-		$push: {
-			paid: {
-				date: req.payDate,
-				amount: req.amount
-			}
-		}
-	}, callback);
+	var update = { 
+		$set: { debt: newDebt },
+		$pull: { paid: { _id: paymentId }}
+	};
+	
+	Member.findOneAndUpdate(query, update, callback);
 }
 
 module.exports.getMember = function(userId, memberId, callback){
 	var query = {userId: userId, _id: memberId};
-	User.findOne(query, callback);
+	Member.findOne(query, callback);
 }
 
-module.exports.getMembers = function(userId, callback){
+module.exports.getMembers = function(userId, criteria, callback){
 	var query = {userId: userId};
-	Member.find(query, callback);
-}
-
-module.exports.calculateDebt = function (cost, paid){
-	var sum = 0;
-	if(paid)
-		paid.forEach(element => { sum += element.amount; });
-	return cost - sum;
+	if(criteria == 1)
+		var sort = { sort: { debt: -1 } };
+	Member.find(query, {}, sort, callback);
 }

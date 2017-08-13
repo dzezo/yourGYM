@@ -5,14 +5,21 @@ var Member = require('../models/member.model');
 
 // Load
 // Load Members
-router.get('/:userId', function (req, res, next) {
-	Member.getMembers(req.params.userId, function (err, members){
+router.get('/:userId/criteria/:criteria', function (req, res, next) {
+
+	var day = 1000*60*60*24;
+	var date1 = new Date("2017-08-14T00:00:00.000Z");
+	var date2 = new Date("2018-08-14T00:00:00.000Z");
+	var date = date2.getTime() - date1.getTime();
+	console.log(Math.round(date/day));
+
+	Member.getMembers(req.params.userId, req.params.criteria, function (err, members){
 		if(err)
 			res.json({ success: false, msg: 'Failed to load members.'});
 		res.json(members);
 	});
 });
-// Load Member
+// Load Member by Id
 router.get('/:userId/member/:memberId', function(req, res, next){
 	Member.getMember(req.params.userId, req.params.memberId, function(err, member){
 		if(err)
@@ -20,36 +27,13 @@ router.get('/:userId/member/:memberId', function(req, res, next){
 				success: false,
 				msg: 'Failed to load member.'
 			});
-		res.json({
-			success: true,
-			member: member
-		});
+		res.json(member);
 	});
 });
 
 // Save
 router.post('/:userId', function (req, res, next) {
-	var newMember = new Member({
-		// Member Info
-		userId: req.params.userId,
-		name: req.body.name,
-		phoneNum: req.body.phoneNum,
-		email: req.body.email
-	});
-	// Membership
-	if(req.body.type)
-		newMember.type = req.body.type;
-	newMember.startDate = new Date(req.body.sDate);
-	newMember.endDate = new Date(req.body.eDate);
-	newMember.cost = req.body.cost;
-	if(req.body.payDate && req.body.amount)
-		newMember.paid.push({
-			date: new Date(req.body.payDate), 
-			amount: req.body.amount
-		});
-	newMember.debt = Member.calculateDebt(newMember.cost, newMember.paid);
-
-	Member.addMember(newMember, function (err, member) {
+	Member.addMember(req.params.userId, req.body, function (err, member) {
 		if(err)
 			res.json({
 				success: false,
@@ -79,7 +63,7 @@ router.delete('/:userId/member/:memberId', function (req, res, next) {
 });
 // Delete Payment Log
 router.delete('/:userId/member/:memberId/payment/:paymentId', function (req, res, next) {
-	Member.removeMember(req.params.userId, req.params.memberId, req.params.paymentId, function(err, member){
+	Member.removeMemberPayment(req.params.userId, req.params.memberId, req.params.paymentId, function(err, member){
 		if(err)
 			res.json({
 				success: false,
@@ -93,20 +77,6 @@ router.delete('/:userId/member/:memberId/payment/:paymentId', function (req, res
 });
 
 // Update
-// Membership Update 
-router.put('/:userId/membership/:memberId', function (req, res, next) {
-	Member.updateMembership(req.params.userId, req.params.memberId, req.body, function(err, updatedMember){
-		if(err)
-			res.json({
-				success: false,
-				msg: 'Failed to update membership information.'
-			});
-		res.json({
-			success: true,
-			msg: updatedMember.name + ' membership is now updated.'
-		});
-	});
-});
 // Member Info Update
 router.put('/:userId/memberinfo/:memberId', function (req, res, next) {
 	Member.updateMemberInfo(req.params.userId, req.params.memberId, req.body, function(err, updatedMember){
@@ -121,9 +91,25 @@ router.put('/:userId/memberinfo/:memberId', function (req, res, next) {
 		});
 	});
 });
-// Member Payment Update
-router.put('/:userId/memberpaid/:memberId', function (req, res, next) {
-	Member.updateMemberPayments(req.params.userId, req.params.memberId, req.body, function(err, updatedMember){
+// Membership Renewal 
+router.put('/:userId/renew/:memberId', function (req, res, next) {
+	Member.renewMembership(req.params.userId, req.params.memberId, req.body, function(err, updatedMember){
+		if(err)
+			res.json({
+				success: false,
+				msg: 'Failed to renew membership.'
+			});
+		res.json({
+			success: true,
+			msg: updatedMember.name + ' membership is now renewed.'
+		});
+	});
+});
+
+// Member Payment
+// Member Make Payment
+router.put('/:userId/pay/:memberId', function (req, res, next) {
+	Member.makePayment(req.params.userId, req.params.memberId, req.body, function(err, updatedMember){
 		if(err)
 			res.json({
 				success: false,
@@ -132,6 +118,20 @@ router.put('/:userId/memberpaid/:memberId', function (req, res, next) {
 		res.json({
 			success: true,
 			msg: updatedMember.name + ' payment logged.'
+		});
+	});
+});
+// Member Cancel Payment
+router.put('/:userId/undopaid/:memberId/payment/:paymentId', function (req, res, next) {
+	Member.undoPayment(req.params.userId, req.params.memberId, req.params.paymentId, req.body, function(err, updatedMember){
+		if(err)
+			res.json({
+				success: false,
+				msg: 'Failed to undo the payment.'
+			});
+		res.json({
+			success: true,
+			msg: updatedMember.name + ' payment undone.'
 		});
 	});
 });
