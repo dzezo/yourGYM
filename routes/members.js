@@ -1,16 +1,29 @@
 var express = require('express');
 var router = express.Router();
-var passport = require('passport');
-
 var config = require('../config/database');
 var Member = require('../models/member.model');
 
 // Load
+// Load Members
 router.get('/:userId', function (req, res, next) {
 	Member.getMembers(req.params.userId, function (err, members){
 		if(err)
 			res.json({ success: false, msg: 'Failed to load members.'});
 		res.json(members);
+	});
+});
+// Load Member
+router.get('/:userId/member/:memberId', function(req, res, next){
+	Member.getMember(req.params.userId, req.params.memberId, function(err, member){
+		if(err)
+			res.json({
+				success: false,
+				msg: 'Failed to load member.'
+			});
+		res.json({
+			success: true,
+			member: member
+		});
 	});
 });
 
@@ -64,7 +77,6 @@ router.delete('/:userId/member/:memberId', function (req, res, next) {
 		});
 	});
 });
-
 // Delete Payment Log
 
 
@@ -75,7 +87,21 @@ router.put('/:userId/membership/:memberId', function (req, res, next) {
 		if(err)
 			res.json({
 				success: false,
-				msg: 'Failed to update member.'
+				msg: 'Failed to update membership information.'
+			});
+		res.json({
+			success: true,
+			msg: updatedMember.name + ' membership is now updated.'
+		});
+	});
+});
+// Member Info Update
+router.put('/:userId/memberinfo/:memberId', function (req, res, next) {
+	Member.updateMemberInfo(req.params.userId, req.params.memberId, req.body, function(err, updatedMember){
+		if(err)
+			res.json({
+				success: false,
+				msg: 'Failed to update member information.'
 			});
 		res.json({
 			success: true,
@@ -83,9 +109,19 @@ router.put('/:userId/membership/:memberId', function (req, res, next) {
 		});
 	});
 });
-
-// Member Info Update
-
 // Member Payment Update
+router.put('/:userId/memberpaid/:memberId', function (req, res, next) {
+	Member.updateMemberPaid(req.params.userId, req.params.memberId, req.body, function(err, updatedMember){
+		if(err)
+			res.json({
+				success: false,
+				msg: 'Failed to log the payment.'
+			});
+		res.json({
+			success: true,
+			msg: updatedMember.name + ' payment logged.'
+		});
+	});
+});
 
 module.exports = router;

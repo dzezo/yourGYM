@@ -51,24 +51,54 @@ module.exports.removeMember = function(userId, memberId, callback){
 	Member.findOneAndRemove(query, callback);
 }
 
+module.exports.updateMemberInfo = function(userId, memberId, req, callback){
+	var query = {userId: userId, _id: memberId}
+	Member.findOneAndUpdate(query, 
+	{ 
+		$set: {
+			name: req.name,
+			phone: req.phone,
+			email: req.email
+		}
+	}, callback);
+}
+
 module.exports.updateMembership = function(userId, memberId, req, callback){
 	var query = {userId: userId, _id: memberId}
 	Member.findOneAndUpdate(query, 
 	{ 
 		$set: {
-		type: req.type,
-		startDate: new Date(req.sDate),
-		endDate: new Date(req.eDate),
-		cost: req.cost,
-		debt: req.cost - req.amount
+			type: req.type,
+			startDate: new Date(req.sDate),
+			endDate: new Date(req.eDate),
+			cost: req.cost,
+			debt: req.debt + (req.cost - req.amount)
 		},
 		$push: {
 			paid: {
 				date: req.payDate,
 				amount: req.amount
 			}
-		},
+		}
 	}, callback);
+}
+
+module.exports.updateMemberPaid = function(userId, memberId, req, callback){
+	var query = {userId: userId, _id: memberId}
+	Member.findOneAndUpdate(query, 
+	{ 
+		$push: {
+			paid: {
+				date: req.payDate,
+				amount: req.amount
+			}
+		}
+	}, callback);
+}
+
+module.exports.getMember = function(userId, memberId, callback){
+	var query = {userId: userId, _id: memberId}
+	User.findOne(query, callback);
 }
 
 module.exports.getMembers = function(userId, callback){
