@@ -4,9 +4,8 @@ var config = require('../config/database');
 // Member Schema
 var MemberSchema = mongoose.Schema({
 	// Member
-	gymId: {
+	userId: {
 		type: mongoose.Schema.ObjectId,
-		ref: 'User',
 		index: true,
 		required: true
 	},
@@ -18,6 +17,10 @@ var MemberSchema = mongoose.Schema({
 	email: String,
 	
 	// Membership
+	type: {
+		type: String,
+		default: 'Teretana'
+	},
 	startDate: {
 		type: Date,
 		required: true
@@ -26,16 +29,11 @@ var MemberSchema = mongoose.Schema({
 		type: Date,
 		required: true
 	},
-	type: {
-		type: String,
-		default: 'Teretana'
-	},
 	cost: {
 		type: Number,
 		required: true
 	},
 	paid: [{
-		_id: false,
 		date: Date,
 		amount: Number
 	}],
@@ -48,15 +46,39 @@ module.exports.addMember = function (newMember, callback) {
 	newMember.save(callback);
 }
 
+module.exports.removeMember = function(userId, memberId, callback){
+	var query = {userId: userId, _id: memberId}
+	Member.findOneAndRemove(query, callback);
+}
+
+module.exports.updateMembership = function(userId, memberId, req, callback){
+	var query = {userId: userId, _id: memberId}
+	Member.findOneAndUpdate(query, 
+	{ 
+		$set: {
+		type: req.type,
+		startDate: new Date(req.sDate),
+		endDate: new Date(req.eDate),
+		cost: req.cost,
+		debt: req.cost - req.amount
+		},
+		$push: {
+			paid: {
+				date: req.payDate,
+				amount: req.amount
+			}
+		},
+	}, callback);
+}
+
+module.exports.getMembers = function(userId, callback){
+	var query = {userId: userId};
+	Member.find(query, callback);
+}
+
 module.exports.calculateDebt = function (cost, paid){
 	var sum = 0;
 	if(paid)
 		paid.forEach(element => { sum += element.amount; });
 	return cost - sum;
-}
-
-module.exports.calculateEndDate = function (startDate, days){
-	var endDate = new Date(startDate);
-	endDate.setDate(endDate.getDate() + days);
-	return endDate;
 }

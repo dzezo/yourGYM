@@ -6,29 +6,34 @@ var config = require('../config/database');
 var Member = require('../models/member.model');
 
 // Load
-router.get('/', function (req, res, next) {
-	Order.find({}).exec(function (err, orders) {
+router.get('/:userId', function (req, res, next) {
+	Member.getMembers(req.params.userId, function (err, members){
 		if(err)
-			console.log('error loading orders.');
-		res.json(orders);
+			res.json({ success: false, msg: 'Failed to load members.'});
+		res.json(members);
 	});
 });
 
 // Save
-router.post('/', function (req, res, next) {
+router.post('/:userId', function (req, res, next) {
 	var newMember = new Member({
 		// Member Info
-		gymId: req.body.gymId,
+		userId: req.params.userId,
 		name: req.body.name,
 		phoneNum: req.body.phoneNum,
 		email: req.body.email
 	});
 	// Membership
-	newMember.startDate = new Date(2016, 1, 3, 1);
-	newMember.endDate = Member.calculateEndDate(newMember.startDate, req.body.length);
-	newMember.type = req.body.type;
+	if(req.body.type)
+		newMember.type = req.body.type;
+	newMember.startDate = new Date(req.body.sDate);
+	newMember.endDate = new Date(req.body.eDate);
 	newMember.cost = req.body.cost;
-	newMember.paid.push({date: new Date(2017,0,1,1), amount: req.body.amount});
+	if(req.body.payDate && req.body.amount)
+		newMember.paid.push({
+			date: new Date(req.body.payDate), 
+			amount: req.body.amount
+		});
 	newMember.debt = Member.calculateDebt(newMember.cost, newMember.paid);
 
 	Member.addMember(newMember, function (err, member) {
@@ -45,29 +50,42 @@ router.post('/', function (req, res, next) {
 });
 
 // Delete
-router.delete('/:id', function (req, res, next) {
-	Order.findOneAndRemove(
-		{
-			//query
-			_id: req.params.id
-		}, function (err, deletedOrder) {
-			if(err)
-				console.log('error deleting order.');
-			res.json(deletedOrder);
+// Delete Member
+router.delete('/:userId/member/:memberId', function (req, res, next) {
+	Member.removeMember(req.params.userId, req.params.memberId, function(err, exMember){
+		if(err)
+			res.json({
+				success: false,
+				msg: 'Failed to remove member.'
+			});
+		res.json({
+			success: true,
+			msg: exMember.name + ' is removed.'
 		});
+	});
 });
 
-//Update
-router.put('/:id', function (req, res, next) {
-	Order.findOneAndUpdate({
-		_id: req.params.id
-	},{
-		$set: {name: req.body.name, drink: req.body.drink}
-	},function (err, updatetedBook) {
+// Delete Payment Log
+
+
+// Update
+// Membership Update 
+router.put('/:userId/membership/:memberId', function (req, res, next) {
+	Member.updateMembership(req.params.userId, req.params.memberId, req.body, function(err, updatedMember){
 		if(err)
-			console.log('error updating order.');
-		res.json(updatetedBook);
-	})
+			res.json({
+				success: false,
+				msg: 'Failed to update member.'
+			});
+		res.json({
+			success: true,
+			msg: updatedMember.name + ' is now updated.'
+		});
+	});
 });
+
+// Member Info Update
+
+// Member Payment Update
 
 module.exports = router;
