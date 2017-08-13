@@ -78,7 +78,19 @@ router.delete('/:userId/member/:memberId', function (req, res, next) {
 	});
 });
 // Delete Payment Log
-
+router.delete('/:userId/member/:memberId/payment/:paymentId', function (req, res, next) {
+	Member.removeMember(req.params.userId, req.params.memberId, req.params.paymentId, function(err, member){
+		if(err)
+			res.json({
+				success: false,
+				msg: 'Failed to remove payment.'
+			});
+		res.json({
+			success: true,
+			msg: 'Payment is removed.'
+		});
+	});
+});
 
 // Update
 // Membership Update 
@@ -111,7 +123,7 @@ router.put('/:userId/memberinfo/:memberId', function (req, res, next) {
 });
 // Member Payment Update
 router.put('/:userId/memberpaid/:memberId', function (req, res, next) {
-	Member.updateMemberPaid(req.params.userId, req.params.memberId, req.body, function(err, updatedMember){
+	Member.updateMemberPayments(req.params.userId, req.params.memberId, req.body, function(err, updatedMember){
 		if(err)
 			res.json({
 				success: false,

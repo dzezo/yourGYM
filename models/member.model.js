@@ -47,26 +47,37 @@ module.exports.addMember = function (newMember, callback) {
 }
 
 module.exports.removeMember = function(userId, memberId, callback){
-	var query = {userId: userId, _id: memberId}
+	var query = {userId: userId, _id: memberId};
 	Member.findOneAndRemove(query, callback);
 }
 
-module.exports.updateMemberInfo = function(userId, memberId, req, callback){
-	var query = {userId: userId, _id: memberId}
+module.exports.removeMemberPayment = function(userId, memberId, paymentId, callback){
+	var query = {userId: userId, _id: memberId};
 	Member.findOneAndUpdate(query, 
 	{ 
+		$pull: {
+			_id: paymentId
+		}
+	}, callback);
+}
+
+module.exports.updateMemberInfo = function(userId, memberId, req, callback){
+	var query = {userId: userId, _id: memberId};
+	var update = {
 		$set: {
 			name: req.name,
 			phone: req.phone,
 			email: req.email
 		}
-	}, callback);
+	};
+	var options = { new: true };
+
+	Member.findOneAndUpdate(query, update, options, callback);
 }
 
 module.exports.updateMembership = function(userId, memberId, req, callback){
-	var query = {userId: userId, _id: memberId}
-	Member.findOneAndUpdate(query, 
-	{ 
+	var query = {userId: userId, _id: memberId};
+	var update = {
 		$set: {
 			type: req.type,
 			startDate: new Date(req.sDate),
@@ -80,11 +91,13 @@ module.exports.updateMembership = function(userId, memberId, req, callback){
 				amount: req.amount
 			}
 		}
-	}, callback);
+	};
+
+	Member.findOneAndUpdate(query, update, callback);
 }
 
-module.exports.updateMemberPaid = function(userId, memberId, req, callback){
-	var query = {userId: userId, _id: memberId}
+module.exports.updateMemberPayments = function(userId, memberId, req, callback){
+	var query = {userId: userId, _id: memberId};
 	Member.findOneAndUpdate(query, 
 	{ 
 		$push: {
@@ -97,7 +110,7 @@ module.exports.updateMemberPaid = function(userId, memberId, req, callback){
 }
 
 module.exports.getMember = function(userId, memberId, callback){
-	var query = {userId: userId, _id: memberId}
+	var query = {userId: userId, _id: memberId};
 	User.findOne(query, callback);
 }
 
