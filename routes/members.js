@@ -5,15 +5,8 @@ var Member = require('../models/member.model');
 
 // Load
 // Load Members
-router.get('/:userId/criteria/:criteria', function (req, res, next) {
-
-	var day = 1000*60*60*24;
-	var date1 = new Date("2017-08-14T00:00:00.000Z");
-	var date2 = new Date("2018-08-14T00:00:00.000Z");
-	var date = date2.getTime() - date1.getTime();
-	console.log(Math.round(date/day));
-
-	Member.getMembers(req.params.userId, req.params.criteria, function (err, members){
+router.get('/:userId/criteria/:criteria/limit/:limit', function (req, res, next) {
+	Member.getMembers(req.params.userId, req.params.criteria, req.params.limit, function (err, members){
 		if(err)
 			res.json({ success: false, msg: 'Failed to load members.'});
 		res.json(members);
@@ -28,6 +21,15 @@ router.get('/:userId/member/:memberId', function(req, res, next){
 				msg: 'Failed to load member.'
 			});
 		res.json(member);
+	});
+});
+// Load Member by Username
+// Load Stats
+router.get('/:userId/stat/:stat', function (req, res, next) {
+	Member.getStat(req.params.userId, req.params.stat, function (err, members){
+		if(err)
+			res.json({ success: false, msg: 'Failed to load members.'});
+		res.json(members);
 	});
 });
 

@@ -13,8 +13,14 @@ var MemberSchema = mongoose.Schema({
 		type: String, 
 		required: true
 	},
-	phoneNum: String,	
-	email: String,
+	phoneNum: {
+		type: String,
+		default: 'Phone number not submitted'
+	},	
+	email: {
+		type: String,
+		default: 'E-mail not submitted'
+	},
 	
 	// Membership
 	type: {
@@ -27,6 +33,10 @@ var MemberSchema = mongoose.Schema({
 	},
 	endDate: {
 		type: Date,
+		required: true
+	},
+	daysLeft: {
+		type: Number,
 		required: true
 	},
 	cost: {
@@ -45,19 +55,32 @@ var MemberSchema = mongoose.Schema({
 
 var Member = module.exports = mongoose.model('Member', MemberSchema);
 
+module.exports.calculateDaysLeft = function(date1, date2){
+	var day = 1000*60*60*24,
+		days = date2.getTime() - date1.getTime();
+
+	return (Math.round(days/day));
+}
+
 module.exports.addMember = function (userId, req, callback) {
-	var newMember = new Member();
-	var amount = (req.amount)?req.amount:0;
+	var newMember = new Member(),
+		amount = (req.amount)?req.amount:0,
+		sDate = new Date(req.sDate),
+		eDate = new Date(req.eDate);
+
 	// Member Info
 	newMember.userId = userId;
 	newMember.name = req.name;
-	newMember.phoneNum = req.phoneNum;
-	newMember.email = req.email;
+	if(req.phoneNum)
+		newMember.phoneNum = req.phoneNum;
+	if(req.email)
+		newMember.email = req.email;
 	// Membership
 	if(req.type)
 		newMember.type = req.type;
-	newMember.startDate = new Date(req.sDate);
-	newMember.endDate = new Date(req.eDate);
+	newMember.startDate = sDate;
+	newMember.endDate = eDate;
+	newMember.daysLeft = calculateDaysLeft(sDate, eDate);
 	newMember.cost = req.cost;
 	newMember.paid.push({
 		date: new Date(req.sDate), 
@@ -150,9 +173,28 @@ module.exports.getMember = function(userId, memberId, callback){
 	Member.findOne(query, callback);
 }
 
-module.exports.getMembers = function(userId, criteria, callback){
-	var query = {userId: userId};
+module.exports.getMembers = function(userId, criteria, limit, callback){
+	var query = {userId: userId},
+		criterion = {};
 	if(criteria == 1)
-		var sort = { sort: { debt: -1 } };
-	Member.find(query, {}, sort, callback);
+		criterion = { debt: -1 };
+	else if (criteria == 2)
+		criterion = { daysLeft: 1 };
+	else if (criteria == 3)
+		criterion = { startDate: -1 };
+
+	if(limit != 0)
+		Member.find(query, {}, { sort: criterion, limit: limit }, callback);
+	else
+		Member.find(query, {}, { sort: criterion }, callback);
+}
+
+module.exports.getStat = function(userId, stat, callback){
+	var query = {};
+	if(stat == 1)
+		query = { daysLeft: { $gt: 0 } };
+	if(stat == 2)
+		query = { debt: { $gt: 0 } };
+
+	Member.count(query, callback);
 }
