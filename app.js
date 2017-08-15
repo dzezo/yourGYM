@@ -21,6 +21,7 @@ var app = express();
 // Routers
 var users = require('./routes/users');
 var members = require('./routes/members');
+var pricelists = require('./routes/pricelists');
 
 // Port Number
 var port = 3000;
@@ -42,6 +43,7 @@ require('./config/passport')(passport);
 // Routes
 app.use('/users', users);
 app.use('/members', members);
+app.use('/pricelists', pricelists);
 
 // Index Route
 app.get('/', function (req, res) {

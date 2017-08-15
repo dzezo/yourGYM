@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var config = require('../config/database');
 var Member = require('../models/member.model');
 
 // Load

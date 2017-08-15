@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var config = require('../config/database');
 
 // Member Schema
 var MemberSchema = mongoose.Schema({
