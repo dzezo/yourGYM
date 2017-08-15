@@ -40,6 +40,10 @@ post.(./pricelists/:userId)
 
 **Delete Metode**
 Obrisi pricelistId clanarinu
+
+```
+delete.(./pricelists/:userId/pricelist/pricelistId)
+```
 *Output
 ```
 {
@@ -47,11 +51,6 @@ Obrisi pricelistId clanarinu
     "msg": "MY WELNESS 07-22 is removed."
 }
 ```
-
-```
-delete.(./pricelists/:userId/pricelist/pricelistId)
-```
-
 **Update Metode**
 Azuriranje pricelistId clanarine
 
