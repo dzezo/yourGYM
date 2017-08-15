@@ -5,6 +5,11 @@ var Member = require('../models/member.model');
 
 // Load
 // Load Members
+// Limit number of results, 0 - show all
+// Sort by Criteria
+// #1 - Debt
+// #2 - Days Left
+// #3 - Start Date
 router.get('/:userId/criteria/:criteria/limit/:limit', function (req, res, next) {
 	Member.getMembers(req.params.userId, req.params.criteria, req.params.limit, function (err, members){
 		if(err)
@@ -18,19 +23,26 @@ router.get('/:userId/member/:memberId', function(req, res, next){
 		if(err)
 			res.json({
 				success: false,
-				msg: 'Failed to load member.'
+				msg: 'Failed to load member by ID.'
 			});
 		res.json(member);
 	});
 });
-// Load Member by Username
-// Load Stats
-router.get('/:userId/stat/:stat', function (req, res, next) {
-	Member.getStat(req.params.userId, req.params.stat, function (err, members){
+// Load Member/s by Name
+router.get('/:userId/search/:search', function (req, res, next) {
+	Member.getByName(req.params.userId, req.params.search, function (err, members){
 		if(err)
-			res.json({ success: false, msg: 'Failed to load members.'});
+			res.json({ success: false, msg: 'Search failed.'});
 		res.json(members);
 	});
+});
+// Load Stat by ID
+// #1 - Number of members
+// #2 - Number of active members
+// #3 - Number of unpaid memberships
+// #4 - Total unpaid amount
+router.get('/:userId/stat/:statId', function (req, res, next) {
+	Member.getStats(req.params.userId, req.params.statId, res);
 });
 
 // Save
@@ -123,7 +135,7 @@ router.put('/:userId/pay/:memberId', function (req, res, next) {
 		});
 	});
 });
-// Member Cancel Payment
+// Member Undo Payment
 router.put('/:userId/undopaid/:memberId/payment/:paymentId', function (req, res, next) {
 	Member.undoPayment(req.params.userId, req.params.memberId, req.params.paymentId, req.body, function(err, updatedMember){
 		if(err)

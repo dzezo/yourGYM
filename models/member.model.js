@@ -55,7 +55,7 @@ var MemberSchema = mongoose.Schema({
 
 var Member = module.exports = mongoose.model('Member', MemberSchema);
 
-module.exports.calculateDaysLeft = function(date1, date2){
+function calculateDaysLeft (date1, date2){
 	var day = 1000*60*60*24,
 		days = date2.getTime() - date1.getTime();
 
@@ -66,7 +66,8 @@ module.exports.addMember = function (userId, req, callback) {
 	var newMember = new Member(),
 		amount = (req.amount)?req.amount:0,
 		sDate = new Date(req.sDate),
-		eDate = new Date(req.eDate);
+		eDate = new Date(req.eDate),
+		daysLeft = calculateDaysLeft(sDate, eDate);
 
 	// Member Info
 	newMember.userId = userId;
@@ -80,7 +81,7 @@ module.exports.addMember = function (userId, req, callback) {
 		newMember.type = req.type;
 	newMember.startDate = sDate;
 	newMember.endDate = eDate;
-	newMember.daysLeft = calculateDaysLeft(sDate, eDate);
+	newMember.daysLeft = daysLeft
 	newMember.cost = req.cost;
 	newMember.paid.push({
 		date: new Date(req.sDate), 
@@ -176,25 +177,58 @@ module.exports.getMember = function(userId, memberId, callback){
 module.exports.getMembers = function(userId, criteria, limit, callback){
 	var query = {userId: userId},
 		criterion = {};
+	var num = {number: limit};
+
 	if(criteria == 1)
 		criterion = { debt: -1 };
-	else if (criteria == 2)
-		criterion = { daysLeft: 1 };
+	else if (criteria == 2){
+		query = { userId: userId, daysLeft: { $gte: 0 } };
+		criterion = { daysLeft: 1};
+	}
 	else if (criteria == 3)
 		criterion = { startDate: -1 };
-
+	console.log(num.number);
 	if(limit != 0)
-		Member.find(query, {}, { sort: criterion, limit: limit }, callback);
-	else
-		Member.find(query, {}, { sort: criterion }, callback);
+		Member.find(query).sort(criterion).limit(1).exec(callback);	
+	//else
+		//Member.find(query).sort(criterion).exec(callback);
 }
 
-module.exports.getStat = function(userId, stat, callback){
-	var query = {};
-	if(stat == 1)
-		query = { daysLeft: { $gt: 0 } };
-	if(stat == 2)
-		query = { debt: { $gt: 0 } };
+module.exports.getByName = function(userId, name, callback){
+	var query = {
+		userId: userId,
+		name: { $regex: name, $options: "i" }
+	};
+	Member.find(query, callback);
+}
 
-	Member.count(query, callback);
+module.exports.getStats = function(userId, statId, res){
+	if (statId == 1)
+		Member.count({ userId: userId }, function(err, count){
+			if(err)
+				res.json({ success: false, msg: 'Failed to fetch number of members.'});
+			res.json({ success: true, data: count});
+		});
+	else if (statId == 2)
+		Member.count({ userId: userId, daysLeft: { $gt: 0 } }, function(err, count){
+			if(err)
+				res.json({ success: false, msg: 'Failed to fetch number of active members.'});
+			res.json({ success: true, data: count});
+		});
+	else if (statId == 3)
+		Member.count({ userId: userId, debt: { $gt: 0 } }, function(err, count){
+			if(err)
+				res.json({ success: false, msg: 'Failed to fetch number of unpaid memberships.'});
+			res.json({ success: true, data: count});
+		});
+	else
+		Member.find({userId: userId}, function(err, members){
+			if(err)
+				res.json({ success: false, msg: 'Failed to fetch unpaid amount.'});
+			var sum = 0;
+			members.forEach(member => {
+				sum = sum + member.debt;
+			});
+			res.json({ success: true, data: sum});
+		});
 }
