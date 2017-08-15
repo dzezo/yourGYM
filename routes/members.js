@@ -4,14 +4,13 @@ var config = require('../config/database');
 var Member = require('../models/member.model');
 
 // Load
-// Load Members
-// Limit number of results, 0 - show all
-// Sort by Criteria
-// #1 - Debt
-// #2 - Days Left
-// #3 - Start Date
-router.get('/:userId/criteria/:criteria/limit/:limit', function (req, res, next) {
-	Member.getMembers(req.params.userId, req.params.criteria, req.params.limit, function (err, members){
+// Load Sorted
+// #00/01 - Name
+// #10/11 - Debt
+// #20/21 - Days Left
+// #30/31 - Start Date
+router.get('/:userId/sortby/:sortId', function (req, res, next) {
+	Member.getMembers(req.params.userId, req.params.sortId, function (err, members){
 		if(err)
 			res.json({ success: false, msg: 'Failed to load members.'});
 		res.json(members);
@@ -42,7 +41,7 @@ router.get('/:userId/search/:search', function (req, res, next) {
 // #3 - Number of unpaid memberships
 // #4 - Total unpaid amount
 router.get('/:userId/stat/:statId', function (req, res, next) {
-	Member.getStats(req.params.userId, req.params.statId, res);
+	Member.getStat(req.params.userId, req.params.statId, res);
 });
 
 // Save

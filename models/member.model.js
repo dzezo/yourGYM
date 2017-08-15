@@ -174,25 +174,53 @@ module.exports.getMember = function(userId, memberId, callback){
 	Member.findOne(query, callback);
 }
 
-module.exports.getMembers = function(userId, criteria, limit, callback){
-	var query = {userId: userId},
-		criterion = {};
-
-	if(criteria == 1)
-		criterion = { debt: -1 };
-	else if (criteria == 2){
-		query = { userId: userId, daysLeft: { $gte: 0 } };
-		criterion = { daysLeft: 1};
+module.exports.getMembers = function(userId, sortId, callback){
+	var query, criterion;
+	switch(parseInt(sortId)){
+		case 00: {
+			query = {userId: userId};
+			criterion = { name: -1 };
+		}
+		break;
+		case 10: {
+			query = {userId: userId};
+			criterion = { debt: -1 };
+		}
+		break;
+		case 20: {
+			query = { userId: userId, daysLeft: { $gte: 0 } };
+			criterion = { daysLeft: -1};
+		}
+		break;
+		case 30: {
+			query = {userId: userId};
+			criterion = { startDate: -1 };
+		}
+		break;
+		case 01: {
+			query = {userId: userId};
+			criterion = { name: 1 };
+		}
+		break;
+		case 11: {
+			query = {userId: userId};
+			criterion = { debt: 1 };
+		}
+		break;
+		case 21: {
+			query = { userId: userId, daysLeft: { $gte: 0 } };
+			criterion = { daysLeft: 1};
+		}
+		break;
+		case 31: {
+			query = {userId: userId};
+			criterion = { startDate: 1 };
+		}
+		break;
+		default:
+			console.log('SortId is not valid');
 	}
-	else if (criteria == 3)
-		criterion = { startDate: -1 };
-
-	if(limit != 0)
-		Member.aggregate([{$match: query}, {$sort: criterion}, {$limit: limit}]).exec(callback);
-
-		//Member.find(query).sort(criterion).limit(1).exec(callback);	
-	//else
-		//Member.find(query).sort(criterion).exec(callback);
+	Member.find(query,{},{sort: criterion}, callback)
 }
 
 module.exports.getByName = function(userId, name, callback){
@@ -203,33 +231,41 @@ module.exports.getByName = function(userId, name, callback){
 	Member.find(query, callback);
 }
 
-module.exports.getStats = function(userId, statId, res){
-	if (statId == 1)
-		Member.count({ userId: userId }, function(err, count){
-			if(err)
-				res.json({ success: false, msg: 'Failed to fetch number of members.'});
-			res.json({ success: true, data: count});
-		});
-	else if (statId == 2)
-		Member.count({ userId: userId, daysLeft: { $gt: 0 } }, function(err, count){
-			if(err)
-				res.json({ success: false, msg: 'Failed to fetch number of active members.'});
-			res.json({ success: true, data: count});
-		});
-	else if (statId == 3)
-		Member.count({ userId: userId, debt: { $gt: 0 } }, function(err, count){
-			if(err)
-				res.json({ success: false, msg: 'Failed to fetch number of unpaid memberships.'});
-			res.json({ success: true, data: count});
-		});
-	else
-		Member.find({userId: userId}, function(err, members){
-			if(err)
-				res.json({ success: false, msg: 'Failed to fetch unpaid amount.'});
-			var sum = 0;
-			members.forEach(member => {
-				sum = sum + member.debt;
+module.exports.getStat = function(userId, statId, res){
+	switch(parseInt(statId)){
+		case 1:
+			Member.count({ userId: userId }, function(err, count){
+				if(err)
+					res.json({ success: false, msg: 'Failed to fetch number of members.'});
+				res.json({ success: true, data: count});
 			});
-			res.json({ success: true, data: sum});
-		});
+			break;
+		case 2:
+			Member.count({ userId: userId, daysLeft: { $gt: 0 } }, function(err, count){
+				if(err)
+					res.json({ success: false, msg: 'Failed to fetch number of active members.'});
+				res.json({ success: true, data: count});
+			});
+			break;
+		case 3:
+			Member.count({ userId: userId, debt: { $gt: 0 } }, function(err, count){
+				if(err)
+					res.json({ success: false, msg: 'Failed to fetch number of unpaid memberships.'});
+				res.json({ success: true, data: count});
+			});
+			break;
+		case 4:
+			Member.find({userId: userId}, function(err, members){
+				if(err)
+					res.json({ success: false, msg: 'Failed to fetch unpaid amount.'});
+				var sum = 0;
+				members.forEach(member => {
+					sum = sum + member.debt;
+				});
+				res.json({ success: true, data: sum});
+			});
+			break;
+		default:
+			console.log('StatId ' + statId + ' is not valid.');
+	}
 }
