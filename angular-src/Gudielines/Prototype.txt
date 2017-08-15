@@ -1,0 +1,48 @@
+1. Home
+2. Log In
+3. Register
+4. Dashboard
+5. Members
+6. Member profile(ne vidi se link)
+7. Pop-up Add new member
+8. Pop-up Pay/Renew
+
+4. Ima overview
+	- Add new member
+	- Aktivni clanovi
+	- clanovi koji nisu platili
+	- ukupno neplaceno
+	- 10 najnovijih korisnika u vidu tabele
+	- Ukupni broj clanova
+	
+5. Members
+	- Add new member
+	- Tabela:
+		* Ime
+		* Dugovanje
+		* Days left
+		* Kontakt (telefon)
+		* Type
+	- Search bar 
+	- Sortby za sve kolone
+	- Pored svakog korisnika u tabeli ima dva dugmeta pay i renew koji otvaraju pop-up formu
+	- Delete button
+	- Imena korisnika su linkovi koji vode na /profile
+	
+6. Profile
+
+	- Navigacija
+	- member details
+		* name
+		* phone
+		* mail
+		* debt
+		
+	- current membership
+		* type
+		* end
+		* current debt
+	- member log tabela log
+		* Datum | Uplata
+		* Undo uplata
+		* Untrace uplata
