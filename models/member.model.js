@@ -177,7 +177,6 @@ module.exports.getMember = function(userId, memberId, callback){
 module.exports.getMembers = function(userId, criteria, limit, callback){
 	var query = {userId: userId},
 		criterion = {};
-	var num = {number: limit};
 
 	if(criteria == 1)
 		criterion = { debt: -1 };
@@ -187,9 +186,11 @@ module.exports.getMembers = function(userId, criteria, limit, callback){
 	}
 	else if (criteria == 3)
 		criterion = { startDate: -1 };
-	console.log(num.number);
+
 	if(limit != 0)
-		Member.find(query).sort(criterion).limit(1).exec(callback);	
+		Member.aggregate([{$match: query}, {$sort: criterion}, {$limit: limit}]).exec(callback);
+
+		//Member.find(query).sort(criterion).limit(1).exec(callback);	
 	//else
 		//Member.find(query).sort(criterion).exec(callback);
 }
