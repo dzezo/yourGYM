@@ -18,6 +18,7 @@ mongoose.connection.on('err', function (err) {
 
 var app = express();
 
+// Routers
 var users = require('./routes/users');
 var members = require('./routes/members');
 
