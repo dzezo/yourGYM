@@ -7,20 +7,20 @@ Pricelist(Cenovnik) sadrzi tipove clanarina.
 Dobavi kompletan cenovnik
 
 ```
-get.(./pricelists/:userId)
+.get(./pricelists/:userId)
 ```
 
 Dobavi podatke Pricelist clanarine
 
 ```
-get.(./pricelists/:userId/pricelist/pricelistId)
+.get(./pricelists/:userId/pricelist/pricelistId)
 ```
 
 **Save Metode**
 Usnimi clanarinu
 
 ```
-post.(./pricelists/:userId)
+.post(./pricelists/:userId)
 ```
 *Input
 ```
@@ -42,7 +42,7 @@ post.(./pricelists/:userId)
 Obrisi pricelistId clanarinu
 
 ```
-delete.(./pricelists/:userId/pricelist/pricelistId)
+.delete(./pricelists/:userId/pricelist/pricelistId)
 ```
 *Output
 ```
@@ -55,7 +55,7 @@ delete.(./pricelists/:userId/pricelist/pricelistId)
 Azuriranje pricelistId clanarine
 
 ```
-put.(./pricelists/:userId/pricelist/pricelistId)
+.put(./pricelists/:userId/pricelist/pricelistId)
 ```
 *Input
 ```

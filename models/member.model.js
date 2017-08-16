@@ -1,8 +1,7 @@
 var mongoose = require('mongoose');
+var Pricelist = require('../models/pricelist.model');
 
-// Member Schema
 var MemberSchema = mongoose.Schema({
-	// Member
 	userId: {
 		type: mongoose.Schema.ObjectId,
 		index: true,
@@ -12,7 +11,7 @@ var MemberSchema = mongoose.Schema({
 		type: String, 
 		required: true
 	},
-	phoneNum: {
+	phone: {
 		type: String,
 		default: 'Phone number not submitted'
 	},	
@@ -20,75 +19,73 @@ var MemberSchema = mongoose.Schema({
 		type: String,
 		default: 'E-mail not submitted'
 	},
-	
-	// Membership
-	type: {
-		type: String,
-		default: 'Teretana'
-	},
-	startDate: {
-		type: Date,
-		required: true
-	},
-	endDate: {
-		type: Date,
-		required: true
-	},
-	daysLeft: {
+	totalDebt: {
 		type: Number,
-		required: true
+		default: 0
 	},
-	cost: {
-		type: Number,
-		required: true
-	},
-	paid: [{
-		date: Date,
-		amount: Number
-	}],
-	debt: {
-		type: Number,
-		required: true
-	}
+	memberships: [{
+		membershipId: mongoose.Schema.ObjectId,
+		start: Date,
+		end: Date,
+		debt: Number,
+		log: [{
+			date: Date,
+			amount: Number
+		}]
+	}]
 });
 
 var Member = module.exports = mongoose.model('Member', MemberSchema);
 
-function calculateDaysLeft (date1, date2){
-	var day = 1000*60*60*24,
-		days = date2.getTime() - date1.getTime();
+module.exports.addMember = function (userId, input, callback) {
+	var newMember = new Member({
+		userId: userId,
+		name: input.name,
+		phone: input.phone,
+		email: input.email
+	});
 
-	return (Math.round(days/day));
+	Pricelist.findOne({_id: input.membershipId}, function(err, item){
+		if (err)
+			return res.json({success: false, msg: 'Membership type not found.'});
+		if(input.amount){
+			// Dug za clanarinu
+			var debt = item.cost - input.amount;
+			var start = new Date(input.start);
+			var length = 1000*60*60*24*parseInt(item.length);
+			// Krajnji datum
+			var end = new Date(start.getTime() + length);
+			newMember.totalDebt = debt;
+			newMember.memberships.unshift({
+				membershipId: input.membershipId,
+				start: input.start,
+				end: end,
+				debt: debt,
+			});
+			newMember.memberships[0].log.unshift({
+				date: input.start,
+				amount: input.amount
+			});
+			newMember.save(callback);
+		}
+	});
 }
 
-module.exports.addMember = function (userId, req, callback) {
-	var newMember = new Member(),
-		amount = (req.amount)?req.amount:0,
-		sDate = new Date(req.sDate),
-		eDate = new Date(req.eDate),
-		daysLeft = calculateDaysLeft(sDate, eDate);
+// calculate end
+// calculate debt
+// calculate totaldebt
+module.exports.newMembership = function(userId, memberId, input, callback){
+	var query = {userId: userId, _id: memberId, 'memberships._id': "599391be6b957013ac3318ee"};
+	var update = {
+		$push: {
+			'memberships.$.log': {
+				date: input.start,
+				amount: input.amount
+			}
+		}
+	};
 
-	// Member Info
-	newMember.userId = userId;
-	newMember.name = req.name;
-	if(req.phoneNum)
-		newMember.phoneNum = req.phoneNum;
-	if(req.email)
-		newMember.email = req.email;
-	// Membership
-	if(req.type)
-		newMember.type = req.type;
-	newMember.startDate = sDate;
-	newMember.endDate = eDate;
-	newMember.daysLeft = daysLeft
-	newMember.cost = req.cost;
-	newMember.paid.push({
-		date: new Date(req.sDate), 
-		amount: amount
-	});
-	newMember.debt = req.cost - amount;
-	// Add New Member
-	newMember.save(callback);
+	Member.findOneAndUpdate(query, update, callback);
 }
 
 module.exports.removeMember = function(userId, memberId, callback){

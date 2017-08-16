@@ -2,6 +2,26 @@ var express = require('express');
 var router = express.Router();
 var Member = require('../models/member.model');
 
+// Add New Member
+router.post('/:userId', function (req, res, next) {
+	Member.addMember(req.params.userId, req.body, function (err, member) {
+		if(err)
+			res.json({ success: false, msg: 'Failed to add member.'});
+		else
+			res.json({ success: true, msg: 'New member added.' });
+	});
+});
+
+// New Membership
+router.post('/:userId/member/:memberId', function (req, res, next){
+	Member.newMembership(req.params.userId, req.params.memberId, req.body, function(err, member){
+		if(err)
+			res.json({ success: false, msg: 'Failed to create new membership.'});
+		else
+			res.json({ success: true, msg: 'Membership created.' });
+	});
+});
+
 // Load
 // Load Sorted
 // #00/01 - Name
@@ -41,21 +61,6 @@ router.get('/:userId/search/:search', function (req, res, next) {
 // #4 - Total unpaid amount
 router.get('/:userId/stat/:statId', function (req, res, next) {
 	Member.getStat(req.params.userId, req.params.statId, res);
-});
-
-// Save
-router.post('/:userId', function (req, res, next) {
-	Member.addMember(req.params.userId, req.body, function (err, member) {
-		if(err)
-			res.json({
-				success: false,
-				msg: 'Failed to add member.'
-			});
-		res.json({
-			success: true,
-			msg: 'New member added.'
-		});
-	});
 });
 
 // Delete
