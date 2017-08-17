@@ -72,7 +72,7 @@ router.put('/member/:memberId', function (req, res, next) {
 	});
 });
 
-// Load Member (Id) - rework return
+// Load Member (Id)
 router.get('/member/:memberId', function(req, res, next){
 	Member.getMember(req.params.memberId, function(err, member){
 		if(err)

@@ -137,7 +137,7 @@ module.exports.newPayment = function(memberId, membershipId, input, res, callbac
 	});
 }
 
-// Delete 1/3
+// Delete
 
 module.exports.removeMember = function(memberId, callback){
 	var query = {_id: memberId};
@@ -149,10 +149,10 @@ module.exports.removeMembership = function(memberId, membershipId, res, callback
 		if (err) 
 			return res.json({success: false, msg: 'Member not found.'});
 		var counter = 0;
-		member.membership.forEach(membership =>{
+		member.memberships.forEach(membership =>{
 			if(membership._id == membershipId){
 				member.totalDebt = member.totalDebt - membership.debt;
-				member.membership.splice(counter,1);
+				member.memberships.splice(counter,1);
 			}
 			counter++;
 		});
@@ -165,13 +165,13 @@ module.exports.removePayment = function(memberId, membershipId, paymentId, res, 
 		if (err) 
 			return res.json({success: false, msg: 'Member not found.'});
 		var counter = 0;
-		member.membership.forEach(membership =>{
+		member.memberships.forEach(membership =>{
 			if(membership._id == membershipId){
 				membership.log.forEach(payment =>{
 					if(payment._id == paymentId){
-						member.totalDebt -= payment.amount;
-						member.membership.debt -= payment.amount;
-						member.membership.log.splice(counter,1);
+						member.totalDebt += payment.amount;
+						membership.debt += payment.amount;
+						membership.log.splice(counter,1);
 					}
 					counter++;
 				});
