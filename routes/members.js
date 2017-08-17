@@ -105,18 +105,13 @@ router.get('/:userId', function (req, res, next) {
 });
 
 // Load Active Members
-router.get('/:userId', function (req, res, next) {
-	Member.getActiveMembers(req.params.userId, function (err, members){
-		if(err)
-			res.json({ success: false, msg: 'Failed to load active members.'});
-		else
-			res.json(members);
-	});
+router.get('/active/:userId', function (req, res, next) {
+	Member.getActiveMembers(req.params.userId, res);
 });
 
 // Load Statistics
 router.get('/:userId/statistics', function (req, res, next) {
-	Member.getStatistics(req.params.userId, req.params.statId, res);
+	Member.getStatistics(req.params.userId, res);
 });
 
 module.exports = router;

@@ -219,7 +219,7 @@ module.exports.updateMemberInfo = function(memberId, input, callback){
 	var update = {
 		$set: {
 			name: input.name,
-			phoneNum: input.phoneNum,
+			phone: input.phone,
 			email: input.email
 		}
 	};
@@ -234,15 +234,13 @@ module.exports.updateDaysLeft = function(userId, input, res){
 			res.json({ success: false, msg: 'Failed to update remaining days.'});
 		else{
 			members.forEach(member =>{
-				member.membership.forEach(membership => {
+				member.memberships.forEach(membership => {
 					if(membership.daysLeft != 0)
 						membership.daysLeft = getDaysLeft(input.date, membership.end);
 				});
-				member.save(function(err, updatedMember){
-					if(err)
-						return res.json({ success: false, msg: 'Failed to update remaining days.'});
-				});
+				member.save();
 			});
+			res.json({ success: true, msg: 'Remaining days updated.'});
 		}
 	});
 }
@@ -276,22 +274,23 @@ module.exports.getStatistics = function(userId, res){
 					activeMembers++;
 				if(member.totalDebt > 0)
 					indeptedMembers++;
-				unpaidAmount += totalDebt;
+				unpaidAmount += member.totalDebt;
 				membersCount++;
 			});
-			res.json({
+			var statistics = {
 				members: membersCount,
 				activeMembers: activeMembers,
 				indeptedMembers: indeptedMembers,
 				unpaidAmount: unpaidAmount
-			});
+			};
+			res.json(statistics);
 		}
 	});
 }
 
 module.exports.getMembers = function(userId, callback){
 	var query = {userId: userId};
-	var criterion = { name: -1 };
+	var criterion = { name: 1 };
 	Member.find(query,{},{sort: criterion}, callback);
 }
 
@@ -302,16 +301,30 @@ module.exports.getActiveMembers = function(userId, res){
 		else{
 			var activeMem = [];
 			members.forEach(member =>{
-				var newMember = {
-					name: member.name,
-					debt: member.totalDebt,
-					start: member.memberships[0].start,
-					left: member.memberships[0].daysLeft
-				};
-				activeMem.push(newMember);
+				if(member.memberships[0].daysLeft > 0){
+					var newMember = {
+						name: member.name,
+						debt: member.totalDebt,
+						start: member.memberships[0].start,
+						left: member.memberships[0].daysLeft
+					};
+					activeMem.push(newMember);
+				}
 			});
-			// sort
-			// return
+			var i,j,min, tmp;
+			for(i = 0; i < activeMem.length - 1; i++){
+				min = i;
+				for (j = i+1; j < activeMem.length; j++){
+					if(activeMem[min].left > activeMem[j].left)
+						min = j;
+				}
+				if(min != i){
+					tmp = activeMem[i];
+					activeMem[i] = activeMem[min];
+					activeMem[min] = tmp;
+				}
+			}
+			res.json(activeMem);
 		}
 	});
 }
