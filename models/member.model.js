@@ -27,6 +27,7 @@ var MemberSchema = mongoose.Schema({
 		membershipId: mongoose.Schema.ObjectId,
 		start: Date,
 		end: Date,
+		daysLeft: Number,
 		debt: Number,
 		log: [{
 			date: Date,
@@ -37,76 +38,158 @@ var MemberSchema = mongoose.Schema({
 
 var Member = module.exports = mongoose.model('Member', MemberSchema);
 
-module.exports.addMember = function (userId, input, callback) {
-	var newMember = new Member({
-		userId: userId,
-		name: input.name,
-		phone: input.phone,
-		email: input.email
-	});
+function getEndDate (startDate, length) {
+	var length = 1000*60*60*24*parseInt(length);
+	var startDate = new Date (startDate);
+	return (new Date (startDate.getTime() + length));
+}
 
+function getDaysLeft (currentDate, endDate){
+	var day_ms = 1000*60*60*24;
+	var current = new Date(currentDate);
+	var end = new Date(endDate);
+	return Math.round((end.getTime() - current.getTime())/day_ms);
+}
+
+// Post
+
+module.exports.addMember = function (userId, input, res, callback) {
 	Pricelist.findOne({_id: input.membershipId}, function(err, item){
 		if (err)
-			return res.json({success: false, msg: 'Membership type not found.'});
-		if(input.amount){
-			// Dug za clanarinu
-			var debt = item.cost - input.amount;
-			var start = new Date(input.start);
-			var length = 1000*60*60*24*parseInt(item.length);
-			// Krajnji datum
-			var end = new Date(start.getTime() + length);
-			newMember.totalDebt = debt;
+			res.json({success: false, msg: 'Membership type not found.'});
+		else{
+			var end = getEndDate(input.start, item.length);
+			var daysLeft = getDaysLeft(input.start, end);
+			var debt = item.cost - ((input.amount)?input.amount:0);
+			var newMember = new Member({
+				userId: userId,
+				name: input.name,
+				phone: input.phone,
+				email: input.email,
+				totalDebt: debt,
+			});
 			newMember.memberships.unshift({
 				membershipId: input.membershipId,
 				start: input.start,
 				end: end,
+				daysLeft: daysLeft,
 				debt: debt,
 			});
-			newMember.memberships[0].log.unshift({
-				date: input.start,
-				amount: input.amount
-			});
+			if(input.amount){
+				newMember.memberships[0].log.unshift({
+					date: input.start,
+					amount: input.amount
+				});
+			}
 			newMember.save(callback);
 		}
 	});
 }
 
-// calculate end
-// calculate debt
-// calculate totaldebt
-module.exports.newMembership = function(userId, memberId, input, callback){
-	var query = {userId: userId, _id: memberId, 'memberships._id': "599391be6b957013ac3318ee"};
-	var update = {
-		$push: {
-			'memberships.$.log': {
-				date: input.start,
-				amount: input.amount
-			}
+module.exports.newMembership = function(memberId, input, res, callback){
+	Pricelist.findOne({_id: input.membershipId}, function(err, item){
+		if (err)
+			res.json({success: false, msg: 'Membership type not found.'});
+		else{
+			Member.findById(memberId, function(err, member){
+				if (err)
+					res.json({success: false, msg: 'Member not found.'});
+				else{
+					var end = getEndDate(input.start, item.length);
+					var daysLeft = getDaysLeft(input.start, end);
+					var debt = item.cost - ((input.amount)?input.amount:0);
+					member.totalDebt = member.totalDebt + debt;
+					member.memberships.unshift({
+						membershipId: input.membershipId,
+						start: input.start,
+						end: end,
+						daysLeft: daysLeft,
+						debt: debt,
+					});
+					if(input.amount){
+						member.memberships[0].log.unshift({
+							date: input.start,
+							amount: input.amount
+						});
+					}
+					member.save(callback);
+				}
+			});
 		}
-	};
-
-	Member.findOneAndUpdate(query, update, callback);
+	});
 }
 
-module.exports.removeMember = function(userId, memberId, callback){
-	var query = {userId: userId, _id: memberId};
+module.exports.newPayment = function(memberId, membershipId, input, res, callback){
+	Member.findById(memberId, function (err, member){
+		if (err)
+			return res.json({success: false, msg: 'Member not found.'});
+		member.totalDebt = member.totalDebt - input.amount;
+		member.memberships.forEach(membership => {
+			if(membership._id == membershipId){
+				membership.debt = membership.debt - input.amount;
+				membership.log.unshift({
+					date: input.date,
+					amount: input.amount
+				});
+			}
+		});
+		member.save(callback);
+	});
+}
+
+// Delete 1/3
+
+module.exports.removeMember = function(memberId, callback){
+	var query = {_id: memberId};
 	Member.findOneAndRemove(query, callback);
 }
 
-module.exports.removeMemberPayment = function(userId, memberId, paymentId, callback){
-	var query = {userId: userId, _id: memberId};
-	var update = { $pull: { paid: { _id: paymentId }}};
-	
-	Member.findOneAndUpdate(query, update, callback);
+module.exports.removeMembership = function(memberId, membershipId, res, callback){
+	Member.findById(memberId, function(err, member){
+		if (err) 
+			return res.json({success: false, msg: 'Member not found.'});
+		var counter = 0;
+		member.membership.forEach(membership =>{
+			if(membership._id == membershipId){
+				member.totalDebt = member.totalDebt - membership.debt;
+				member.membership.splice(counter,1);
+			}
+			counter++;
+		});
+		member.save(callback);
+	})
 }
 
-module.exports.updateMemberInfo = function(userId, memberId, req, callback){
-	var query = {userId: userId, _id: memberId};
+module.exports.removePayment = function(memberId, membershipId, paymentId, res, callback){
+	Member.findById(memberId, function(err, member){
+		if (err) 
+			return res.json({success: false, msg: 'Member not found.'});
+		var counter = 0;
+		member.membership.forEach(membership =>{
+			if(membership._id == membershipId){
+				membership.log.forEach(payment =>{
+					if(payment._id == paymentId){
+						member.totalDebt -= payment.amount;
+						member.membership.debt -= payment.amount;
+						member.membership.log.splice(counter,1);
+					}
+					counter++;
+				});
+			}
+		});
+		member.save(callback);
+	})
+}
+
+// Put
+
+module.exports.updateMemberInfo = function(memberId, input, callback){
+	var query = {_id: memberId};
 	var update = {
 		$set: {
-			name: req.name,
-			phoneNum: req.phoneNum,
-			email: req.email
+			name: input.name,
+			phoneNum: input.phoneNum,
+			email: input.email
 		}
 	};
 	var options = { new: true };
@@ -114,61 +197,24 @@ module.exports.updateMemberInfo = function(userId, memberId, req, callback){
 	Member.findOneAndUpdate(query, update, options, callback);
 }
 
-module.exports.renewMembership = function(userId, memberId, req, callback){
-	var query = {userId: userId, _id: memberId};
-	var amount = (req.amount)?req.amount:0;
-	var update = {
-		$set: {
-			type: req.type,
-			startDate: new Date(req.sDate),
-			endDate: new Date(req.eDate),
-			cost: req.cost,
-			debt: req.debt + (req.cost - req.amount)
-		},
-		$push: {
-			paid: {
-				date: req.sDate,
-				amount: amount
-			}
-		}
-	};
+// Get
 
-	Member.findOneAndUpdate(query, update, callback);
-}
-
-module.exports.makePayment = function(userId, memberId, req, callback){
-	var query = {userId: userId, _id: memberId};
-	var update = {
-		$set: {
-			debt: req.debt - req.amount
-		},
-		$push: {
-			paid: {
-				date: req.payDate,
-				amount: req.amount
-			}
-		}
-	};
-
-	Member.findOneAndUpdate(query, update, callback);
-}
-
-module.exports.undoPayment = function(userId, memberId, paymentId, req, callback){
-	var newDebt = req.debt - req.amount;
-
-	var query = {userId: userId, _id: memberId};
-	var update = { 
-		$set: { debt: newDebt },
-		$pull: { paid: { _id: paymentId }}
-	};
-	
-	Member.findOneAndUpdate(query, update, callback);
-}
-
-module.exports.getMember = function(userId, memberId, callback){
-	var query = {userId: userId, _id: memberId};
+module.exports.getMember = function(memberId, callback){
+	var query = {_id: memberId};
 	Member.findOne(query, callback);
 }
+
+module.exports.searchMembers = function(userId, name, callback){
+	var query = {
+		userId: userId,
+		name: { $regex: name, $options: "i" }
+	};
+	Member.find(query, callback);
+}
+
+
+
+// Old
 
 module.exports.getMembers = function(userId, sortId, callback){
 	var query, criterion;
@@ -217,14 +263,6 @@ module.exports.getMembers = function(userId, sortId, callback){
 			console.log('SortId is not valid');
 	}
 	Member.find(query,{},{sort: criterion}, callback)
-}
-
-module.exports.getByName = function(userId, name, callback){
-	var query = {
-		userId: userId,
-		name: { $regex: name, $options: "i" }
-	};
-	Member.find(query, callback);
 }
 
 module.exports.getStat = function(userId, statId, res){
