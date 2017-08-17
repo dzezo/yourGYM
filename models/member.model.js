@@ -24,10 +24,12 @@ var MemberSchema = mongoose.Schema({
 		default: 0
 	},
 	memberships: [{
-		membershipId: mongoose.Schema.ObjectId,
+		mName: String,
 		start: Date,
 		end: Date,
 		daysLeft: Number,
+		length: Number,
+		cost: Number,
 		debt: Number,
 		log: [{
 			date: Date,
@@ -53,7 +55,7 @@ function getDaysLeft (currentDate, endDate){
 
 // Post
 
-module.exports.addMember = function (userId, input, res, callback) {
+module.exports.addMember = function (userId, input, res) {
 	Pricelist.findOne({_id: input.membershipId}, function(err, item){
 		if (err)
 			res.json({success: false, msg: 'Membership type not found.'});
@@ -69,10 +71,12 @@ module.exports.addMember = function (userId, input, res, callback) {
 				totalDebt: debt,
 			});
 			newMember.memberships.unshift({
-				membershipId: input.membershipId,
+				mName: item.name,
 				start: input.start,
 				end: end,
 				daysLeft: daysLeft,
+				length: item.length,
+				cost: item.cost,
 				debt: debt,
 			});
 			if(input.amount){
@@ -81,12 +85,17 @@ module.exports.addMember = function (userId, input, res, callback) {
 					amount: input.amount
 				});
 			}
-			newMember.save(callback);
+			newMember.save(function (err, member) {
+				if(err)
+					res.json({ success: false, msg: 'Failed to add member.'});
+				else
+					res.json({ success: true, msg: 'New member added.' });
+			});
 		}
 	});
 }
 
-module.exports.newMembership = function(memberId, input, res, callback){
+module.exports.newMembership = function(memberId, input, res){
 	Pricelist.findOne({_id: input.membershipId}, function(err, item){
 		if (err)
 			res.json({success: false, msg: 'Membership type not found.'});
@@ -100,10 +109,12 @@ module.exports.newMembership = function(memberId, input, res, callback){
 					var debt = item.cost - ((input.amount)?input.amount:0);
 					member.totalDebt = member.totalDebt + debt;
 					member.memberships.unshift({
-						membershipId: input.membershipId,
+						mName: item.name,
 						start: input.start,
 						end: end,
 						daysLeft: daysLeft,
+						length: item.length,
+						cost: item.cost,
 						debt: debt,
 					});
 					if(input.amount){
@@ -112,14 +123,19 @@ module.exports.newMembership = function(memberId, input, res, callback){
 							amount: input.amount
 						});
 					}
-					member.save(callback);
+					member.save(function(err, member){
+						if(err)
+							res.json({ success: false, msg: 'Failed to create new membership.'});
+						else
+							res.json({ success: true, msg: 'Membership created.' });
+					});
 				}
 			});
 		}
 	});
 }
 
-module.exports.newPayment = function(memberId, membershipId, input, res, callback){
+module.exports.newPayment = function(memberId, membershipId, input, res){
 	Member.findById(memberId, function (err, member){
 		if (err)
 			return res.json({success: false, msg: 'Member not found.'});
@@ -133,7 +149,12 @@ module.exports.newPayment = function(memberId, membershipId, input, res, callbac
 				});
 			}
 		});
-		member.save(callback);
+		member.save(function(err, member){
+			if(err)
+				res.json({ success: false, msg: 'Failed to log the payment.'});
+			else
+				res.json({ success: true, msg: 'Payment logged.' });
+		});
 	});
 }
 
@@ -144,7 +165,7 @@ module.exports.removeMember = function(memberId, callback){
 	Member.findOneAndRemove(query, callback);
 }
 
-module.exports.removeMembership = function(memberId, membershipId, res, callback){
+module.exports.removeMembership = function(memberId, membershipId, res){
 	Member.findById(memberId, function(err, member){
 		if (err) 
 			return res.json({success: false, msg: 'Member not found.'});
@@ -156,11 +177,16 @@ module.exports.removeMembership = function(memberId, membershipId, res, callback
 			}
 			counter++;
 		});
-		member.save(callback);
+		member.save(function(err, exMember){
+			if(err)
+				res.json({ success: false, msg: 'Failed to remove membership.' });
+			else
+				res.json({ success: true, msg: 'Membership is removed.' });
+		});
 	})
 }
 
-module.exports.removePayment = function(memberId, membershipId, paymentId, res, callback){
+module.exports.removePayment = function(memberId, membershipId, paymentId, res){
 	Member.findById(memberId, function(err, member){
 		if (err) 
 			return res.json({success: false, msg: 'Member not found.'});
@@ -177,7 +203,12 @@ module.exports.removePayment = function(memberId, membershipId, paymentId, res, 
 				});
 			}
 		});
-		member.save(callback);
+		member.save( function(err, exMember){
+			if(err)
+				res.json({ success: false, msg: 'Failed to remove payment.' });
+			else
+				res.json({ success: true, msg: 'Payment is removed.' });
+		});
 	})
 }
 
@@ -197,6 +228,25 @@ module.exports.updateMemberInfo = function(memberId, input, callback){
 	Member.findOneAndUpdate(query, update, options, callback);
 }
 
+module.exports.updateDaysLeft = function(userId, input, res){
+	Member.find({userId: userId}, function(err, members){
+		if(err)
+			res.json({ success: false, msg: 'Failed to update remaining days.'});
+		else{
+			members.forEach(member =>{
+				member.membership.forEach(membership => {
+					if(membership.daysLeft != 0)
+						membership.daysLeft = getDaysLeft(input.date, membership.end);
+				});
+				member.save(function(err, updatedMember){
+					if(err)
+						return res.json({ success: false, msg: 'Failed to update remaining days.'});
+				});
+			});
+		}
+	});
+}
+
 // Get
 
 module.exports.getMember = function(memberId, callback){
@@ -212,94 +262,56 @@ module.exports.searchMembers = function(userId, name, callback){
 	Member.find(query, callback);
 }
 
-
-
-// Old
-
-module.exports.getMembers = function(userId, sortId, callback){
-	var query, criterion;
-	switch(parseInt(sortId)){
-		case 00: {
-			query = {userId: userId};
-			criterion = { name: -1 };
+module.exports.getStatistics = function(userId, res){
+	Member.find({userId: userId}, function(err, members){
+		if(err)
+			res.json({ success: false, msg: 'Failed to get statistics.'});
+		else{
+			var membersCount = 0;
+			var activeMembers = 0;
+			var indeptedMembers = 0;
+			var unpaidAmount = 0;
+			members.forEach(member =>{
+				if(member.memberships[0].daysLeft > 0)
+					activeMembers++;
+				if(member.totalDebt > 0)
+					indeptedMembers++;
+				unpaidAmount += totalDebt;
+				membersCount++;
+			});
+			res.json({
+				members: membersCount,
+				activeMembers: activeMembers,
+				indeptedMembers: indeptedMembers,
+				unpaidAmount: unpaidAmount
+			});
 		}
-		break;
-		case 10: {
-			query = {userId: userId};
-			criterion = { debt: -1 };
-		}
-		break;
-		case 20: {
-			query = { userId: userId, daysLeft: { $gte: 0 } };
-			criterion = { daysLeft: -1};
-		}
-		break;
-		case 30: {
-			query = {userId: userId};
-			criterion = { startDate: -1 };
-		}
-		break;
-		case 01: {
-			query = {userId: userId};
-			criterion = { name: 1 };
-		}
-		break;
-		case 11: {
-			query = {userId: userId};
-			criterion = { debt: 1 };
-		}
-		break;
-		case 21: {
-			query = { userId: userId, daysLeft: { $gte: 0 } };
-			criterion = { daysLeft: 1};
-		}
-		break;
-		case 31: {
-			query = {userId: userId};
-			criterion = { startDate: 1 };
-		}
-		break;
-		default:
-			console.log('SortId is not valid');
-	}
-	Member.find(query,{},{sort: criterion}, callback)
+	});
 }
 
-module.exports.getStat = function(userId, statId, res){
-	switch(parseInt(statId)){
-		case 1:
-			Member.count({ userId: userId }, function(err, count){
-				if(err)
-					res.json({ success: false, msg: 'Failed to fetch number of members.'});
-				res.json({ success: true, data: count});
+module.exports.getMembers = function(userId, callback){
+	var query = {userId: userId};
+	var criterion = { name: -1 };
+	Member.find(query,{},{sort: criterion}, callback);
+}
+
+module.exports.getActiveMembers = function(userId, res){
+	Member.find({userId: userId}, function(err, members){
+		if(err)
+			res.json({ success: false, msg: 'Failed to get active members.'});
+		else{
+			var activeMem = [];
+			members.forEach(member =>{
+				var newMember = {
+					name: member.name,
+					debt: member.totalDebt,
+					start: member.memberships[0].start,
+					left: member.memberships[0].daysLeft
+				};
+				activeMem.push(newMember);
 			});
-			break;
-		case 2:
-			Member.count({ userId: userId, daysLeft: { $gt: 0 } }, function(err, count){
-				if(err)
-					res.json({ success: false, msg: 'Failed to fetch number of active members.'});
-				res.json({ success: true, data: count});
-			});
-			break;
-		case 3:
-			Member.count({ userId: userId, debt: { $gt: 0 } }, function(err, count){
-				if(err)
-					res.json({ success: false, msg: 'Failed to fetch number of unpaid memberships.'});
-				res.json({ success: true, data: count});
-			});
-			break;
-		case 4:
-			Member.find({userId: userId}, function(err, members){
-				if(err)
-					res.json({ success: false, msg: 'Failed to fetch unpaid amount.'});
-				var sum = 0;
-				members.forEach(member => {
-					sum = sum + member.debt;
-				});
-				res.json({ success: true, data: sum});
-			});
-			break;
-		default:
-			console.log('StatId ' + statId + ' is not valid.');
-	}
+			// sort
+			// return
+		}
+	});
 }
