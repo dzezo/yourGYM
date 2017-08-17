@@ -1,6 +1,48 @@
 <div class="container">
-	<h2 class="page-header">Dashboard</h2>
-	<p>
-	  dashboard works!
-	</p>
+    <div>
+    	<div class="col-sm-4 col-md-3 col-xs-12">
+    		<app-page-nav></app-page-nav>
+    	</div>
+    	<div class="col-sm-8 col-md-9 col-xs-12" id="overview">
+    		<div class="panel panel-default">
+              <div class="panel-heading main-color-bg">
+                <h3 class="panel-title">Overview</h3>
+              </div>
+                  <div class="panel-body">
+                    <div class="col-md-3">
+                      <div class="well dash-box">
+                        <h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span> ?</h3>
+                        <h4>Number of Members</h4>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="well dash-box">
+                        <h3><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> ?</h3>
+                        <h4>Number of Active Users</h4>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="well dash-box">
+                        <h3><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> ?</h3>
+                        <h4>Number of Upaid Memberships</h4>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="well dash-box">
+                        <h3><span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ?</h3>
+                        <h4>Sum of Unpaid Amount</h4>
+                      </div>
+                    </div>
+                </div>
+            </div>
+    	</div>
+    </div>
+    <div class="col-sm-12 col-md-12 col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading main-color-bg">
+            <h3 class="panel-title">Members</h3>
+        </div>
+        <app-memberstable></app-memberstable>
+      </div>
+    </div>
 </div>

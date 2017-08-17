@@ -1,22 +1,23 @@
-svuda de su txt inputi
-[(ngModel)]="username" name="username"
-stavis ovaj par
-npr. sve divove uokviris u jednu formu i dodas submit event i funkciju koju poziva.
-Ako hoces button da deklarises kao <a> dodas type submit
+Ceo element sa formom, (divove) uokviris tagom form i dodas submit event i funkciju koju poziva.
+	*<form (event koj je poziva) = "funkcija">
+	*<form (submit) = "onLoginSubmit()">	
 
-Za proveru:
+	*svuda de su txt inputi
+	*[(ngModel)]="username" name="username"
 
-1. Pokrenes mongo: 
+U app.module.ts const niz appRoutes izbaci canActivate[AuthGuard] modul
+da bi se bez autentifikacije kretao kroz rute
+pr. localhost:4200/profile
+
+Pokretanje backend-a:
+
+1. Pokretanje baze: 
 -cmd Run as administrator!
 -u mongo bin folderu
 -"net start Mongodb" - servis
 -"net stop mongodb"  - zaustavljas servis
 -"mongo" 	     - otvaras mongoshell
 
-2. Pokrenes Node, sa monitorom:
+2. Pokretanje Node.js-a, sa monitorom:
 -u projektnom folderu
--"nodemon" 
-
-3. Pokrenes angular:
--u front-end folderu
--"ng serve -o"
+-"nodemon"
