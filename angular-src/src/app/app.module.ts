@@ -14,11 +14,12 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { PageNavComponent } from './components/page-nav/page-nav.component';
 import { MembersComponent } from './components/members/members.component';
+import { MemberstableComponent } from './components/memberstable/memberstable.component';
+import { BusinessSettingsComponent } from './components/business-settings/business-settings.component';
 
 import { ValidateService } from './services/validate.service';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
-import { MemberstableComponent } from './components/memberstable/memberstable.component';
 
 
 const appRoutes: Routes = [
@@ -27,6 +28,7 @@ const appRoutes: Routes = [
 {path: 'login', component: LoginComponent},
 {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
 {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
+{path: 'businesssettings', component: BusinessSettingsComponent, canActivate: [AuthGuard]},
 {path: 'members', component: MembersComponent, canActivate: [AuthGuard]}
 ]
 
@@ -41,7 +43,8 @@ const appRoutes: Routes = [
     ProfileComponent,
     PageNavComponent,
     MembersComponent,
-    MemberstableComponent
+    MemberstableComponent,
+    BusinessSettingsComponent
   ],
   imports: [
     BrowserModule,

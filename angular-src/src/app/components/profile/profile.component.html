@@ -1,9 +1,185 @@
 <div class="container">
-	<div *ngIf = "user">
-		<h2 class="page-header">{{user.name}}</h2>
-		<ul class="list-group">
-			<li class="list-group-item">Username: {{user.username}}</li>
-			<li class="list-group-item">E-mail: {{user.email}}</li>
-		</ul>
+	<div id>
+		<div class="col-sm-4 col-md-3 col-xs-12">
+			<app-page-nav></app-page-nav>
+		</div>
+		<div class="col-sm-8 col-md-9 col-xs-12 toprow">
+			<div class="panel panel-default">
+	        	<div id="title" class="panel-heading main-color-bg">
+	            	<h3 class="panel-title">Member info</h3>
+	            	<input id="editbtn" type="button" class="btn btn-default submit-btn responsbtn" value="Edit Profile">
+	          	</div>
+	        	<div class="panel-body">
+	        	    <ul class="list-group">
+					  <li class="list-group-item">Ime</li>
+					  <li class="list-group-item">Telefon</li>
+					  <li class="list-group-item">Mail</li>
+					  <li class="list-group-item">Debt</li>
+					</ul>
+	    		</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-12 col-md-12 col-xs-12">
+		<div class="panel panel-default">
+        	<div id="title" class="panel-heading main-color-bg">
+            	<h3 class="panel-title">Membership</h3> 
+            	<input type="button" class="btn btn-default submit-btn responsbtn" value="Add New Membership">
+          	</div>
+        	<div class="panel-body">
+				<ul class="list-group">
+					<li class="list-group-item programi">
+				  		<div class="dropdown">
+				  			<div class="dropdown-toggle membershipdropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+				  				<h4>Naziv programa</h4>
+		                   		<div>
+			                   		<div style="display: inline-flex; padding-right: 20px;">
+				                   		<h4>Days left</h4>
+				                   		<h4>/</h4>
+				                   		<h4>Days payed</h4>	
+			                   		</div>
+				                   	<span class="glyphicon glyphicon-chevron-down"></span>
+				                </div>
+		                  	 </div>
+		                    <div class="dropdown-menu">
+		                        <div class="col-sm-6 col-md-6 col-xs-6">
+		                       
+		                        	<p>Cost = 0</p>
+		                        	<p>Debt = 0</p>
+
+		                         </div>
+		                         <div class="col-sm-6 col-md-6 col-xs-6">
+		                         	<p>neki datum</p>
+		                         	<p>neki datum</p>
+	                         	</div>
+
+	                         	<div class="col-sm-6 col-md-6 col-xs-6">
+	                         		<h3>Date</h3>
+	                         		<p>neki datum</p>
+		                         	<p>neki datum</p>
+	                         	</div>
+	                         	<div class="col-sm-6 col-md-6 col-xs-6">
+	                         		<h3>Paid</h3>
+	                         		<div class="col-sm-5 col-md-5 col-xs-5">
+		                         		<p>1000</p>
+		                         		<p>1110</p>
+	                         		</div>
+		                         	<div class="col-sm-2 col-md-2 col-xs-2">
+		                         		<p>x</p>
+		                         		<p>x</p>
+		                         	</div>
+	                         	</div>
+	                         	<div class="col-sm-6 col-md-6 col-xs-6">
+	                         		<input type="button" class="btn btn-default submit-btn responsbtn" value="Pay">
+	                         	</div>
+	                         	<div class="col-sm-6 col-md-6 col-xs-6">
+	                         		<input type="button" class="btn btn-danger responsbtn" value="Delete">
+	                         	</div>
+		                    </div>
+		                </div>
+					</li>
+					<li class="list-group-item programi">
+				  		<div class="dropdown">
+				  			<div class="dropdown-toggle membershipdropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+				  				<h4>Naziv programa</h4>
+		                   		<div>
+			                   		<div style="display: inline-flex; padding-right: 20px;">
+				                   		<h4>Days left</h4>
+				                   		<h4>/</h4>
+				                   		<h4>Days payed</h4>	
+			                   		</div>
+				                   	<span class="glyphicon glyphicon-chevron-down"></span>
+				                </div>
+		                  	 </div>
+		                    <div class="dropdown-menu">
+		                        <div class="col-sm-6 col-md-6 col-xs-6">
+		                       
+		                        	<p>Cost = 0</p>
+		                        	<p>Debt = 0</p>
+
+		                         </div>
+		                         <div class="col-sm-6 col-md-6 col-xs-6">
+		                         	<p>neki datum</p>
+		                         	<p>neki datum</p>
+	                         	</div>
+
+	                         	<div class="col-sm-6 col-md-6 col-xs-6">
+	                         		<h3>Date</h3>
+	                         		<p>neki datum</p>
+		                         	<p>neki datum</p>
+	                         	</div>
+	                         	<div class="col-sm-6 col-md-6 col-xs-6">
+	                         		<h3>Paid</h3>
+	                         		<div class="col-sm-5 col-md-5 col-xs-5">
+		                         		<p>1000</p>
+		                         		<p>1110</p>
+	                         		</div>
+		                         	<div class="col-sm-2 col-md-2 col-xs-2">
+		                         		<p>x</p>
+		                         		<p>x</p>
+		                         	</div>
+	                         	</div>
+	                         	<div class="col-sm-6 col-md-6 col-xs-6">
+	                         		<input type="button" class="btn btn-default submit-btn responsbtn" value="Pay">
+	                         	</div>
+	                         	<div class="col-sm-6 col-md-6 col-xs-6">
+	                         		<input type="button" class="btn btn-danger responsbtn" value="Delete">
+	                         	</div>
+		                    </div>
+		                </div>
+					</li>
+					<li class="list-group-item programi">
+				  		<div class="dropdown">
+				  			<div class="dropdown-toggle membershipdropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+				  				<h4>Naziv programa</h4>
+		                   		<div>
+			                   		<div style="display: inline-flex; padding-right: 20px;">
+				                   		<h4>Days left</h4>
+				                   		<h4>/</h4>
+				                   		<h4>Days payed</h4>	
+			                   		</div>
+				                   	<span class="glyphicon glyphicon-chevron-down"></span>
+				                </div>
+		                  	 </div>
+		                    <div class="dropdown-menu">
+		                        <div class="col-sm-6 col-md-6 col-xs-6">
+		                       
+		                        	<p>Cost = 0</p>
+		                        	<p>Debt = 0</p>
+
+		                         </div>
+		                         <div class="col-sm-6 col-md-6 col-xs-6">
+		                         	<p>neki datum</p>
+		                         	<p>neki datum</p>
+	                         	</div>
+
+	                         	<div class="col-sm-6 col-md-6 col-xs-6">
+	                         		<h3>Date</h3>
+	                         		<p>neki datum</p>
+		                         	<p>neki datum</p>
+	                         	</div>
+	                         	<div class="col-sm-6 col-md-6 col-xs-6">
+	                         		<h3>Paid</h3>
+	                         		<div class="col-sm-5 col-md-5 col-xs-5">
+		                         		<p>1000</p>
+		                         		<p>1110</p>
+	                         		</div>
+		                         	<div class="col-sm-2 col-md-2 col-xs-2">
+		                         		<p>x</p>
+		                         		<p>x</p>
+		                         	</div>
+	                         	</div>
+	                         	<div class="col-sm-6 col-md-6 col-xs-6">
+	                         		<input type="button" class="btn btn-default submit-btn responsbtn" value="Pay">
+	                         	</div>
+	                         	<div class="col-sm-6 col-md-6 col-xs-6">
+	                         		<input type="button" class="btn btn-danger responsbtn" value="Delete">
+	                         	</div>
+		                    </div>
+		                </div>
+					</li>
+				</ul>
+    		</div>
+		</div>
 	</div>
 </div>

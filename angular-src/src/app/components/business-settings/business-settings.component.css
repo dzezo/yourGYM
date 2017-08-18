@@ -1,0 +1,15 @@
+.container {
+	margin-top: 20px;
+}
+
+.responsbtn{
+	position: relative;
+	width: 100%;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.centeralign {
+	display: flex;
+	align-items: center;
+}

@@ -1,0 +1,12 @@
+Pages:
+
+7. Pop-up Add new member
+8. Pop-up Pay/Renew
+
+---------------------------------------
+
+Tasks:
+
+- ikonice uz register forme
+- sredi membership izgled drop down-a
+- povezi sa backendom sta umes

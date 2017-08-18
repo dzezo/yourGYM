@@ -9,11 +9,10 @@
 }
 .registerbox{  
     background: white;
-    color: black;    
+    color: black;
+    padding: 20px;
     margin-top: 10%;
-    margin-left: 50%;
-    left: 0;
-    padding: 20px;   
+    margin-left: 25%;
     box-shadow: 0 8px 50px -2px #000;
     border-radius:5px;
 

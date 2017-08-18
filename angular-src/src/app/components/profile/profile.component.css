@@ -1,0 +1,35 @@
+.container {
+	margin-top: 20px;
+}
+
+.toprow {
+	margin-top: 40px;
+}
+
+#editbtn {
+	max-width: 100%;
+}
+
+#title {
+	display: flex;
+	justify-content: space-between;
+}
+
+.membershipdropdown {
+	display: flex;
+	justify-content: space-between;
+	padding: 10px;
+}
+
+
+.programi {
+	padding: 0;
+}
+
+.dropdown-menu {
+    width: 100%;
+    height: 100%;
+    margin-top: -1px;
+    border-radius: 0;
+    position: relative;
+}
