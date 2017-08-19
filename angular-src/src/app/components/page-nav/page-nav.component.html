@@ -1,7 +1,16 @@
-<div class="list-group">
-	<ul id="pagenavigation">
-        <li class="list-group-item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}"><a [routerLink]="['/dashboard']">Dashboard</a></li>
-        <li class="list-group-item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}"><a [routerLink]="['/businesssettings']">Business settings</a></li>
-        <li class="list-group-item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}"><a [routerLink]="['/members']">Members</a></li>
+<div *ngIf="authService.loggedIn() && !(router.url === '/')" id="page-nav" class="page-nav-collapse main-color-bg col-md-2">
+	<ul>
+	    <li [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}">
+	    	<a [routerLink]="['/dashboard']"><span class="glyphicon glyphicon-cog"></span> Dashboard
+	    	</a>
+	    </li>
+	    <li [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}">
+	    	<a [routerLink]="['/pricelist']"><span class="glyphicon glyphicon-list-alt"></span> Pricelist
+	    	</a>
+	    </li>
+	    <li [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}">
+	    	<a [routerLink]="['/members']"><span class="glyphicon glyphicon-th-list"></span> Members
+	    	</a>
+	    </li>
 	</ul>
 </div>

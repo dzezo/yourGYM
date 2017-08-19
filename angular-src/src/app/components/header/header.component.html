@@ -1,0 +1,14 @@
+<header id="header">
+	<div class="container">
+		<div class="col-md-12">
+			<h1 *ngIf = "router.url === '/'"><span class="glyphicon glyphicon-home"></span> Home <small>Home Page</small></h1>
+			<h1 *ngIf = "router.url === '/login'"><span class="glyphicon glyphicon-log-in"></span> Login <small>Enter Your Gym</small></h1>
+			<h1 *ngIf = "router.url === '/register'"><span class="glyphicon glyphicon-pencil"></span> Register <small>Create Your Account</small></h1>
+
+			<h1 *ngIf = "router.url === '/dashboard'"><span class="glyphicon glyphicon-cog"></span> Dashboard <small>Manage Your Gym</small></h1>
+			<h1 *ngIf = "router.url === '/pricelist'"><span class="glyphicon glyphicon-list-alt"></span> Pricelist <small>Create Your Pricelist</small></h1>
+			<h1 *ngIf = "router.url === '/members'"><span class="glyphicon glyphicon-th-list"></span> Members <small>Manage Your Members</small></h1>
+			<h1 *ngIf = "router.url === '/profile'"><span class="glyphicon glyphicon-user"></span> Profile <small>Member Profile</small></h1>
+		</div>
+	</div>
+</header>

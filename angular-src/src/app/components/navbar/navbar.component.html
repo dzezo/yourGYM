@@ -1,25 +1,40 @@
-<nav id="navbar" class="navbar navbar-default">
-  <div class="container">
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand">yourGYM</a>
+      <a class="navbar-brand" [routerLink]="['/']">yourGYM</a>
     </div>
-    <div class="collapse navbar-collapse">
+    <div class="collapse navbar-collapse" id="navbar">
       <ul class="nav navbar-nav navbar-left">
-        <li [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}"><a [routerLink]="['/']">Home</a></li>
+        <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}">
+          <a [routerLink]="['/dashboard']">Dashboard</a>
+        </li>
+        <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}">
+          <a [routerLink]="['/pricelist']">Pricelist</a>
+        </li>
+        <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}">
+          <a [routerLink]="['/members']">Members</a>
+        </li>
       </ul>
+      <!-- Right Side -->
       <ul class="nav navbar-nav navbar-right">
-        <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}"><a [routerLink]="['/dashboard']">Dashboard</a></li>
-        <li *ngIf="authService.loggedIn()"><a (click)="onLogoutClick()">Logout</a></li>
-
-        <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}"><a [routerLink]="['/login']">Login</a></li>
-        <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}"><a [routerLink]="['/register']">Register</a></li>
+        <!-- Logged in -->
+        <li *ngIf="authService.loggedIn()">
+          <a (click)="onLogoutClick()">Logout</a>
+        </li>
+        <!-- Logged out -->
+        <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}">
+          <a [routerLink]="['/login']">Login</a>
+        </li>
+        <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}">
+          <a [routerLink]="['/register']">Register</a>
+        </li>
       </ul>
-    </div><!--/.nav-collapse -->
+    </div>
   </div>
 </nav>

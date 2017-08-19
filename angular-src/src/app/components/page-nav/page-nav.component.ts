@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-page-nav',
@@ -7,7 +9,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PageNavComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router,
+  			private authService: AuthService) { }
 
   ngOnInit() {
   }

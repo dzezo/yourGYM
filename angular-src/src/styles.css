@@ -1,6 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 
 html, body {
-  height: 100%;
-  width: 100%;
+	background: #f4f4f4;
+	height: 100%;
+	width: 100%;
+	margin-bottom: 50px;
+}
+
+.main-color-bg{
+	background-color: #001029 !important;
+  	border-color: #03001a !important;
+	color: #00caf6 !important;
 }

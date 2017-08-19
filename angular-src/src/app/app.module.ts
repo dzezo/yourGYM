@@ -16,11 +16,12 @@ import { PageNavComponent } from './components/page-nav/page-nav.component';
 import { MembersComponent } from './components/members/members.component';
 import { MemberstableComponent } from './components/memberstable/memberstable.component';
 import { BusinessSettingsComponent } from './components/business-settings/business-settings.component';
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 import { ValidateService } from './services/validate.service';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
-
 
 const appRoutes: Routes = [
 {path: '', component: HomeComponent},
@@ -28,7 +29,7 @@ const appRoutes: Routes = [
 {path: 'login', component: LoginComponent},
 {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
 {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
-{path: 'businesssettings', component: BusinessSettingsComponent, canActivate: [AuthGuard]},
+{path: 'pricelist', component: BusinessSettingsComponent, canActivate: [AuthGuard]},
 {path: 'members', component: MembersComponent, canActivate: [AuthGuard]}
 ]
 
@@ -44,7 +45,9 @@ const appRoutes: Routes = [
     PageNavComponent,
     MembersComponent,
     MemberstableComponent,
-    BusinessSettingsComponent
+    BusinessSettingsComponent,
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
