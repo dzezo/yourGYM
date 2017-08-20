@@ -37,7 +37,7 @@
   text-decoration: none;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 991px) {
   .page-nav-collapse {
   	display: none;
   }
