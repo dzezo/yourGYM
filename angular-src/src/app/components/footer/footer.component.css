@@ -7,5 +7,5 @@
 	padding-left: 15px;
 	padding-top: 5px;
 	padding-bottom: 1px;
-	margin-bottom: 0px;
+	z-index: 101;
 }
