@@ -2,11 +2,9 @@
 	background: #00caf6;
 	color: #ffffff;
 	padding-bottom: 10px;
-	top: 33px;
-	position: absolute;
+	position: relative;
 	width: 100%;
 	z-index: 2;
-
 }
 
 h1 small {
