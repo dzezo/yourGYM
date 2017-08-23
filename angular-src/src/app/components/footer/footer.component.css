@@ -1,11 +1,9 @@
 #footer{
-	height: 25px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	position: fixed;
-	padding-left: 15px;
+	height: 30px;
+	position: relative;
 	padding-top: 5px;
 	padding-bottom: 1px;
-	margin-bottom: 0px;
+	padding-left: 15px;
+	margin-top: -30px; /* if no content */
+	clear: both;
 }

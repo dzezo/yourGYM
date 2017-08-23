@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MembersService } from '../../services/members.service';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -7,9 +9,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+	// Statistics
+	statMembers: String;
+	statActiveMembers: String;
+	statIndeptedMembers: String;
+	statUnpaidAmount: String;
+	constructor(private memSvc: MembersService) { }
 
-  ngOnInit() {
-  }
+	ngOnInit() {
+		var user = JSON.parse(localStorage.getItem('user'));
+		this.memSvc.getStatistics(user.id).subscribe(stats => {
+			this.statMembers = JSON.stringify(stats.members);
+			this.statActiveMembers = JSON.stringify(stats.activeMembers);
+			this.statIndeptedMembers = JSON.stringify(stats.indeptedMembers);
+			this.statUnpaidAmount = JSON.stringify(stats.unpaidAmount);
+		},
+		err =>{
+			console.log(err);
+			return false;
+		});
+	}
 
 }
