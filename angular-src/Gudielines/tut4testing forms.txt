@@ -5,10 +5,6 @@ Ceo element sa formom, (divove) uokviris tagom form i dodas submit event i funkc
 	*svuda de su txt inputi
 	*[(ngModel)]="username" name="username"
 
-U app.module.ts const niz appRoutes izbaci canActivate[AuthGuard] modul
-da bi se bez autentifikacije kretao kroz rute
-pr. localhost:4200/profile
-
 Pokretanje backend-a:
 
 1. Pokretanje baze: 
