@@ -60,4 +60,5 @@
 	border: 5px solid #03001a;
 	border-radius: 10px;
 	text-align: center;
+	overflow: hidden;
 }
