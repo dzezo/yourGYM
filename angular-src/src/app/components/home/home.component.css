@@ -1,8 +1,63 @@
+.container {
+	margin-top: 4.5%;
+}
+
 #myCarousel {
-	position: absolute;
-	top: 0;
 	z-index: 1;
-	height: 100%;
+}
+
+.carousel-control {
+	z-index: 20;
+	color: #03001a;
+	width: 5%;
+}
+
+.carousel-indicators li{
+	border: 2px solid #03001a;
+	border-radius: 0;
+	background-color: #00caf6;
+
+}
+
+/* container sadrzaja vrteske */
+.carousel-caption {
 	display: flex;
-	align-self: stretch;
+	justify-content: space-around;
+	align-items: center;
+	bottom: 0;
+	top: 0;
+	right: 0;
+	left: 0;
+	padding-left: 6%;
+	padding-right: 6%;
+	padding-top: 7%;
+	padding-bottom: 8%;
+}
+
+/* slika unutar vrteske */
+.carouselPic {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	border: 5px solid #03001a;
+	border-radius: 10px;
+}
+
+.carouselPic img {
+	width: 100%;
+    height: 100%;
+}
+
+/* tekst unutar vrteske */
+.carouselText {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	background-color: #00caf6;
+	border: 5px solid #03001a;
+	border-radius: 10px;
+	text-align: center;
 }
