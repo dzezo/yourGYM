@@ -1,15 +1,65 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, HostListener} from '@angular/core';
+
+declare var $: any;
 
 @Component({
   selector: 'app-members',
   templateUrl: './members.component.html',
   styleUrls: ['./members.component.css']
 })
-export class MembersComponent implements OnInit {
+export class MembersComponent implements OnInit, AfterViewInit {
+	// Sidebar
+	contentContainer: any;
+	sidebarWrapper: any;
+	sidebar: any;
+	sidebarOffset: any;
+	
+	constructor(private elRef: ElementRef) { }
 
-  constructor() { }
+	ngOnInit() {
+	}
 
-  ngOnInit() {
-  }
+	ngAfterViewInit(){
+		this.sidebarWrapper = $(this.elRef.nativeElement).find('.page-nav-wrapper');
+		this.sidebar = $(this.elRef.nativeElement).find('#page-nav');
+		this.contentContainer = $(this.elRef.nativeElement).find('.container')
+		// set Sidebar Height
+		this.sidebarWrapper.css('height', (window.innerHeight) + 'px');
+		// set Sidebar Offset ( Init & Reroute )
+		var contentOffset = this.contentContainer.offset();
+		this.sidebarOffset = contentOffset.top - parseInt(this.contentContainer.css('margin-top'), 10);
+	}
+
+	// Events
+
+	@HostListener("window:scroll", [])
+	onWindowScroll() {
+		if(window.scrollY > this.sidebarOffset){
+			this.sidebar.css('margin-top', window.scrollY - this.sidebarOffset);
+		}
+		else{
+			this.sidebar.css('margin-top', 0);
+		}
+	}
+	@HostListener("window:resize", [])
+	onWindowsResize(){
+		// Adjust Height
+		this.sidebarWrapper.css('height', (window.innerHeight) + 'px');
+		// Adjust Offset
+		var contentOffset = this.contentContainer.offset();
+		this.sidebarOffset = contentOffset.top - parseInt(this.contentContainer.css('margin-top'), 10);
+		if(window.scrollY > this.sidebarOffset){
+			this.sidebar.css('margin-top', window.scrollY - this.sidebarOffset);
+		}
+		else{
+			this.sidebar.css('margin-top', 0);
+		}
+	}
+	@HostListener("window:load", [])
+	onWindowsLoad(){
+		// set Sidebar Offset ( Refresh & Load )
+		var contentOffset = this.contentContainer.offset();
+		this.sidebarOffset = contentOffset.top - parseInt(this.contentContainer.css('margin-top'), 10);
+	}
 
 }

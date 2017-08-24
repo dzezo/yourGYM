@@ -5,7 +5,6 @@ import { MembersService } from '../../services/members.service';
 
 declare var $: any;
 
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -18,6 +17,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 	members: Array<any>;
 	membershipTypes: Array<any>;
 	// Sidebar
+	contentContainer: any;
 	sidebarWrapper: any;
 	sidebar: any;
 	sidebarOffset: any;
@@ -51,16 +51,20 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 		this.modal = $(this.elRef.nativeElement).find('#add-member-modal');
 		this.sidebarWrapper = $(this.elRef.nativeElement).find('.page-nav-wrapper');
 		this.sidebar = $(this.elRef.nativeElement).find('#page-nav');
-		// set Height
+		this.contentContainer = $(this.elRef.nativeElement).find('.container')
+		// set Sidebar Height
 		this.sidebarWrapper.css('height', (window.innerHeight) + 'px');
-		// set Sidebar Offset
-		this.sidebarOffset = this.sidebar.offset();
+		// set Sidebar Offset ( Init & Reroute )
+		var contentOffset = this.contentContainer.offset();
+		this.sidebarOffset = contentOffset.top - parseInt(this.contentContainer.css('margin-top'), 10);
 	}
+
+	// Events
 
 	@HostListener("window:scroll", [])
 	onWindowScroll() {
-		if(window.scrollY > this.sidebarOffset.top){
-			this.sidebar.css('margin-top', window.scrollY - this.sidebarOffset.top);
+		if(window.scrollY > this.sidebarOffset){
+			this.sidebar.css('margin-top', window.scrollY - this.sidebarOffset);
 		}
 		else{
 			this.sidebar.css('margin-top', 0);
@@ -68,8 +72,26 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 	}
 	@HostListener("window:resize", [])
 	onWindowsResize(){
+		// Adjust Height
 		this.sidebarWrapper.css('height', (window.innerHeight) + 'px');
+		// Adjust Offset
+		var contentOffset = this.contentContainer.offset();
+		this.sidebarOffset = contentOffset.top - parseInt(this.contentContainer.css('margin-top'), 10);
+		if(window.scrollY > this.sidebarOffset){
+			this.sidebar.css('margin-top', window.scrollY - this.sidebarOffset);
+		}
+		else{
+			this.sidebar.css('margin-top', 0);
+		}
 	}
+	@HostListener("window:load", [])
+	onWindowsLoad(){
+		// set Sidebar Offset ( Refresh & Load )
+		var contentOffset = this.contentContainer.offset();
+		this.sidebarOffset = contentOffset.top - parseInt(this.contentContainer.css('margin-top'), 10);
+	}
+
+	// Methods
 
 	getStatistics(){
 		this.memSvc.getStatistics(this.user.id).subscribe(stats => {
