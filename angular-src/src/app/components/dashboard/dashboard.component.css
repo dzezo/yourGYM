@@ -6,6 +6,56 @@
 	margin-top: 20px;
 }
 
+.modal-dialog{
+	width: 400px;
+}
+
+.modal-content{
+	border-color: #001029 !important;
+}
+
+.modal-header{
+	background-color: #001029 !important;
+	border-color: #001029 !important;
+	color: #00caf6 !important;
+}
+
+.modal-header .close{
+	color: #00caf6 !important;
+	opacity: 1;
+}
+
+.modal-header .close:hover{
+	color: #ffffff !important;
+	opacity: 1;
+}
+
+.modal-body hr{
+	border-top: 1px solid #001029;
+	opacity: 0.5;
+}
+
+.form-control{
+	height: 30px;
+	padding: 4px 16px;
+}
+
+.dropdown-menu{
+	max-height: 280px;
+    min-width: stretch;
+    text-align: center;
+    overflow: auto;
+}
+
+.dropdown-menu li a:hover{
+	background-color: #001029;
+	color: #00caf6;
+}
+
+.modal-footer > button {
+	padding: 8px 16px !important;
+}
+
 @media (max-width: 991px) {
   .page-nav-wrapper {
   	display: none;

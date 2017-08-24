@@ -10,30 +10,38 @@ export class MembersService {
   // Dashboard & Members
 
   getStatistics(userId){
-  	var headers = new Headers();
-    return this.http.get('http://localhost:3000/members/' + userId + '/statistics', {headers: headers})
+    return this.http.get('http://localhost:3000/members/' + userId + '/statistics')
       .map(res => res.json());
   }
 
   getActiveMembers(userId){
-  	var headers = new Headers();
-    return this.http.get('http://localhost:3000/members/active/' + userId, {headers: headers})
+    return this.http.get('http://localhost:3000/members/active/' + userId)
       .map(res => res.json());
   }
 
   searchByName(userId, name){
-  	var headers = new Headers();
-    return this.http.get('http://localhost:3000/members/' + userId + '/search/' + name, {headers: headers})
+    return this.http.get('http://localhost:3000/members/' + userId + '/search/' + name)
       .map(res => res.json());
   }
 
   deleteMember(memberId){
-  	var headers = new Headers();
-    return this.http.get('http://localhost:3000/members/' + memberId, {headers: headers})
+    return this.http.delete('http://localhost:3000/members/member/' + memberId)
+      .map(res => res.json());
+  }
+
+  addNewMember(userId, newMember){
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://localhost:3000/members/' + userId, JSON.stringify(newMember), {headers: headers})
       .map(res => res.json());
   }
 
   // Pricelist
+
+  getPricelist(userId){
+    return this.http.get('http://localhost:3000/pricelists/' + userId)
+      .map(res => res.json());
+  }
 
   // Profile
 }

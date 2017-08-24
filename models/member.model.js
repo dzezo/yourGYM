@@ -66,10 +66,12 @@ module.exports.addMember = function (userId, input, res) {
 			var newMember = new Member({
 				userId: userId,
 				name: input.name,
-				phone: input.phone,
-				email: input.email,
-				totalDebt: debt,
+				totalDebt: debt
 			});
+			if(input.phone)
+				newMember.phone = input.phone;
+			if(input.email)
+				newMember.email = input.email;
 			newMember.memberships.unshift({
 				mName: item.name,
 				start: input.start,
@@ -89,7 +91,17 @@ module.exports.addMember = function (userId, input, res) {
 				if(err)
 					res.json({ success: false, msg: 'Failed to add member.'});
 				else
-					res.json({ success: true, msg: 'New member added.' });
+					res.json({ 
+						success: true, 
+						msg: 'New member added.', 
+						member: {
+							id: member._id,
+							name: member.name,
+							debt: member.totalDebt,
+							start: member.memberships[0].start,
+							left: member.memberships[0].daysLeft
+						} 
+					});
 			});
 		}
 	});
@@ -303,6 +315,7 @@ module.exports.getActiveMembers = function(userId, res){
 			members.forEach(member =>{
 				if(member.memberships[0].daysLeft > 0){
 					var newMember = {
+						id: member._id,
 						name: member.name,
 						debt: member.totalDebt,
 						start: member.memberships[0].start,
