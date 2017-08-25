@@ -22,6 +22,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { ValidateService } from './services/validate.service';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
+import { MembersService } from './services/members.service';
 
 const appRoutes: Routes = [
 {path: '', component: HomeComponent},
@@ -59,7 +60,8 @@ const appRoutes: Routes = [
   providers: [
     ValidateService,
     AuthService,
-    AuthGuard
+    AuthGuard,
+    MembersService
   ],
   bootstrap: [AppComponent]
 })

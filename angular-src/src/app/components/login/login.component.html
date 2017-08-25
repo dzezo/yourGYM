@@ -1,28 +1,40 @@
-<div class="container">
-    <div id="loginbox" class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <div class="panel-title">
-                    <div>
-                        <h4>Log in to our site!</h4>
-                        <p>Enter your username and password:</p>
+<div class="login2background">
+    <form (submit) = "onLoginSubmit()"> 
+        <div class="container">
+            <div class="col-lg-6 col-md-6 col-sm-8  loginbox">
+                <div class=" row">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-6">
+                        <img src="../../assets/LOGOplaceholder.png" alt="Logo" class="logo"> 
                     </div>
-                    <p class="glyphicon glyphicon-lock"></p>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6  ">
+                        <span class="singtext" >Login</span>   
+                    </div>      
+                </div>
+                <div class=" row loginbox_content">
+                    <div class="input-group input-group-sm" >
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-user"></span>
+                        </span>
+                        <input [(ngModel)]="username" name="username" class="form-control" type="text" placeholder="Username"  >
+                    </div>
+                    <br>
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-lock"></span>
+                        </span>
+                        <input [(ngModel)]="password" name="password" class="form-control" type="password" placeholder="Password" >
+                    </div>              
+                </div>
+                <div class="row ">                   
+                    <!--div class="col-lg-8 col-md-8  col-sm-8 col-xs-7 forgotpassword "> 
+                        <a href="#"  > Forgot Username / Password?</a>                    
+                    </div-->
+                    <div class="col-lg-4 col-md-4 col-sm-4  col-xs-5"> 
+                    <input type="submit" class="btn btn-default submit-btn" value="Submit">       
+                    </div>
                 </div>
             </div>
-            <div class="panel-body">
-                <form (submit)="onLoginSubmit()" class="form-horizontal" role="form">
-                    <div class="input">
-                        <input [(ngModel)]="username" type="text" class="form-control" name="username" placeholder="Username">
-                    </div>
-                    <div class="input">
-                        <input [(ngModel)]="password" type="password" class="form-control" name="password" placeholder="Password">
-                    </div>
-                    <div style="margin-top:10px" class="form">
-                        <input type="submit" class="btn btn-success btn-block" value="Sign in"> 
-                    </div>
-                </form>
-            </div>
+            <div class="col-lg-6 col-md-6 col-sm-4 "></div>
         </div>
-    </div>
+    </form>
 </div>

@@ -23,7 +23,7 @@ router.delete('/member/:memberId', function (req, res, next) {
 		if(err)
 			res.json({ success: false, msg: 'Failed to remove member.' });
 		else
-			res.json({ success: true, msg: exMember.name + ' is removed.' });
+			res.json({ success: true, msg: 'Member is removed.' });
 	});
 });
 
@@ -71,6 +71,7 @@ router.get('/:userId/search/:search', function (req, res, next) {
 			var memArr = [];
 			members.forEach(member =>{
 				var newMember = {
+					id: member._id,
 					name: member.name,
 					debt: member.totalDebt,
 					start: member.memberships[0].start,
@@ -92,6 +93,7 @@ router.get('/:userId', function (req, res, next) {
 			var memArr = [];
 			members.forEach(member =>{
 				var newMember = {
+					id: member._id,
 					name: member.name,
 					debt: member.totalDebt,
 					start: member.memberships[0].start,

@@ -1,4 +1,4 @@
-<div *ngIf="authService.loggedIn() && !(router.url === '/')" id="page-nav" class="page-nav-collapse main-color-bg col-md-2">
+<div id="page-nav" class="main-color-bg">
 	<ul>
 	    <li [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}">
 	    	<a [routerLink]="['/dashboard']"><span class="glyphicon glyphicon-cog"></span> Dashboard
@@ -14,3 +14,5 @@
 	    </li>
 	</ul>
 </div>
+
+<!-- *ngIf="authService.loggedIn() && !(router.url === '/')"  -->

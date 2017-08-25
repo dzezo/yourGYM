@@ -1,16 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 
-
 html, body {
 	background: #f4f4f4;
 	height: 100%;
 	width: 100%;
-	font-family: 'Oswald', sans-serif;
-}
-
-body {
-	background-image: url("assets/BGplaceholder.png");
-	background-repeat: repeat;
 }
 
 .main-color-bg{

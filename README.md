@@ -279,6 +279,14 @@ Azuriranje pricelistId clanarine
 ```
 {
     "success": true,
-    "msg": "Zene - 07-22 sa kardio programom is now updated."
+    "msg": "Zene - 07-22 sa kardio programom is now updated.",
+    "item": {
+        "_id": "599d992747856906e48de63e",
+        "userId": "59932102eadabb0cec8178bc",
+        "name": "Zene - 07-22 sa kardio programom",
+        "length": 30,
+        "cost": 2500,
+        "__v": 0
+    }
 }
 ```

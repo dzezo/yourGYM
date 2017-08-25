@@ -50,7 +50,7 @@ router.put('/item/:pricelistId', function (req, res, next) {
 		if(err)
 			res.json({ success: false, msg: 'Failed to update item information.' });
 		else
-			res.json({ success: true, msg: updatedItem.name + ' is now updated.' });
+			res.json({ success: true, msg: updatedItem.name + ' is now updated.', item: updatedItem });
 	});
 });
 
