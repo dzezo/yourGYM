@@ -1,4 +1,7 @@
 import { Component, OnInit, AfterViewInit, ElementRef, HostListener} from '@angular/core';
+import { FlashMessagesService } from 'angular2-flash-messages';
+import { MembersService } from '../../services/members.service';
+import { PricelistService } from '../../services/pricelist.service';
 
 declare var $: any;
 
@@ -8,16 +11,25 @@ declare var $: any;
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit, AfterViewInit {
-
+  // User
+  user: any;
+  // Member
+  members: any;
+  memberships: Array<any>;
   // Sidebar
   contentContainer: any;
   sidebarWrapper: any;
   sidebar: any;
   sidebarOffset: any;
 
-  constructor(private elRef: ElementRef) { }
+  constructor(private memSvc: MembersService,
+              private pricelistSvc: PricelistService,
+              private flashMessage: FlashMessagesService,
+              private elRef: ElementRef) { }
 
   ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('user'));
+    // Get Member on err dont show content
   }
 
   ngAfterViewInit(){

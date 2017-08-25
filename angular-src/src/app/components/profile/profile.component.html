@@ -4,184 +4,96 @@
 </div>
 <!-- Content -->
 <div class="container col-sm-12 col-md-10">
-	<div>
-		<div class="col-sm-8 col-md-9 col-xs-12 toprow">
-			<div class="panel panel-default">
-	        	<div id="title" class="panel-heading main-color-bg">
-	            	<h3 class="panel-title">Member info</h3>
-	            	<input id="editbtn" type="button" class="btn btn-default submit-btn responsbtn" value="Edit Profile">
-	          	</div>
-	        	<div class="panel-body">
-	        	    <ul class="list-group">
-					  <li class="list-group-item">Ime</li>
-					  <li class="list-group-item">Telefon</li>
-					  <li class="list-group-item">Mail</li>
-					  <li class="list-group-item">Debt</li>
-					</ul>
-	    		</div>
+	<!-- Member Info -->
+	<div class="panel panel-default">
+    	<div class="panel-heading main-color-bg">
+        	<h3 class="panel-title main-color-bg">Member info</h3>
+        	<a><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit</a>
+      	</div>
+    	<div class="panel-body">
+    	    <div class="col-md-3">
+		        <div class="well dash-box">
+		        <h3><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Name</h3>
+		        <h4>Petar Petrovic</h4>
+	   			</div>
+			</div>
+			<div class="col-md-3">
+				<div class="well dash-box">
+				<h3><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Phone</h3>
+				<h4>053 231 213</h4>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="well dash-box">
+				<h3><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> E-mail</h3>
+				<h4>petar@gmail.com</h4>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="well dash-box">
+				  <h3><span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> Debt</h3>
+				  <h4>2000</h4>
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-12 col-md-12 col-xs-12">
-		<div class="panel panel-default">
-        	<div id="title" class="panel-heading main-color-bg">
-            	<h3 class="panel-title">Membership</h3> 
-            	<input type="button" class="btn btn-default submit-btn responsbtn" value="Add New Membership">
-          	</div>
-        	<div class="panel-body">
-				<ul class="list-group">
-					<li class="list-group-item programi">
-				  		<div class="dropdown">
-				  			<div class="dropdown-toggle membershipdropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-				  				<h4>Naziv programa</h4>
-		                   		<div>
-			                   		<div style="display: inline-flex; padding-right: 20px;">
-				                   		<h4>Days left</h4>
-				                   		<h4>/</h4>
-				                   		<h4>Days payed</h4>	
-			                   		</div>
-				                   	<span class="glyphicon glyphicon-chevron-down"></span>
-				                </div>
-		                  	 </div>
-		                    <div class="dropdown-menu">
-		                        <div class="col-sm-6 col-md-6 col-xs-6">
-		                       
-		                        	<p>Cost = 0</p>
-		                        	<p>Debt = 0</p>
+	<!-- Memberships -->
+	<div class="panel panel-default">
+    	<div class="panel-heading main-color-bg">
+        	<h3 class="panel-title main-color-bg">Membership</h3> 
+        	<input type="button" class="btn btn-default submit-btn responsbtn" value="Add New Membership">
+      	</div>
+    	<div class="panel-body">
+			<ul class="list-group">
+				<li class="list-group-item">
+			  		<div class="dropdown">
+			  			<div class="dropdown-toggle membershipdropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+			  				<h4>Naziv programa</h4>
+	                   		<div>
+		                   		<div style="display: inline-flex; padding-right: 20px;">
+			                   		<h4>Days left</h4>
+			                   		<h4>/</h4>
+			                   		<h4>Days payed</h4>	
+		                   		</div>
+			                   	<span class="glyphicon glyphicon-chevron-down"></span>
+			                </div>
+	                  	 </div>
+	                    <div class="dropdown-menu">
+	                        <div class="col-sm-6 col-md-6 col-xs-6">	                       
+	                        	<p>Cost = 0</p>
+	                        	<p>Debt = 0</p>
+	                         </div>
+	                         <div class="col-sm-6 col-md-6 col-xs-6">
+	                         	<p>neki datum</p>
+	                         	<p>neki datum</p>
+                         	</div>
 
-		                         </div>
-		                         <div class="col-sm-6 col-md-6 col-xs-6">
-		                         	<p>neki datum</p>
-		                         	<p>neki datum</p>
+                         	<div class="col-sm-6 col-md-6 col-xs-6">
+                         		<h3>Date</h3>
+                         		<p>neki datum</p>
+	                         	<p>neki datum</p>
+                         	</div>
+                         	<div class="col-sm-6 col-md-6 col-xs-6">
+                         		<h3>Paid</h3>
+                         		<div class="col-sm-5 col-md-5 col-xs-5">
+	                         		<p>1000</p>
+	                         		<p>1110</p>
+                         		</div>
+	                         	<div class="col-sm-2 col-md-2 col-xs-2">
+	                         		<p>x</p>
+	                         		<p>x</p>
 	                         	</div>
-
-	                         	<div class="col-sm-6 col-md-6 col-xs-6">
-	                         		<h3>Date</h3>
-	                         		<p>neki datum</p>
-		                         	<p>neki datum</p>
-	                         	</div>
-	                         	<div class="col-sm-6 col-md-6 col-xs-6">
-	                         		<h3>Paid</h3>
-	                         		<div class="col-sm-5 col-md-5 col-xs-5">
-		                         		<p>1000</p>
-		                         		<p>1110</p>
-	                         		</div>
-		                         	<div class="col-sm-2 col-md-2 col-xs-2">
-		                         		<p>x</p>
-		                         		<p>x</p>
-		                         	</div>
-	                         	</div>
-	                         	<div class="col-sm-6 col-md-6 col-xs-6">
-	                         		<input type="button" class="btn btn-default submit-btn responsbtn" value="Pay">
-	                         	</div>
-	                         	<div class="col-sm-6 col-md-6 col-xs-6">
-	                         		<input type="button" class="btn btn-danger responsbtn" value="Delete">
-	                         	</div>
-		                    </div>
-		                </div>
-					</li>
-					<li class="list-group-item programi">
-				  		<div class="dropdown">
-				  			<div class="dropdown-toggle membershipdropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-				  				<h4>Naziv programa</h4>
-		                   		<div>
-			                   		<div style="display: inline-flex; padding-right: 20px;">
-				                   		<h4>Days left</h4>
-				                   		<h4>/</h4>
-				                   		<h4>Days payed</h4>	
-			                   		</div>
-				                   	<span class="glyphicon glyphicon-chevron-down"></span>
-				                </div>
-		                  	 </div>
-		                    <div class="dropdown-menu">
-		                        <div class="col-sm-6 col-md-6 col-xs-6">
-		                       
-		                        	<p>Cost = 0</p>
-		                        	<p>Debt = 0</p>
-
-		                         </div>
-		                         <div class="col-sm-6 col-md-6 col-xs-6">
-		                         	<p>neki datum</p>
-		                         	<p>neki datum</p>
-	                         	</div>
-
-	                         	<div class="col-sm-6 col-md-6 col-xs-6">
-	                         		<h3>Date</h3>
-	                         		<p>neki datum</p>
-		                         	<p>neki datum</p>
-	                         	</div>
-	                         	<div class="col-sm-6 col-md-6 col-xs-6">
-	                         		<h3>Paid</h3>
-	                         		<div class="col-sm-5 col-md-5 col-xs-5">
-		                         		<p>1000</p>
-		                         		<p>1110</p>
-	                         		</div>
-		                         	<div class="col-sm-2 col-md-2 col-xs-2">
-		                         		<p>x</p>
-		                         		<p>x</p>
-		                         	</div>
-	                         	</div>
-	                         	<div class="col-sm-6 col-md-6 col-xs-6">
-	                         		<input type="button" class="btn btn-default submit-btn responsbtn" value="Pay">
-	                         	</div>
-	                         	<div class="col-sm-6 col-md-6 col-xs-6">
-	                         		<input type="button" class="btn btn-danger responsbtn" value="Delete">
-	                         	</div>
-		                    </div>
-		                </div>
-					</li>
-					<li class="list-group-item programi">
-				  		<div class="dropdown">
-				  			<div class="dropdown-toggle membershipdropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-				  				<h4>Naziv programa</h4>
-		                   		<div>
-			                   		<div style="display: inline-flex; padding-right: 20px;">
-				                   		<h4>Days left</h4>
-				                   		<h4>/</h4>
-				                   		<h4>Days payed</h4>	
-			                   		</div>
-				                   	<span class="glyphicon glyphicon-chevron-down"></span>
-				                </div>
-		                  	 </div>
-		                    <div class="dropdown-menu">
-		                        <div class="col-sm-6 col-md-6 col-xs-6">
-		                       
-		                        	<p>Cost = 0</p>
-		                        	<p>Debt = 0</p>
-
-		                         </div>
-		                         <div class="col-sm-6 col-md-6 col-xs-6">
-		                         	<p>neki datum</p>
-		                         	<p>neki datum</p>
-	                         	</div>
-
-	                         	<div class="col-sm-6 col-md-6 col-xs-6">
-	                         		<h3>Date</h3>
-	                         		<p>neki datum</p>
-		                         	<p>neki datum</p>
-	                         	</div>
-	                         	<div class="col-sm-6 col-md-6 col-xs-6">
-	                         		<h3>Paid</h3>
-	                         		<div class="col-sm-5 col-md-5 col-xs-5">
-		                         		<p>1000</p>
-		                         		<p>1110</p>
-	                         		</div>
-		                         	<div class="col-sm-2 col-md-2 col-xs-2">
-		                         		<p>x</p>
-		                         		<p>x</p>
-		                         	</div>
-	                         	</div>
-	                         	<div class="col-sm-6 col-md-6 col-xs-6">
-	                         		<input type="button" class="btn btn-default submit-btn responsbtn" value="Pay">
-	                         	</div>
-	                         	<div class="col-sm-6 col-md-6 col-xs-6">
-	                         		<input type="button" class="btn btn-danger responsbtn" value="Delete">
-	                         	</div>
-		                    </div>
-		                </div>
-					</li>
-				</ul>
-    		</div>
+                         	</div>
+                         	<div class="col-sm-6 col-md-6 col-xs-6">
+                         		<input type="button" class="btn btn-default submit-btn responsbtn" value="Pay">
+                         	</div>
+                         	<div class="col-sm-6 col-md-6 col-xs-6">
+                         		<input type="button" class="btn btn-danger responsbtn" value="Delete">
+                         	</div>
+	                    </div>
+	                </div>
+				</li>
+			</ul>
 		</div>
 	</div>
 </div>

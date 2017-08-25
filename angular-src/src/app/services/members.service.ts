@@ -14,6 +14,11 @@ export class MembersService {
       .map(res => res.json());
   }
 
+  getMembers(userId){
+    return this.http.get('http://localhost:3000/members/' + userId)
+      .map(res => res.json());
+  }
+
   getActiveMembers(userId){
     return this.http.get('http://localhost:3000/members/active/' + userId)
       .map(res => res.json());
@@ -37,4 +42,10 @@ export class MembersService {
   }
 
   // Profile
+
+   getMember(memberId){
+    return this.http.get('http://localhost:3000/members/member/' + memberId)
+      .map(res => res.json());
+  }
+
 }
