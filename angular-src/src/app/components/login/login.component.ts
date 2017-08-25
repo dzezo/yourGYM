@@ -1,25 +1,53 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, HostListener } from '@angular/core';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+
+declare var $: any;
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit {
 	// ngModel
 	username: String;
 	password: String;
 
+  // Background
+  backgroundElement: any;
+  footerSize: any = 30;
   constructor(
   			private flashMessage: FlashMessagesService,
   			private authService: AuthService,
-  			private router: Router) { }
+  			private router: Router,
+        private elRef: ElementRef) { }
 
   ngOnInit() {
   }
+
+  ngAfterViewInit(){
+    this.backgroundElement = $(this.elRef.nativeElement).find('.login-background');
+    var contentOffset = this.backgroundElement.offset();
+    this.backgroundElement.css('height', (window.innerHeight - contentOffset.top - this.footerSize) + 'px');
+  }
+
+  // Events
+
+  @HostListener("window:resize", [])
+  onWindowsResize(){
+    var contentOffset = this.backgroundElement.offset();
+    this.backgroundElement.css('height', (window.innerHeight - contentOffset.top - this.footerSize) + 'px');
+  }
+  @HostListener("window:load", [])
+  onWindowsLoad(){
+    // set Sidebar Offset ( Refresh & Load )
+    var contentOffset = this.backgroundElement.offset();
+    this.backgroundElement.css('height', (window.innerHeight - contentOffset.top - this.footerSize) + 'px');
+  }
+
+  // Methods
 
   onLoginSubmit(){
   	var user = {
