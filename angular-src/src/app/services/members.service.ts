@@ -36,12 +36,5 @@ export class MembersService {
       .map(res => res.json());
   }
 
-  // Pricelist
-
-  getPricelist(userId){
-    return this.http.get('http://localhost:3000/pricelists/' + userId)
-      .map(res => res.json());
-  }
-
   // Profile
 }

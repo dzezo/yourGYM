@@ -11,8 +11,8 @@ router.get('/:userId', function (req, res, next) {
 	});
 });
 
-router.get('/item/:pricelistId', function (req, res, next) {
-	Pricelist.loadItem(req.params.pricelistId, function(err, item){
+router.get('/item/:itemId', function (req, res, next) {
+	Pricelist.loadItem(req.params.itemId, function(err, item){
 		if(err)
 			res.json({success: false, msg: 'Loading of pricelist item failed.'});
 		else
@@ -36,8 +36,8 @@ router.post('/:userId', function (req, res, next) {
 	});
 });
 
-router.delete('/item/:pricelistId', function (req, res, next) {
-	Pricelist.removeItem(req.params.pricelistId, function(err, deletedItem){
+router.delete('/item/:itemId', function (req, res, next) {
+	Pricelist.removeItem(req.params.itemId, function(err, deletedItem){
 		if(err)
 			res.json({ success: false, msg: 'Failed to remove item.' });
 		else
@@ -45,8 +45,8 @@ router.delete('/item/:pricelistId', function (req, res, next) {
 	});
 });
 
-router.put('/item/:pricelistId', function (req, res, next) {
-	Pricelist.updateItem(req.params.pricelistId, req.body, function(err, updatedItem){
+router.put('/item/:itemId', function (req, res, next) {
+	Pricelist.updateItem(req.params.itemId, req.body, function(err, updatedItem){
 		if(err)
 			res.json({ success: false, msg: 'Failed to update item information.' });
 		else

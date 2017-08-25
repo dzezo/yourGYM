@@ -220,10 +220,10 @@ Dobavi kompletan cenovnik
 .get(./pricelists/:userId)
 ```
 
-Dobavi podatke pricelistId clanarine
+Dobavi podatke itemId clanarine
 
 ```
-.get(./pricelist/item/pricelistId)
+.get(./pricelist/item/itemId)
 ```
 
 **Save Metode**
@@ -249,10 +249,10 @@ Usnimi clanarinu
 ```
 
 **Delete Metode**
-Obrisi pricelistId clanarinu
+Obrisi itemId clanarinu
 
 ```
-.delete(./pricelist/item/pricelistId)
+.delete(./pricelist/item/itemId)
 ```
 *Output
 ```
@@ -262,10 +262,10 @@ Obrisi pricelistId clanarinu
 }
 ```
 **Update Metode**
-Azuriranje pricelistId clanarine
+Azuriranje itemId clanarine
 
 ```
-.put(./pricelist/item/pricelistId)
+.put(./pricelist/item/itemId)
 ```
 *Input
 ```

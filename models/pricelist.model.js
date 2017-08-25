@@ -30,18 +30,18 @@ module.exports.loadPricelist = function(userId, callback){
 	Pricelist.find(query, project, options, callback);
 }
 
-module.exports.loadItem = function(pricelistId, callback){
-	var query = {_id: pricelistId};
+module.exports.loadItem = function(itemId, callback){
+	var query = {_id: itemId};
 	Pricelist.findOne(query, callback);
 }
 
-module.exports.removeItem = function(pricelistId, callback){
-	var query = {_id: pricelistId};
+module.exports.removeItem = function(itemId, callback){
+	var query = {_id: itemId};
 	Pricelist.findOneAndRemove(query, callback);
 }
 
-module.exports.updateItem = function(pricelistId, update, callback){
-	var query = {_id: pricelistId};
+module.exports.updateItem = function(itemId, update, callback){
+	var query = {_id: itemId};
 	var update = {
 		$set: {
 			name: update.name,
