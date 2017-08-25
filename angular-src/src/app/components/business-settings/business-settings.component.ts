@@ -7,7 +7,7 @@ declare var $: any;
   templateUrl: './business-settings.component.html',
   styleUrls: ['./business-settings.component.css']
 })
-export class BusinessSettingsComponent implements OnInit {
+export class BusinessSettingsComponent implements OnInit, AfterViewInit {
 	// Sidebar
 	contentContainer: any;
 	sidebarWrapper: any;

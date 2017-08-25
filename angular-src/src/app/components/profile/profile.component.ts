@@ -1,28 +1,66 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Component, OnInit, AfterViewInit, ElementRef, HostListener} from '@angular/core';
 
+declare var $: any;
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit {
-	user: Object;
+export class ProfileComponent implements OnInit, AfterViewInit {
 
-  constructor(private router: Router, private authService: AuthService) { }
+  // Sidebar
+  contentContainer: any;
+  sidebarWrapper: any;
+  sidebar: any;
+  sidebarOffset: any;
 
-  // If there is a token in localstorage, 
-  // user will be ready for template
+  constructor(private elRef: ElementRef) { }
+
   ngOnInit() {
-  	this.authService.getProfile().subscribe(profile => {
-  		this.user = profile.user;
-  	},
-  	err => {
-  		console.log(err);
-  		return false;
-  	});
+  }
+
+  ngAfterViewInit(){
+    this.sidebarWrapper = $(this.elRef.nativeElement).find('.page-nav-wrapper');
+    this.sidebar = $(this.elRef.nativeElement).find('#page-nav');
+    this.contentContainer = $(this.elRef.nativeElement).find('.container')
+    // set Sidebar Height
+    this.sidebarWrapper.css('height', (window.innerHeight) + 'px');
+    // set Sidebar Offset ( Init & Reroute )
+    var contentOffset = this.contentContainer.offset();
+    this.sidebarOffset = contentOffset.top - parseInt(this.contentContainer.css('margin-top'), 10);
+  }
+
+  // Events
+
+  @HostListener("window:scroll", [])
+  onWindowScroll() {
+    if(window.scrollY > this.sidebarOffset){
+      this.sidebar.css('margin-top', window.scrollY - this.sidebarOffset);
+    }
+    else{
+      this.sidebar.css('margin-top', 0);
+    }
+  }
+  @HostListener("window:resize", [])
+  onWindowsResize(){
+    // Adjust Height
+    this.sidebarWrapper.css('height', (window.innerHeight) + 'px');
+    // Adjust Offset
+    var contentOffset = this.contentContainer.offset();
+    this.sidebarOffset = contentOffset.top - parseInt(this.contentContainer.css('margin-top'), 10);
+    if(window.scrollY > this.sidebarOffset){
+      this.sidebar.css('margin-top', window.scrollY - this.sidebarOffset);
+    }
+    else{
+      this.sidebar.css('margin-top', 0);
+    }
+  }
+  @HostListener("window:load", [])
+  onWindowsLoad(){
+    // set Sidebar Offset ( Refresh & Load )
+    var contentOffset = this.contentContainer.offset();
+    this.sidebarOffset = contentOffset.top - parseInt(this.contentContainer.css('margin-top'), 10);
   }
 
 }
