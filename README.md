@@ -279,6 +279,7 @@ Azuriranje pricelistId clanarine
 ```
 {
     "success": true,
-    "msg": "Zene - 07-22 sa kardio programom is now updated."
+    "msg": "Zene - 07-22 sa kardio programom is now updated.",
+    "item": updatedItem
 }
 ```
