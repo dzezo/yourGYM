@@ -29,6 +29,13 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     // set Sidebar Offset ( Init & Reroute )
     var contentOffset = this.contentContainer.offset();
     this.sidebarOffset = contentOffset.top - parseInt(this.contentContainer.css('margin-top'), 10);
+    // Adjust Scroll ( Init & Reroute )
+    if(window.scrollY > this.sidebarOffset){
+      this.sidebar.css('margin-top', window.scrollY - this.sidebarOffset);
+    }
+    else{
+      this.sidebar.css('margin-top', 0);
+    }
   }
 
   // Events
@@ -49,6 +56,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     // Adjust Offset
     var contentOffset = this.contentContainer.offset();
     this.sidebarOffset = contentOffset.top - parseInt(this.contentContainer.css('margin-top'), 10);
+    // Adjust Scroll
     if(window.scrollY > this.sidebarOffset){
       this.sidebar.css('margin-top', window.scrollY - this.sidebarOffset);
     }
