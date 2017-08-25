@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit, ElementRef, HostListener } from '@ang
 import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { MembersService } from '../../services/members.service';
+import { PricelistService } from '../../services/pricelist.service';
 
 declare var $: any;
 
@@ -36,6 +37,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 	statUnpaidAmount: String;
 
 	constructor(private memSvc: MembersService,
+				private pricelistSvc: PricelistService,
 				private flashMessage: FlashMessagesService,
 				private router: Router,
 				private elRef: ElementRef) { }
@@ -115,7 +117,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 	}
 
 	getPricelist() {
-		this.memSvc.getPricelist(this.user.id).subscribe(pricelist => {
+		this.pricelistSvc.getPricelist(this.user.id).subscribe(pricelist => {
 			this.membershipTypes = pricelist;
 		}, err => {
 			console.log(err);
