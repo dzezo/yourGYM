@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
   @HostListener("window:load", [])
   onWindowsLoad(){
-    // set Sidebar Offset ( Refresh & Load )
+    // Offset (Refresh & Direct Load)
     var contentOffset = this.backgroundElement.offset();
     this.backgroundElement.css('height', (window.innerHeight - contentOffset.top - this.footerSize) + 'px');
   }

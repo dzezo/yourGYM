@@ -6,6 +6,16 @@
 	margin-top: 20px;
 }
 
+.panel-title > a{
+  cursor: pointer;
+  float: right;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.panel-title > a:hover{
+  color: #ffffff;
+}
 
 
 /************************/
