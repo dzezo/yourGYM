@@ -14,7 +14,6 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { PageNavComponent } from './components/page-nav/page-nav.component';
 import { MembersComponent } from './components/members/members.component';
-import { MemberstableComponent } from './components/memberstable/memberstable.component';
 import { BusinessSettingsComponent } from './components/business-settings/business-settings.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -46,7 +45,6 @@ const appRoutes: Routes = [
     ProfileComponent,
     PageNavComponent,
     MembersComponent,
-    MemberstableComponent,
     BusinessSettingsComponent,
     HeaderComponent,
     FooterComponent
