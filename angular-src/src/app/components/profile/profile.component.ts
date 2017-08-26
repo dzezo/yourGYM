@@ -15,7 +15,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   // User
   user: any;
   // Member
-  member: any;
   memberId: String;
   memberships: Array<any>;
   // Member Info
@@ -30,6 +29,13 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   sidebarOffset: any;
   // Modals
   editModal: any;
+  // Modal Vars
+  membershipId: String = "";
+  membershipType: String = "Select Membership";
+  membershipCost: String = "0";
+  // Error Flags
+  errorType: Boolean = false;
+  errorDate: Boolean = false;
   constructor(private memSvc: MembersService,
               private pricelistSvc: PricelistService,
               private flashMessage: FlashMessagesService,
@@ -122,10 +128,13 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       }
       // Valid
       else{
+        // Informations
         this.memberName = member.name;
         this.memberPhone = member.phone;
         this.memberMail = member.email;
         this.memberDebt = member.totalDebt;
+        // Memberships
+        this.memberships = member.memberships;
       }
     }, err => {
       console.log(err);
