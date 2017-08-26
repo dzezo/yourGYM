@@ -7,25 +7,25 @@
       <h3 class="panel-title main-color-bg">Overview</h3>
     </div>
     <div class="panel-body">
-      <div class="col-md-3">
+      <div class="col-md-3 col-sm-3">
         <div class="well dash-box">
         <h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{statMembers}}</h3>
         <h4>Number of Members</h4>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3 col-sm-3">
         <div class="well dash-box">
         <h3><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> {{statActiveMembers}}</h3>
         <h4>Number of Active Members</h4>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3 col-sm-3">
         <div class="well dash-box">
         <h3><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> {{statIndeptedMembers}}</h3>
         <h4>Number of Unpaid Memberships</h4>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3 col-sm-3">
         <div class="well dash-box">
           <h3><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> {{statUnpaidAmount}}</h3>
           <h4>Total Unpaid Amount</h4>
@@ -49,7 +49,6 @@
           <button (click)="searchForMember(srchInput.value)" class="search-box-btn"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
         </div>
       </div> 
-      <br>
       <table class="table table-hover">
         <thead>
           <tr>
@@ -73,6 +72,7 @@
     </div>
   </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade" id="add-member-modal" tabindex="-1" role="dialog" aria-labelledby="Add Member">
   <div class="modal-dialog" role="document">
