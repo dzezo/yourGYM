@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, HostListener } from '@angular/core';
 import { ValidateService } from '../../services/validate.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+
+declare var $: any;
 
 @Component({
   selector: 'app-register',
@@ -15,13 +17,38 @@ export class RegisterComponent implements OnInit {
 	email: String;
 	password: String;
 
+
+	backgroundElement: any;
+  	footerSize: any = 30;
 	constructor(private validateService: ValidateService,
 				private flashMessage: FlashMessagesService,
 				private authService: AuthService,
-				private router: Router) { }
+				private router: Router,
+				private elRef: ElementRef) { }
 
 	ngOnInit() {
 	}
+
+	ngAfterViewInit(){
+	    this.backgroundElement = $(this.elRef.nativeElement).find('.register-background');
+	    var contentOffset = this.backgroundElement.offset();
+	    this.backgroundElement.css('height', (window.innerHeight - contentOffset.top - this.footerSize) + 'px');
+  }
+
+	// Events
+
+  	@HostListener("window:resize", [])
+  	onWindowsResize(){
+	    var contentOffset = this.backgroundElement.offset();
+	    this.backgroundElement.css('height', (window.innerHeight - contentOffset.top - this.footerSize) + 'px');
+  	}
+  	@HostListener("window:load", [])
+  	onWindowsLoad(){
+	    // Offset (Refresh & Direct Load)
+	    var contentOffset = this.backgroundElement.offset();
+	    this.backgroundElement.css('height', (window.innerHeight - contentOffset.top - this.footerSize) + 'px');
+  }
+
 
 	onRegisterSubmit(){
 		const user = {

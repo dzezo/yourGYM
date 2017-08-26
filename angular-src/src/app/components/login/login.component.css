@@ -1,57 +1,43 @@
-.login-background{
+.login-background {
     background-color: #00caf6;
-    background-image: url("../../assets/Background.png");
-    background-repeat:no-repeat;
-    background-size: 100% 100%;
+    background-image: url("../../assets/BGplaceholder.png");
+    background-repeat: repeat;
     position: relative;
 }
-.loginbox{  
+
+#loginbox{  
     background: white;
-    color: black;    
     margin-top: 10%;
     margin-left: 25%;
-    padding: 20px;   
-    box-shadow: 0 8px 50px -2px #000;
-    border-radius:5px;
-
-}
-.logo{
-    width: 130px; 
-    height: 55px;
-    margin-left: 10%;
-}
-@media (max-width:767px) {
-    .loginbox{ 
-        margin-top: 10%;
-    }    
+    margin-right: 25%;
+    padding: 0;   
+    box-shadow: 0 8px 50px -2px #000;    
 }
 
-.loginbox_content{
-    padding:5% 11% 5% 11%;
+.panel {
+    margin-bottom: 0;
+    border-radius: 0;
+}
+
+.panel-heading {
+    border-radius: 0;
+}
+
+.panel-title {
+    display: flex;
+    justify-content: space-between;
+}
+
+.panel-body {
+    padding-left: 10px;
+    padding-right: 10px;
 
 }
 
-.singtext{
-    font-family: "Open Sans",sans-serif;
-    font-size: 27px;  
-    color: #82C226;
-    float: right;
-    padding-right: 25%;
+.input {
+     margin-bottom: 10px;
 }
 
-.submit-btn{
-    float: right;
-    margin-right: 28%;
-}
-
-.forgotpassword{
-    padding-left: 10%;
-}
-@media (max-width:800px) {
-    .submit-btn{
-        
-        margin-right: 23%;
-    }
-
-   
+.glyphicon {
+    font-size: 50px
 }
