@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit, ElementRef, HostListener} from '@angu
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { MembersService } from '../../services/members.service';
 import { PricelistService } from '../../services/pricelist.service';
+import { Router } from '@angular/router';
 
 declare var $: any;
 
@@ -14,25 +15,39 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   // User
   user: any;
   // Member
-  members: any;
+  member: any;
+  memberId: String;
   memberships: Array<any>;
+  // Member Info
+  memberName: any;
+  memberPhone: any;
+  memberMail: any;
+  memberDebt: any;
   // Sidebar
   contentContainer: any;
   sidebarWrapper: any;
   sidebar: any;
   sidebarOffset: any;
-
+  // Modals
+  editModal: any;
   constructor(private memSvc: MembersService,
               private pricelistSvc: PricelistService,
               private flashMessage: FlashMessagesService,
-              private elRef: ElementRef) { }
+              private elRef: ElementRef,
+              private router: Router) { }
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('user'));
-    // Get Member on err dont show content
+    this.memberId = localStorage.getItem('member');
+    if(!this.memberId){
+      // No memberId in local storage
+      this.router.navigate(['/dashboard']);
+    }
+    this.getMember(this.memberId);
   }
 
   ngAfterViewInit(){
+    this.editModal = $(this.elRef.nativeElement).find('#edit-member-modal');
     this.sidebarWrapper = $(this.elRef.nativeElement).find('.page-nav-wrapper');
     this.sidebar = $(this.elRef.nativeElement).find('#page-nav');
     this.contentContainer = $(this.elRef.nativeElement).find('.container')
@@ -83,4 +98,65 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.sidebarOffset = contentOffset.top - parseInt(this.contentContainer.css('margin-top'), 10);
   }
 
+  // Methods
+
+  getMember(memberId){
+    this.memSvc.getMember(memberId).subscribe(member => {
+      // Invalid ID
+      if(!member){
+        localStorage.removeItem('member');
+        this.router.navigate(['/dashboard']);
+        return false;
+      }
+      // Incorrect ID
+      else if(member.success == false){
+        localStorage.removeItem('member');
+        this.router.navigate(['/dashboard']);
+        return false;
+      }
+      // Wrong Member
+      else if(this.user.id != member.userId){
+        localStorage.removeItem('member');
+        this.router.navigate(['/dashboard']);
+        return false;
+      }
+      // Valid
+      else{
+        this.memberName = member.name;
+        this.memberPhone = member.phone;
+        this.memberMail = member.email;
+        this.memberDebt = member.totalDebt;
+      }
+    }, err => {
+      console.log(err);
+      return false;
+    });
+  }
+
+  updateMember(name, phone, mail){
+    var update = {
+      name: name,
+      phone: phone,
+      email: mail
+    };
+    this.memSvc.updateMember(this.memberId, update).subscribe(updatedMember =>{
+      if(updatedMember.success){
+        // Turn off modal
+        this.editModal.modal('hide');
+        this.flashMessage.show(updatedMember.msg, {cssClass: 'alert-success', timeout: 3000});
+        this.memberName = updatedMember.member.name;
+        this.memberPhone = updatedMember.member.phone;
+        this.memberMail = updatedMember.member.email;
+      }
+      else{
+        // Turn off modal
+        this.editModal.modal('hide');
+        this.flashMessage.show(updatedMember.msg, {cssClass: 'alert-danger', timeout: 3000});
+        return false;
+      }
+    }, err =>{
+      console.log(err);
+      return false;
+    });
+  }
 }

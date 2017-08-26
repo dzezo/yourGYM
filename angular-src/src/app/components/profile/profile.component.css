@@ -17,6 +17,51 @@
   color: #ffffff;
 }
 
+.well > h4{
+  word-wrap: break-word;
+}
+
+.list-group-item{
+  margin-bottom: 5px;
+}
+
+.modal-dialog{
+  width: 400px;
+}
+
+.modal-content{
+  border-color: #001029 !important;
+}
+
+.modal-header{
+  background-color: #001029 !important;
+  border-color: #001029 !important;
+  color: #00caf6 !important;
+}
+
+.modal-header .close{
+  color: #00caf6 !important;
+  opacity: 1;
+}
+
+.modal-header .close:hover{
+  color: #ffffff !important;
+  opacity: 1;
+}
+
+.modal-body hr{
+  border-top: 1px solid #001029;
+  opacity: 0.5;
+}
+
+.form-control{
+  height: 30px;
+  padding: 4px 16px;
+}
+
+.modal-footer > button {
+  padding: 8px 16px !important;
+}
 
 /************************/
 

@@ -48,4 +48,10 @@ export class MembersService {
       .map(res => res.json());
   }
 
+  updateMember(memberId, update){
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.put('http://localhost:3000/members/member/' + memberId, JSON.stringify(update), {headers: headers})
+      .map(res => res.json());
+  }
 }

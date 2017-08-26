@@ -8,32 +8,32 @@
 	<div class="panel panel-default">
     	<div class="panel-heading main-color-bg">
     		<h3 class="panel-title main-color-bg">Member info
-    			<a><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>
+    			<a data-toggle="modal" data-target="#edit-member-modal" ><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>
     		</h3>
       	</div>
     	<div class="panel-body">
     	    <div class="col-md-3">
 		        <div class="well dash-box">
 		        <h3><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Name</h3>
-		        <h4>Petar Petrovic</h4>
+		        <h4>{{memberName}}</h4>
 	   			</div>
 			</div>
 			<div class="col-md-3">
 				<div class="well dash-box">
 				<h3><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Phone</h3>
-				<h4>053 231 213</h4>
+				<h4>{{memberPhone}}</h4>
 				</div>
 			</div>
 			<div class="col-md-3">
 				<div class="well dash-box">
 				<h3><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> E-mail</h3>
-				<h4>petar@gmail.com</h4>
+				<h4>{{memberMail}}</h4>
 				</div>
 			</div>
 			<div class="col-md-3">
 				<div class="well dash-box">
 				  <h3><span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> Debt</h3>
-				  <h4>2000</h4>
+				  <h4>{{memberDebt}}</h4>
 				</div>
 			</div>
 		</div>
@@ -48,54 +48,47 @@
     	<div class="panel-body">
 			<ul class="list-group">
 				<li class="list-group-item">
-			  		<div class="dropdown">
-			  			<div class="dropdown-toggle membershipdropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-			  				<h4>Naziv programa</h4>
-	                   		<div>
-		                   		<div style="display: inline-flex; padding-right: 20px;">
-			                   		<h4>Days left</h4>
-			                   		<h4>/</h4>
-			                   		<h4>Days payed</h4>	
-		                   		</div>
-			                   	<span class="glyphicon glyphicon-chevron-down"></span>
-			                </div>
-	                  	 </div>
-	                    <div class="dropdown-menu">
-	                        <div class="col-sm-6 col-md-6 col-xs-6">	                       
-	                        	<p>Cost = 0</p>
-	                        	<p>Debt = 0</p>
-	                         </div>
-	                         <div class="col-sm-6 col-md-6 col-xs-6">
-	                         	<p>neki datum</p>
-	                         	<p>neki datum</p>
-                         	</div>
-
-                         	<div class="col-sm-6 col-md-6 col-xs-6">
-                         		<h3>Date</h3>
-                         		<p>neki datum</p>
-	                         	<p>neki datum</p>
-                         	</div>
-                         	<div class="col-sm-6 col-md-6 col-xs-6">
-                         		<h3>Paid</h3>
-                         		<div class="col-sm-5 col-md-5 col-xs-5">
-	                         		<p>1000</p>
-	                         		<p>1110</p>
-                         		</div>
-	                         	<div class="col-sm-2 col-md-2 col-xs-2">
-	                         		<p>x</p>
-	                         		<p>x</p>
-	                         	</div>
-                         	</div>
-                         	<div class="col-sm-6 col-md-6 col-xs-6">
-                         		<input type="button" class="btn btn-default submit-btn responsbtn" value="Pay">
-                         	</div>
-                         	<div class="col-sm-6 col-md-6 col-xs-6">
-                         		<input type="button" class="btn btn-danger responsbtn" value="Delete">
-                         	</div>
-	                    </div>
-	                </div>
+			  		
+				</li>
+				<li class="list-group-item">
+			  		
 				</li>
 			</ul>
 		</div>
 	</div>
+</div>
+<!-- Edit Modal -->
+<div class="modal fade" id="edit-member-modal" tabindex="-1" role="dialog" aria-labelledby="Edit Member">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Member Info</h4>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-12">
+          <form (keyup.enter)="updateMember(modName.value, modPhone.value, modMail.value)" >
+            <div class="form-group">
+              <label for="modal-name">Name: </label>
+              <input #modName type="text" class="form-control" id="modal-name" value={{memberName}} placeholder="Name">
+            </div>
+            <div class="form-group">
+              <label for="modal-phone">Phone: </label>
+              <input #modPhone type="text" class="form-control" id="modal-phone" value={{memberPhone}} placeholder="Phone">
+            </div>
+            <div class="form-group">
+              <label for="modal-mail">E-mail: </label>
+              <input #modMail type="text" class="form-control" id="modal-mail" value={{memberMail}} placeholder="E-mail">
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button (click)="updateMember(modName.value, modPhone.value, modMail.value)" type="button" class="btn btn-primary">
+        	<span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Save
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
