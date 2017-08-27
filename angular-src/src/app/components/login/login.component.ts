@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(){
     this.backgroundElement = $(this.elRef.nativeElement).find('.login-background');
     var contentOffset = this.backgroundElement.offset();
-    this.backgroundElement.css('height', (window.innerHeight - contentOffset.top - this.footerSize) + 'px');
+    this.backgroundElement.css('min-height', (window.innerHeight - contentOffset.top - this.footerSize) + 'px');
   }
 
   // Events
@@ -38,13 +38,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
   @HostListener("window:resize", [])
   onWindowsResize(){
     var contentOffset = this.backgroundElement.offset();
-    this.backgroundElement.css('height', (window.innerHeight - contentOffset.top - this.footerSize) + 'px');
+    this.backgroundElement.css('min-height', (window.innerHeight - contentOffset.top - this.footerSize) + 'px');
   }
   @HostListener("window:load", [])
   onWindowsLoad(){
     // Offset (Refresh & Direct Load)
     var contentOffset = this.backgroundElement.offset();
-    this.backgroundElement.css('height', (window.innerHeight - contentOffset.top - this.footerSize) + 'px');
+    this.backgroundElement.css('min-height', (window.innerHeight - contentOffset.top - this.footerSize) + 'px');
   }
 
   // Methods
