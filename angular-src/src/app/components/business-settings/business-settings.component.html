@@ -8,7 +8,8 @@
       </div>
       <div class="panel-body">
         <div class="table-controls col-xs-6 col-sm-6 col-md-6">
-          <button class="btn btn-default add-btn" type="submit">Add Item</button>       
+          <button (click)="resetErrorFlags()"class="btn btn-default add-btn" data-toggle="modal" data-target="#add-item-modal">
+        Add Item</button>         
         </div>
         <table class="table table-hover">
           <thead>
@@ -34,4 +35,88 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Add Modal -->
+<div class="modal fade" id="add-item-modal" tabindex="-1" role="dialog" aria-labelledby="Add Item">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add New Item</h4>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-12">
+          <form (keyup.enter)="addNewItem(modName.value, modLength.value, modCost.value)" >
+            <div class="form-group">
+              <label for="modal-name">Name: </label>
+              <input #modName type="text" class="form-control" id="modal-name" placeholder="Name">
+              <label *ngIf="errorName" for="modal-name" style="color: red; float: right; font-size: 10px;">
+              Please fill in the name
+              </label>
+            </div>
+            <div class="form-group">
+              <label for="modal-length">Length: </label>
+              <input #modLength type="text" class="form-control" id="modal-length" placeholder="0">
+              <label *ngIf="errorLength" for="modal-length" style="color: red; float: right; font-size: 10px;">
+              Please fill in the length
+              </label>
+            </div>
+            <div class="form-group">
+              <label for="modal-cost">Cost: </label>
+              <input #modCost type="text" class="form-control" id="modal-cost" placeholder="0">
+              <label *ngIf="errorCost" for="modal-cost" style="color: red; float: right; font-size: 10px;">
+              Please fill in the cost
+              </label>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button (click)="addNewItem(modName.value, modLength.value, modCost.value)" type="button" class="btn btn-primary">Add Item</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal >
+<div class="modal fade" id="add-item-modal" tabindex="-1" role="dialog" aria-labelledby="Add Item">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add New Item</h4>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-12">
+          <form (keyup.enter)="addNewItem(modName.value, modLength.value, modCost.value)" >
+            <div class="form-group">
+              <label for="modal-name">Name: </label>
+              <input #modName type="text" class="form-control" id="modal-name" placeholder="Name">
+              <label *ngIf="errorName" for="modal-name" style="color: red; float: right; font-size: 10px;">
+              Please fill in the name
+              </label>
+            </div>
+            <div class="form-group">
+              <label for="modal-length">Length: </label>
+              <input #modLength type="text" class="form-control" id="modal-length" placeholder="0">
+              <label *ngIf="errorLength" for="modal-length" style="color: red; float: right; font-size: 10px;">
+              Please fill in the length
+              </label>
+            </div>
+            <div class="form-group">
+              <label for="modal-cost">Cost: </label>
+              <input #modCost type="text" class="form-control" id="modal-cost" placeholder="0">
+              <label *ngIf="errorCost" for="modal-cost" style="color: red; float: right; font-size: 10px;">
+              Please fill in the cost
+              </label>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button (click)="addNewItem(modName.value, modLength.value, modCost.value)" type="button" class="btn btn-primary">Add Item</button>
+      </div>
+    </div>
+  </div>
+</div-->
