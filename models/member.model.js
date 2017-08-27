@@ -139,7 +139,7 @@ module.exports.newMembership = function(memberId, input, res){
 						if(err)
 							res.json({ success: false, msg: 'Failed to create new membership.'});
 						else
-							res.json({ success: true, msg: 'Membership created.' });
+							res.json({ success: true, msg: 'Membership created.', member: member });
 					});
 				}
 			});
@@ -165,7 +165,7 @@ module.exports.newPayment = function(memberId, membershipId, input, res){
 			if(err)
 				res.json({ success: false, msg: 'Failed to log the payment.'});
 			else
-				res.json({ success: true, msg: 'Payment logged.' });
+				res.json({ success: true, msg: 'Payment logged.', member: member });
 		});
 	});
 }
@@ -181,6 +181,8 @@ module.exports.removeMembership = function(memberId, membershipId, res){
 	Member.findById(memberId, function(err, member){
 		if (err) 
 			return res.json({success: false, msg: 'Member not found.'});
+		if (member.memberships.length == 1)
+			return res.json({success: false, msg: 'Member must have at least one membership.'});
 		var counter = 0;
 		member.memberships.forEach(membership =>{
 			if(membership._id == membershipId){
@@ -189,11 +191,11 @@ module.exports.removeMembership = function(memberId, membershipId, res){
 			}
 			counter++;
 		});
-		member.save(function(err, exMember){
+		member.save(function(err, member){
 			if(err)
 				res.json({ success: false, msg: 'Failed to remove membership.' });
 			else
-				res.json({ success: true, msg: 'Membership is removed.' });
+				res.json({ success: true, msg: 'Membership is removed.', newTotalDebt: member.totalDebt });
 		});
 	})
 }
@@ -215,11 +217,11 @@ module.exports.removePayment = function(memberId, membershipId, paymentId, res){
 				});
 			}
 		});
-		member.save( function(err, exMember){
+		member.save( function(err, member){
 			if(err)
 				res.json({ success: false, msg: 'Failed to remove payment.' });
 			else
-				res.json({ success: true, msg: 'Payment is removed.' });
+				res.json({ success: true, msg: 'Payment is removed.', member: member });
 		});
 	})
 }
@@ -302,7 +304,7 @@ module.exports.getStatistics = function(userId, res){
 
 module.exports.getMembers = function(userId, callback){
 	var query = {userId: userId};
-	var criterion = { name: 1 };
+	var criterion = { totalDebt: -1 };
 	Member.find(query,{},{sort: criterion}, callback);
 }
 

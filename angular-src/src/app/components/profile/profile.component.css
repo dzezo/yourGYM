@@ -76,6 +76,7 @@
 
 .hdata-wrap > .hdata-action{
   color: #3e3f3a;
+  cursor: pointer;
   font-size: 15px;
   float: right;
   text-decoration: none;
