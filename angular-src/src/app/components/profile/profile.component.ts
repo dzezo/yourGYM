@@ -12,11 +12,16 @@ declare var $: any;
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit, AfterViewInit {
-  // User
+
+  // General
   user: any;
-  // Member
   memberId: String;
+  // Pricelist items []
+  membershipTypes: Array<any>;
+  // Membership history for memberId
   memberships: Array<any>;
+  // payment for paymentFor (membershipId)
+  paymentFor: any;
   // Member Info
   memberName: any;
   memberPhone: any;
@@ -29,6 +34,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   sidebarOffset: any;
   // Modals
   editModal: any;
+  membershipModal: any;
+  paymentModal: any;
   // Modal Vars
   membershipId: String = "";
   membershipType: String = "Select Membership";
@@ -36,6 +43,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   // Error Flags
   errorType: Boolean = false;
   errorDate: Boolean = false;
+
   constructor(private memSvc: MembersService,
               private pricelistSvc: PricelistService,
               private flashMessage: FlashMessagesService,
@@ -50,10 +58,15 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       this.router.navigate(['/dashboard']);
     }
     this.getMember(this.memberId);
+    this.getPricelist();
   }
 
   ngAfterViewInit(){
+    // Modals
     this.editModal = $(this.elRef.nativeElement).find('#edit-member-modal');
+    this.membershipModal = $(this.elRef.nativeElement).find('#new-membership-modal');
+    this.paymentModal = $(this.elRef.nativeElement).find('#payment-modal');
+    // Sidebar
     this.sidebarWrapper = $(this.elRef.nativeElement).find('.page-nav-wrapper');
     this.sidebar = $(this.elRef.nativeElement).find('#page-nav');
     this.contentContainer = $(this.elRef.nativeElement).find('.container')
@@ -104,7 +117,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.sidebarOffset = contentOffset.top - parseInt(this.contentContainer.css('margin-top'), 10);
   }
 
-  // Methods
+  // Init Methods
 
   getMember(memberId){
     this.memSvc.getMember(memberId).subscribe(member => {
@@ -142,6 +155,19 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // Methods
+  resetErrorFlags(){
+    // Reset prev. errors
+    this.errorType = false;
+    this.errorDate = false;  
+  }
+
+  payment(membershipId){
+    this.paymentFor = membershipId;
+    // Reset prev. error
+    this.errorDate = false;
+  }
+
   updateMember(name, phone, mail){
     var update = {
       name: name,
@@ -164,6 +190,151 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         return false;
       }
     }, err =>{
+      console.log(err);
+      return false;
+    });
+  }
+
+  getPricelist() {
+    this.pricelistSvc.getPricelist(this.user.id).subscribe(pricelist => {
+      this.membershipTypes = pricelist;
+    }, err => {
+      console.log(err);
+      return false;
+    });
+  }
+
+  membershipSelected(pricelistId, name, cost){
+    this.membershipId = pricelistId;
+    this.membershipType = name;
+    this.membershipCost = cost.toString();
+  }
+
+  addNewMembership(start, amount){
+    // No membership selected
+    if(!this.membershipId){
+      this.errorType = true;
+      return false;  
+    }
+    else
+      this.errorType = false;
+    // No date selected
+    if(!start){
+      this.errorDate = true;
+      return false;
+    }
+    else
+      this.errorDate = false;
+
+    const newMembership = {
+      start: start+'T00:00:00Z',
+      membershipId: this.membershipId,
+      amount: parseInt(amount)
+    };
+
+    this.memSvc.addNewMembership(this.memberId, newMembership).subscribe(data => {
+      if(data.success){
+        // Turn off modal
+        this.membershipModal.modal('hide');
+        // Send msg
+        this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+        // Update view
+        this.memberships.unshift(data.member.memberships[0]);
+        this.memberDebt = data.member.totalDebt;
+      }
+      else {
+        // Turn off modal
+        this.membershipModal.modal('hide');
+        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+      }
+    }, err => {
+      console.log(err);
+      return false;
+    });
+  }
+
+  removeMembership(membershipId){
+    this.memSvc.removeMembership(this.memberId, membershipId).subscribe(data => {
+      if(data.success){
+        for(var i=0; i<this.memberships.length;i++){
+          if(this.memberships[i]._id == membershipId)
+            this.memberships.splice(i,1);
+        }
+        this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+        // Update statistics
+        this.memberDebt = data.newTotalDebt;
+      }
+      else {
+        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+      }
+    }, err => {
+      console.log(err);
+      return false;
+    });
+  }
+
+  addNewPayment(payDate, amount){
+    if(!payDate){
+      this.errorDate = true;
+      return false;
+    }
+    else
+      this.errorDate = false;
+
+    const newPayment = {
+      date: payDate + 'T00:00:00Z',
+      amount: parseInt(amount)
+    };
+
+    this.memSvc.addPayment(this.memberId, this.paymentFor, newPayment).subscribe(data => {
+      if(data.success){
+        // Turn off modal
+        this.paymentModal.modal('hide');
+        // Send msg
+        this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+        // Update view 
+        this.memberDebt = data.member.totalDebt;
+        for(var i=0; i<this.memberships.length; i++){
+          if(this.memberships[i]._id == this.paymentFor){
+            this.memberships[i].debt = data.member.memberships[i].debt;
+            this.memberships[i].log.unshift(data.member.memberships[i].log[0]);
+          }
+        }
+      }
+      else {
+        // Turn off modal
+        this.paymentModal.modal('hide');
+        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+      }
+    }, err => {
+      console.log(err);
+      return false;
+    });
+  }
+  
+  removePayment(membershipId, paymentId){
+    this.memSvc.removePayment(this.memberId, membershipId, paymentId).subscribe(data => {
+      if(data.success){
+        for(var i=0; i<this.memberships.length;i++)
+          // Find membership
+          if(this.memberships[i]._id == membershipId)
+            for(var j=0; j<this.memberships[i].log.length; j++)
+              // Find payment log
+              if(this.memberships[i].log[j]._id == paymentId)
+                this.memberships[i].log.splice(j,1);
+        this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+        // Update view
+        this.memberDebt = data.member.totalDebt;
+        for(var i=0; i<this.memberships.length; i++){
+          if(this.memberships[i]._id == membershipId){
+            this.memberships[i].debt = data.member.memberships[i].debt;
+          }
+        }
+      }
+      else {
+        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+      }
+    }, err => {
       console.log(err);
       return false;
     });

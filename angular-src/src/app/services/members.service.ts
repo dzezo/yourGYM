@@ -43,7 +43,7 @@ export class MembersService {
 
   // Profile
 
-   getMember(memberId){
+  getMember(memberId){
     return this.http.get('http://localhost:3000/members/member/' + memberId)
       .map(res => res.json());
   }
@@ -52,6 +52,30 @@ export class MembersService {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http.put('http://localhost:3000/members/member/' + memberId, JSON.stringify(update), {headers: headers})
+      .map(res => res.json());
+  }
+
+  addNewMembership(memberId, membership){
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://localhost:3000/members/member/' + memberId, JSON.stringify(membership), {headers: headers})
+      .map(res => res.json());
+  }
+
+  removeMembership(memberId, membershipId){
+    return this.http.delete('http://localhost:3000/members/member/' + memberId + '/membership/' + membershipId)
+      .map(res => res.json());
+  }
+
+  addPayment(memberId, membershipId, payment){
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://localhost:3000/members/member/' + memberId + '/membership/' + membershipId, JSON.stringify(payment), {headers: headers})
+      .map(res => res.json());
+  }
+
+  removePayment(memberId, membershipId, paymentId){
+    return this.http.delete('http://localhost:3000/members/member/' + memberId + '/membership/' + membershipId + '/payment/' + paymentId)
       .map(res => res.json());
   }
 }

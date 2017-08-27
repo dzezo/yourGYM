@@ -42,7 +42,7 @@
 	<div class="panel panel-default">
     	<div class="panel-heading main-color-bg">
       	<h3 class="panel-title main-color-bg">Memberships
-      		<a data-toggle="modal" data-target="#new-membership-modal">
+      		<a (click)="resetErrorFlags()" data-toggle="modal" data-target="#new-membership-modal">
       			<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New Membership
       		</a>
       	</h3>
@@ -55,23 +55,23 @@
           <div class="heading-wrap">
             <!-- heading data wrap -->
             <div class="hdata-wrap">
-              <a class="hdata-data" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              <a class="hdata-data" role="button" data-toggle="collapse" data-parent="#accordion" href="#{{membership._id}}" aria-expanded="true" aria-controls="collapseOne">
               {{membership.mName}} | Days Left: {{membership.daysLeft}} | Debt: {{membership.debt}}
               </a>
               <!-- Make Payment link -->
-              <a class="hdata-action" data-toggle="modal" data-target="#payment-modal">
+              <a (click)="payment(membership._id)" class="hdata-action" data-toggle="modal" data-target="#payment-modal">
                 Pay <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
               </a>
             </div>
             <!-- heading data ends -->
             <!-- heading action wrap -->
             <div class="haction-wrap">
-              <a ><span class="glyphicon glyphicon-trash"></span></a>
+              <a (click)="removeMembership(membership._id)"><span class="glyphicon glyphicon-trash"></span></a>
             </div>
           </div>
 				</div>
 				<!-- Collapsed Content -->
-				<div id="collapseOne" class="panel-collapse collapse membership-content" role="tabpanel" aria-labelledby="headingOne">
+				<div id={{membership._id}} class="panel-collapse collapse membership-content" role="tabpanel" aria-labelledby="headingOne">
 				  <div class="panel-body">
 				  	<!-- Membership Details -->
 				  	<div class="col-xs-6 col-sm-6 col-md-6">
@@ -96,17 +96,17 @@
   					<!-- Payments -->
   					<div class="col-xs-12 col-sm-12 col-md-12 membership-payments">
   					  <ul class="list-group">
-  						  <li *ngFor = "let payments of membership.log" class="list-group-item">
+  						  <li *ngFor = "let payment of membership.log" class="list-group-item">
                   <!-- Payment content wrapper -->
                   <div class="payment-wrapper">
                     <!-- Payment data wrapper -->
                     <div class="payment-data">
-        						  Date: {{payments.date | date:'shortDate'}}<br>
-        						  Amount: {{payments.amount}}<br>
+        						  Date: {{payment.date | date:'shortDate'}}<br>
+        						  Amount: {{payment.amount}}<br>
                     </div>
                     <!-- Payment action wrapper -->
                     <div class="payment-action">
-                      <a ><span class="glyphicon glyphicon-trash"></span></a>
+                      <a (click)="removePayment(membership._id, payment._id)"><span class="glyphicon glyphicon-trash"></span></a>
                     </div>
                   </div>
   						  </li>
@@ -168,7 +168,7 @@
       <!-- Modal Content -->
       <div class="modal-body">
         <div class="col-md-12">
-          <form  >
+          <form (keyup.enter)="addNewMembership(modStart.value, modAmount.value)">
             <div class="form-group">
               <label for="modal-type">Type: </label>
               <div class="dropdown">
@@ -209,7 +209,7 @@
       <!-- Modal Content Ends -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">
+        <button (click)="addNewMembership(modStart.value, modAmount.value)" type="button" class="btn btn-primary">
         	<span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Submit
         </button>
       </div>
@@ -227,24 +227,24 @@
       </div>
       <div class="modal-body">
         <div class="col-md-12">
-          <form  >
+          <form (keyup.enter)="addNewPayment(modPayDay.value, modPayAmount.value)">
             <div class="form-group">
-              <label for="modal-start">Date: </label>
-              <input #modStart type="date" class="form-control" id="modal-start">
-              <label *ngIf="errorDate" for="modal-start" style="color: red; float: right; font-size: 10px;">
+              <label for="modal-payday">Date: </label>
+              <input #modPayDay type="date" class="form-control" id="modal-payday">
+              <label *ngIf="errorDate" for="modal-payday" style="color: red; float: right; font-size: 10px;">
               Please select the date
               </label>
             </div>
             <div class="form-group">
-              <label for="modal-phone">Amount: </label>
-              <input #modPhone type="text" class="form-control" id="modal-phone" placeholder="0">
+              <label for="modal-pay-amount">Amount: </label>
+              <input #modPayAmount type="text" class="form-control" id="modal-pay-amount" placeholder="0">
             </div>
           </form>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">
+        <button (click)="addNewPayment(modPayDay.value, modPayAmount.value)" type="button" class="btn btn-primary">
           <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Submit
         </button>
       </div>

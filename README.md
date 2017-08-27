@@ -156,7 +156,7 @@ Dodavanje nove clanarine clanu :memberId
 ```
 *Output
 ```
-{ success: true, msg: 'Membership created.' }
+{ success: true, msg: 'Membership created.', member: member }
 ```
 Dodavanje nove uplate clanu :memberId na ime clanarine :membershipId
 ```
@@ -171,18 +171,18 @@ Dodavanje nove uplate clanu :memberId na ime clanarine :membershipId
 ```
 *Output
 ```
-{ success: true, msg: 'Membership created.' }
+{ success: true, msg: 'Membership created.', member: member }
 ```
 **Delete Metode**
 Obrisi clana
 ```
 .delete('/member/:memberId')
 ```
-Ponisti clanarinu clana
+Ponisti clanarinu clana, vraca poruku i novog clana
 ```
 .delete('/member/:memberId/membership/:membershipId')
 ```
-Ponisit uplatu na ime clanarine
+Ponisti uplatu na ime clanarine, vraca poruku i novog clana
 ```
 .delete('/member/:memberId/membership/:membershipId/payment/:paymentId')
 ```
