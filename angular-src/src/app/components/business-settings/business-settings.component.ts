@@ -1,4 +1,7 @@
 import { Component, OnInit, AfterViewInit, ElementRef, HostListener} from '@angular/core';
+import { FlashMessagesService } from 'angular2-flash-messages';
+import { Router } from '@angular/router';
+import { PricelistService } from '../../services/pricelist.service';
 
 declare var $: any;
 
@@ -8,11 +11,19 @@ declare var $: any;
   styleUrls: ['./business-settings.component.css']
 })
 export class BusinessSettingsComponent implements OnInit, AfterViewInit {
+
+	item: any;
+	itemID: String;
+
+	itemTypes: Array <any>;
 	// Sidebar
 	contentContainer: any;
 	sidebarWrapper: any;
 	sidebar: any;
 	sidebarOffset: any;
+	  // Modals
+  	editModal: any;
+  	
 	
 	constructor(private elRef: ElementRef) { }
 
