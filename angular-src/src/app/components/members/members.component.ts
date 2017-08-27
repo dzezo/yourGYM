@@ -1,4 +1,8 @@
 import { Component, OnInit, AfterViewInit, ElementRef, HostListener} from '@angular/core';
+import { Router } from '@angular/router';
+import { FlashMessagesService } from 'angular2-flash-messages';
+import { MembersService } from '../../services/members.service';
+import { PricelistService } from '../../services/pricelist.service';
 
 declare var $: any;
 
@@ -8,18 +12,38 @@ declare var $: any;
   styleUrls: ['./members.component.css']
 })
 export class MembersComponent implements OnInit, AfterViewInit {
+	// User
+	user: any;
+	// Arrays
+	members: Array<any>;
+	membershipTypes: Array<any>;
 	// Sidebar
 	contentContainer: any;
 	sidebarWrapper: any;
 	sidebar: any;
 	sidebarOffset: any;
+	// Modal vars
+	modal: any;
+	membershipId: String = "";
+	membershipType: String = "Select Membership";
+	membershipCost: String = "0";
+	errorName: Boolean = false;
+	errorType: Boolean = false;
+	errorDate: Boolean = false;
 	
-	constructor(private elRef: ElementRef) { }
+	constructor(private elRef: ElementRef,
+				private pricelistSvc: PricelistService,
+				private flashMessage: FlashMessagesService,
+				private router: Router,
+				private memSvc: MembersService) { }
 
 	ngOnInit() {
+		this.user = JSON.parse(localStorage.getItem('user'));
+		this.getMembers();
 	}
 
 	ngAfterViewInit(){
+		this.modal = $(this.elRef.nativeElement).find('#add-member-modal');
 		this.sidebarWrapper = $(this.elRef.nativeElement).find('.page-nav-wrapper');
 		this.sidebar = $(this.elRef.nativeElement).find('#page-nav');
 		this.contentContainer = $(this.elRef.nativeElement).find('.container')
@@ -69,5 +93,117 @@ export class MembersComponent implements OnInit, AfterViewInit {
 		var contentOffset = this.contentContainer.offset();
 		this.sidebarOffset = contentOffset.top - parseInt(this.contentContainer.css('margin-top'), 10);
 	}
+
+	// Methods
+
+		getMembers(){
+			this.memSvc.getMembers(this.user.id).subscribe(members => { 
+					this.members = members;
+				}, err => {
+					console.log(err);
+					return false;
+				});
+		}
+
+		resetErrorFlags(){
+			// Reset prev. errors
+			this.errorName = false;
+			this.errorType = false;
+			this.errorDate = false;	
+		}
+
+		addNewMember(name, phone, email, start, amount){
+			// No name input 
+			if(!name){
+				this.errorName = true;
+				return false;	
+			}
+			else
+				this.errorName = false;
+			// No membership selected
+			if(!this.membershipId){
+				this.errorType = true;
+				return false;	
+			}
+			else
+				this.errorType = false;
+			// No date selected
+			if(!start){
+				this.errorDate = true;
+				return false;
+			}
+			else
+				this.errorDate = false;
+
+			const newMember = {
+				name: name,
+				phone: phone,
+				email: email,
+				start: start+'T00:00:00Z',
+				membershipId: this.membershipId,
+				amount: parseInt(amount)
+			};
+
+			this.memSvc.addNewMember(this.user.id, newMember).subscribe(data => {
+				if(data.success){
+					// Turn off modal
+					this.modal.modal('hide');
+					// Send msg
+		  			this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+		  			// Update view
+		  			this.members.unshift(data.member);
+		  		}
+		  		else {
+		  			// Turn off modal
+					this.modal.modal('hide');
+		  			this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+		  		}
+			}, err => {
+				console.log(err);
+				return false;
+			});
+		}
+
+		searchForMember(name){
+			if(!name)
+				this.getMembers();
+			else{
+				this.memSvc.searchByName(this.user.id, name).subscribe(srchResults => {
+					this.members = srchResults;
+				}, err => {
+					console.log(err);
+					return false;
+				});
+			}
+		}
+
+		deleteMember(memberId){
+			this.memSvc.deleteMember(memberId).subscribe(data => {
+				if(data.success){
+					for(var i=0; i<this.members.length;i++){
+						if(this.members[i].id == memberId)
+							this.members.splice(i,1);
+					}
+		  			this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+		  		}
+		  		else {
+		  			this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+		  		}
+			}, err => {
+				console.log(err);
+				return false;
+			});
+		}
+
+		getMemberProfile(memberId){
+			localStorage.setItem('member',memberId);
+			this.router.navigate(['/profile']);
+		}
+
+		membershipSelected(pricelistId, name, cost){
+			this.membershipId = pricelistId;
+			this.membershipType = name;
+			this.membershipCost = cost.toString();
+		}
 
 }
