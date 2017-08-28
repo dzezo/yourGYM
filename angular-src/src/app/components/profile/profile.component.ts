@@ -1,8 +1,10 @@
 import { Component, OnInit, AfterViewInit, ElementRef, HostListener} from '@angular/core';
+import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { MembersService } from '../../services/members.service';
 import { PricelistService } from '../../services/pricelist.service';
-import { Router } from '@angular/router';
+import { DateService } from '../../services/date.service';
+
 
 declare var $: any;
 
@@ -46,6 +48,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
   constructor(private memSvc: MembersService,
               private pricelistSvc: PricelistService,
+              private dateSvc: DateService,
               private flashMessage: FlashMessagesService,
               private elRef: ElementRef,
               private router: Router) { }
@@ -59,6 +62,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     }
     this.getMember(this.memberId);
     this.getPricelist();
+    this.trackDate();
   }
 
   ngAfterViewInit(){
@@ -118,6 +122,32 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   // Init Methods
+
+  trackDate(){
+    this.dateSvc.startDateService(Date.now());
+    // OnLoad Update
+    this.updateDate();
+    // Every next Update
+    this.dateSvc.trackDate((dateChanged) =>{
+      if(dateChanged)
+        this.updateDate();
+    });
+  }
+
+  updateDate(){
+    this.dateSvc.updateDate(this.user.id).subscribe(result =>{
+      if(result.success){
+        this.getMember(this.memberId);
+      }
+      else{
+        console.log(result.msg);
+        return false;
+      }
+    }, err =>{
+      console.log(err);
+      return false;
+    });
+  }
 
   getMember(memberId){
     this.memSvc.getMember(memberId).subscribe(member => {
@@ -229,7 +259,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     const newMembership = {
       start: start+'T00:00:00Z',
       membershipId: this.membershipId,
-      amount: parseInt(amount)
+      amount: parseInt(amount),
+      submitTime: Date.now()
     };
 
     this.memSvc.addNewMembership(this.memberId, newMembership).subscribe(data => {

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { MembersService } from '../../services/members.service';
 import { PricelistService } from '../../services/pricelist.service';
+import { DateService } from '../../services/date.service';
 
 declare var $: any;
 
@@ -38,6 +39,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
 	constructor(private memSvc: MembersService,
 				private pricelistSvc: PricelistService,
+				private dateSvc: DateService,
 				private flashMessage: FlashMessagesService,
 				private router: Router,
 				private elRef: ElementRef) { }
@@ -47,6 +49,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 		this.getStatistics();
 		this.getActiveMembers();
 		this.getPricelist();
+		this.trackDate();
 	}
 
 	ngAfterViewInit(){
@@ -133,6 +136,33 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 		});
 	}
 
+	trackDate(){
+		this.dateSvc.startDateService(Date.now());
+		// OnLoad Update
+		this.updateDate();
+		// Every next Update
+		this.dateSvc.trackDate((dateChanged) =>{
+			if(dateChanged)
+				this.updateDate();
+		});
+	}
+
+	updateDate(){
+		this.dateSvc.updateDate(this.user.id).subscribe(result =>{
+			if(result.success){
+				this.getStatistics();
+				this.getActiveMembers();
+		      }
+		      else{
+		        console.log(result.msg);
+		        return false;
+		      }
+	    }, err =>{
+	      console.log(err);
+	      return false;
+	    });
+	}
+
 	resetErrorFlags(){
 		// Reset prev. errors
 		this.errorName = false;
@@ -169,7 +199,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 			email: email,
 			start: start+'T00:00:00Z',
 			membershipId: this.membershipId,
-			amount: parseInt(amount)
+			amount: parseInt(amount),
+			submitTime: Date.now()
 		};
 
 		this.memSvc.addNewMember(this.user.id, newMember).subscribe(data => {
