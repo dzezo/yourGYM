@@ -14,6 +14,7 @@ declare var $: any;
 export class BusinessSettingsComponent implements OnInit, AfterViewInit {
 	// User
 	user: any;
+	itemId: String;
 	// Arrays
 	items: Array <any>;
 	// Sidebar
@@ -21,9 +22,13 @@ export class BusinessSettingsComponent implements OnInit, AfterViewInit {
 	sidebarWrapper: any;
 	sidebar: any;
 	sidebarOffset: any;
-	//Modals
+	//Add Modal
 	addModal: any;
-  		//editModal: any;						EDIT MODAL//
+	//Edit Modal
+	editModal: any;
+	itemName: String = "";
+	itemLength: String = "";
+	itemCost: String = "";
   	//Error
   	errorName: Boolean = false;
   	errorLength: Boolean = false;
@@ -39,7 +44,7 @@ export class BusinessSettingsComponent implements OnInit, AfterViewInit {
 	ngOnInit() {
 		this.user = JSON.parse(localStorage.getItem('user'));
 		this.getItems();
-}
+	}
 
   	ngAfterViewInit(){
   		//Modals
@@ -98,82 +103,108 @@ export class BusinessSettingsComponent implements OnInit, AfterViewInit {
 
 	//Methods
 
-		getItems(){
-			this.priceSvc.getPricelist(this.user.id).subscribe(pricelist => {
-				this.items = pricelist;
-			}, err => {
-				console.log(err);
-				return false;
-			});
-		}
+	getItems(){
+		this.priceSvc.getPricelist(this.user.id).subscribe(pricelist => {
+			this.items = pricelist;
+		}, err => {
+			console.log(err);
+			return false;
+		});
+	}
 
-		resetErrorFlags(){
-			this.errorCost = false;
-			this.errorLength = false;
-			this.errorName = false;
-		}
+	resetErrorFlags(){
+		this.errorCost = false;
+		this.errorLength = false;
+		this.errorName = false;
+	}
 
-		addNewItem(name, length, cost){
-			//No name input
-			if (!name){
-				this.errorName = true;
-				return false;
+	addNewItem(name, length, cost){
+		//No name input
+		if (!name){
+			this.errorName = true;
+			return false;
+		}
+		else this.errorName = false;
+
+		if (!length){
+			this.errorLength = true;
+			return false;
+		}
+		else this.errorLength = false;
+
+		if (!cost){
+			this.errorCost = true;
+			return false;
+		}
+		else this.errorCost = false;
+
+		const newItem = {
+			name: name,
+			length: length,
+			cost: cost
+		};
+
+		this.priceSvc.addItemToPricelist(this.user.id, newItem).subscribe(data => {
+			if(data.succes){
+				this.addModal.modal('hide');
+				this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+				this.items.unshift(data.item);
 			}
-			else this.errorName = false;
+			else {
+	  			// Turn off modal
+				this.addModal.modal('hide');
+	  			this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+	  		}
+		}, err => {
+			console.log(err);
+			return false;
+		});
+	}
 
-			if (!length){
-				this.errorLength = true;
-				return false;
+	deleteItem(itemId){
+		this.priceSvc.deleteItemFromPricelist(itemId).subscribe(data => {
+			if(data.success){
+				for(var i=0; i<this.items.length;i++){
+					if(this.items[i].id == itemId)
+						this.items.splice(i,1);
+				}
+				console.log('Dobro');
+				this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
 			}
-			else this.errorLength = false;
-
-			if (!cost){
-				this.errorCost = true;
-				return false;
+			else {
+				console.log('Lose');
+				this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
 			}
-			else this.errorCost = false;
+		}, err => {
+			console.log(err);
+			return false;
+		});
 
-			const newItem = {
-				name: name,
-				length: length,
-				cost: cost
-			};
+	}
 
-			this.priceSvc.addItemToPricelist(this.user.id, newItem).subscribe(data => {
-				if(data.succes){
-					this.addModal.modal('hide');
-					this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
-					this.items.unshift(data.item);
-				}
-				else {
-		  			// Turn off modal
-					this.addModal.modal('hide');
-		  			this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
-		  		}
-			}, err => {
-				console.log(err);
-				return false;
-			});
-		}
-
-		deleteItem(itemId){
-			this.priceSvc.deleteItemFromPricelist(itemId).subscribe(data => {
-				if(data.success){
-					for(var i=0; i<this.items.length;i++){
-						if(this.items[i].id == itemId)
-							this.items.splice(i,1);
-					}
-					console.log('Dobro');
-					this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
-				}
-				else {
-					console.log('Lose');
-					this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
-				}
-			}, err => {
-				console.log(err);
-				return false;
-			});
-
-		}
+	updateItem(name, length, cost){
+		var update = {
+			name: name,
+			length: length,
+			cost: cost
+		};
+	//	this.itemId = ??????????;  kako da prosledim konkretni itemID -_-
+		this.priceSvc.updateItemFromPricelist(this.itemId, update).subscribe(updatedItem =>{
+			if(updatedItem.success){
+				this.editModal.modal('hide');
+				this.flashMessage.show(updatedItem.msg, {cssClass: 'alert-success', timeout: 3000});
+		        this.itemName = updatedItem.item.name;
+		        this.itemLength = updatedItem.item.length;
+		        this.itemCost = updatedItem.item.cost;
+		    }
+		    else{
+		    	this.editModal.modal('hide');
+		        this.flashMessage.show(updatedItem.msg, {cssClass: 'alert-danger', timeout: 3000});
+		        return false;
+		    }        
+		}, err =>{
+			console.log(err);
+			return false;
+		});
+	}
 }

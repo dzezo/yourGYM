@@ -189,6 +189,7 @@ export class MembersComponent implements OnInit, AfterViewInit {
 				// Turn off modal
 				this.modal.modal('hide');
 				// Send msg
+				console.log('Dobro');
 	  			this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
 	  			// Update view
 	  			this.members.unshift(data.member);
@@ -196,6 +197,7 @@ export class MembersComponent implements OnInit, AfterViewInit {
 	  		else {
 	  			// Turn off modal
 				this.modal.modal('hide');
+				console.log('Lose');
 	  			this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
 	  		}
 		}, err => {
