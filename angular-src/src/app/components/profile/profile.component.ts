@@ -126,7 +126,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   trackDate(){
     this.dateSvc.startDateService(Date.now());
     // OnLoad Update
-    this.updateDate();
+    if(!this.dateSvc.startedTracking)
+      this.updateDate();
     // Every next Update
     this.dateSvc.trackDate((dateChanged) =>{
       if(dateChanged)

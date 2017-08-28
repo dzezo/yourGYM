@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ElementRef, HostListener} from '@angu
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
 import { PricelistService } from '../../services/pricelist.service';
-import { MembersService } from '../../services/members.service';
+import { DateService } from '../../services/date.service';
 
 declare var $: any;
 
@@ -14,7 +14,7 @@ declare var $: any;
 export class BusinessSettingsComponent implements OnInit, AfterViewInit {
 	// User
 	user: any;
-	itemId: String;
+	itemId: any;
 	// Arrays
 	items: Array <any>;
 	// Sidebar
@@ -39,17 +39,18 @@ export class BusinessSettingsComponent implements OnInit, AfterViewInit {
 				private router: Router,
 				private flashMessage: FlashMessagesService,
 				private priceSvc: PricelistService,
-				private memSvc: MembersService) { }
+				private dateSvc: DateService,) { }
 
 	ngOnInit() {
 		this.user = JSON.parse(localStorage.getItem('user'));
 		this.getItems();
+		this.trackDate();
 	}
 
   	ngAfterViewInit(){
   		//Modals
   		this.addModal = $(this.elRef.nativeElement).find('#add-item-modal');
-  			//this.editModal = $(this.elRef.nativeElement).find('#edit-item-modal'); 						EDIT MODAL//
+  		this.editModal = $(this.elRef.nativeElement).find('#edit-item-modal');
   		// Sidebar
 		this.sidebarWrapper = $(this.elRef.nativeElement).find('.page-nav-wrapper');
 		this.sidebar = $(this.elRef.nativeElement).find('#page-nav');
@@ -103,6 +104,30 @@ export class BusinessSettingsComponent implements OnInit, AfterViewInit {
 
 	//Methods
 
+	trackDate(){
+		this.dateSvc.startDateService(Date.now());
+		// OnLoad Update
+		if(!this.dateSvc.startedTracking)
+			this.updateDate();
+		// Every next Update
+		this.dateSvc.trackDate((dateChanged) =>{
+			if(dateChanged)
+				this.updateDate();
+		});
+	}
+
+	updateDate(){
+		this.dateSvc.updateDate(this.user.id).subscribe(result =>{
+			if(!result.success){
+				console.log(result.msg);
+				return false;
+			}
+	    }, err =>{
+	      console.log(err);
+	      return false;
+	    });
+	}
+
 	getItems(){
 		this.priceSvc.getPricelist(this.user.id).subscribe(pricelist => {
 			this.items = pricelist;
@@ -119,24 +144,27 @@ export class BusinessSettingsComponent implements OnInit, AfterViewInit {
 	}
 
 	addNewItem(name, length, cost){
-		//No name input
+		//if no name
 		if (!name){
 			this.errorName = true;
 			return false;
 		}
-		else this.errorName = false;
-
+		else 
+			this.errorName = false;
+		//if no length
 		if (!length){
 			this.errorLength = true;
 			return false;
 		}
-		else this.errorLength = false;
-
+		else 
+			this.errorLength = false;
+		//if no cost
 		if (!cost){
 			this.errorCost = true;
 			return false;
 		}
-		else this.errorCost = false;
+		else 
+			this.errorCost = false;
 
 		const newItem = {
 			name: name,
@@ -145,14 +173,14 @@ export class BusinessSettingsComponent implements OnInit, AfterViewInit {
 		};
 
 		this.priceSvc.addItemToPricelist(this.user.id, newItem).subscribe(data => {
-			if(data.succes){
+			if(data.success){
 				this.addModal.modal('hide');
 				this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
 				this.items.unshift(data.item);
 			}
 			else {
 	  			// Turn off modal
-				this.addModal.modal('hide');
+	  			this.addModal.modal('hide');
 	  			this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
 	  		}
 		}, err => {
@@ -164,15 +192,13 @@ export class BusinessSettingsComponent implements OnInit, AfterViewInit {
 	deleteItem(itemId){
 		this.priceSvc.deleteItemFromPricelist(itemId).subscribe(data => {
 			if(data.success){
-				for(var i=0; i<this.items.length;i++){
-					if(this.items[i].id == itemId)
+				for(var i=0; i<this.items.length; i++){
+					if(this.items[i]._id == itemId)
 						this.items.splice(i,1);
 				}
-				console.log('Dobro');
 				this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
 			}
 			else {
-				console.log('Lose');
 				this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
 			}
 		}, err => {
@@ -182,24 +208,31 @@ export class BusinessSettingsComponent implements OnInit, AfterViewInit {
 
 	}
 
+	clickedItem(itemId, name, length, cost){
+		this.itemId = itemId;
+		this.itemName = name;
+		this.itemLength = length;
+		this.itemCost = cost;
+	}
+
 	updateItem(name, length, cost){
 		var update = {
 			name: name,
 			length: length,
 			cost: cost
 		};
-	//	this.itemId = ??????????;  kako da prosledim konkretni itemID -_-
-		this.priceSvc.updateItemFromPricelist(this.itemId, update).subscribe(updatedItem =>{
-			if(updatedItem.success){
+		this.priceSvc.updateItemFromPricelist(this.itemId, update).subscribe(data =>{
+			if(data.success){
 				this.editModal.modal('hide');
-				this.flashMessage.show(updatedItem.msg, {cssClass: 'alert-success', timeout: 3000});
-		        this.itemName = updatedItem.item.name;
-		        this.itemLength = updatedItem.item.length;
-		        this.itemCost = updatedItem.item.cost;
+				for(var i=0; i<this.items.length; i++){
+					if(this.items[i]._id == this.itemId)
+						this.items[i] = data.item;
+				}
+				this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
 		    }
 		    else{
 		    	this.editModal.modal('hide');
-		        this.flashMessage.show(updatedItem.msg, {cssClass: 'alert-danger', timeout: 3000});
+		        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
 		        return false;
 		    }        
 		}, err =>{

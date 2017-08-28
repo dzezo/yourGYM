@@ -32,7 +32,7 @@ router.post('/:userId', function (req, res, next) {
 		if(err)
 			res.json({ success: false, msg: 'Failed to save item.' });
 		else
-			res.json({ success: true, msg: 'New item saved.'});
+			res.json({ success: true, msg: 'New item saved.', item: savedItem});
 	});
 });
 

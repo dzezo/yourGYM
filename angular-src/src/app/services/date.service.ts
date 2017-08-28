@@ -36,8 +36,8 @@ export class DateService {
 				if(!this.authService.loggedIn()){
 					this.started = false;
 					this.startedTracking = false;
+					clearInterval(checkDate);
 				}
-				console.log('loop');
 				currentDate = new Date(Date.now());
 				currentDay = currentDate.getDate();
 				if(this.initDate.getDate() != currentDay)

@@ -26,7 +26,7 @@ var Pricelist = module.exports = mongoose.model('Pricelist', PricelistSchema);
 module.exports.loadPricelist = function(userId, callback){
 	var query = {userId: userId};
 	var project = {};
-	var options = {sort: { cost: 1 }};
+	var options = {sort: { length: 1 }};
 	Pricelist.find(query, project, options, callback);
 }
 

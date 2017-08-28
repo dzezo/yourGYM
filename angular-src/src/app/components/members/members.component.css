@@ -31,9 +31,17 @@
 	opacity: 1;
 }
 
+.modal-body{
+	overflow: auto;
+}
+
 .modal-body hr{
 	border-top: 1px solid #001029;
 	opacity: 0.5;
+}
+
+.form-group{
+	margin-bottom: 2px !important;
 }
 
 .form-control{
@@ -42,7 +50,7 @@
 }
 
 .dropdown-menu{
-	max-height: 280px;
+	max-height: 180px;
     min-width: stretch;
     text-align: center;
     overflow: auto;

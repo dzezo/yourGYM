@@ -26,7 +26,11 @@
               <td><a>{{item.name}}</a></td>
               <td>{{item.length}}</td>
               <td>{{item.cost}}</td>
-              <td><a data-toggle="modal" data-target="#edit-item-modal"><span class="glyphicon glyphicon-pencil"></span></a></td>
+              <td>
+                <a (click)="clickedItem(item._id, item.name, item.length, item.cost)" data-toggle="modal" data-target="#edit-item-modal">
+                  <span class="glyphicon glyphicon-pencil"></span>
+                </a>
+              </td>
               <td><a (click)="deleteItem(item._id)"><span class="glyphicon glyphicon-trash"></span></a></td>
             </tr>
           </tbody>
@@ -45,24 +49,24 @@
       </div>
       <div class="modal-body">
         <div class="col-md-12">
-          <form (keyup.enter)="addNewItem(modItemName.value, modItemLength.value, modItemCost.value)" >
+          <form (keyup.enter)="addNewItem(modAddName.value, modAddLength.value, modAddCost.value)" >
             <div class="form-group">
               <label for="modal-name">Name: </label>
-              <input #modItemName type="text" class="form-control" id="modal-ItemName" placeholder="Name">
+              <input #modAddName type="text" class="form-control" id="modal-ItemName" placeholder="Name">
               <label *ngIf="errorName" for="modal-name" style="color: red; float: right; font-size: 10px;">
               Please fill in the name
               </label>
             </div>
             <div class="form-group">
               <label for="modal-length">Length: </label>
-              <input #modItemLength type="text" class="form-control" id="modal-ItemLength" placeholder="0">
+              <input #modAddLength type="text" class="form-control" id="modal-ItemLength" placeholder="0">
               <label *ngIf="errorLength" for="modal-length" style="color: red; float: right; font-size: 10px;">
               Please fill in the length
               </label>
             </div>
             <div class="form-group">
               <label for="modal-cost">Cost: </label>
-              <input #modItemCost type="text" class="form-control" id="modal-ItemCost" placeholder="0">
+              <input #modAddCost type="text" class="form-control" id="modal-ItemCost" placeholder="0">
               <label *ngIf="errorCost" for="modal-cost" style="color: red; float: right; font-size: 10px;">
               Please fill in the cost
               </label>
@@ -72,7 +76,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button (click)="addNewItem(modItemName.value, modItemLength.value, modItemCost.value)" type="button" class="btn btn-primary">Add Item</button>
+        <button (click)="addNewItem(modAddName.value, modAddLength.value, modAddCost.value)" type="button" class="btn btn-primary">Add Item</button>
       </div>
     </div>
   </div>
@@ -88,25 +92,25 @@
       </div>
       <div class="modal-body">
         <div class="col-md-12">
-          <form (keyup.enter)="updateItem(modItemName.value, modItemLength.value, modItemCost.value)" >
+          <form (keyup.enter)="updateItem(modEditName.value, modEditLength.value, modEditCost.value)" >
             <div class="form-group">
               <label for="modal-name">Name: </label>
-              <input #modItemName type="text" class="form-control" id="modal-ItemName" value={{itemName}} placeholder="Name">
+              <input #modEditName type="text" class="form-control" id="modal-ItemName" value={{itemName}} placeholder="Name">
             </div>
             <div class="form-group">
               <label for="modal-length">Length: </label>
-              <input #modItemLength type="text" class="form-control" id="modal-ItemLength" value={{itemLength}} placeholder="0">
+              <input #modEditLength type="text" class="form-control" id="modal-ItemLength" value={{itemLength}} placeholder="0">
             </div>
             <div class="form-group">
               <label for="modal-cost">Cost: </label>
-              <input #modItemCost type="text" class="form-control" id="modal-ItemCost" value={{itemCost}} placeholder="0">
+              <input #modEditCost type="text" class="form-control" id="modal-ItemCost" value={{itemCost}} placeholder="0">
             </div>
           </form>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button (click)="updateItem(modItemName.value, modItemLength.value, modItemCost.value)" type="button" class="btn btn-primary">Submit changes</button>
+        <button (click)="updateItem(modEditName.value, modEditLength.value, modEditCost.value)" type="button" class="btn btn-primary">Submit changes</button>
       </div>
     </div>
   </div>
