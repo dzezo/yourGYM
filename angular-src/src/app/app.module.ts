@@ -23,6 +23,8 @@ import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
 import { MembersService } from './services/members.service';
 import { PricelistService } from './services/pricelist.service';
+import { DateService } from './services/date.service';
+
 
 const appRoutes: Routes = [
 {path: '', component: HomeComponent},
@@ -61,7 +63,8 @@ const appRoutes: Routes = [
     AuthService,
     AuthGuard,
     MembersService,
-    PricelistService
+    PricelistService,
+    DateService
   ],
   bootstrap: [AppComponent]
 })

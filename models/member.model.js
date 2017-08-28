@@ -50,7 +50,7 @@ function getDaysLeft (currentDate, endDate){
 	var day_ms = 1000*60*60*24;
 	var current = new Date(currentDate);
 	var end = new Date(endDate);
-	return Math.round((end.getTime() - current.getTime())/day_ms);
+	return (Math.round((end.getTime() - current.getTime())/day_ms) + 1);
 }
 
 // Post
@@ -61,7 +61,7 @@ module.exports.addMember = function (userId, input, res) {
 			res.json({success: false, msg: 'Membership type not found.'});
 		else{
 			var end = getEndDate(input.start, item.length);
-			var daysLeft = getDaysLeft(input.start, end);
+			var daysLeft = getDaysLeft(input.submitTime, end);
 			var debt = item.cost - ((input.amount)?input.amount:0);
 			var newMember = new Member({
 				userId: userId,
@@ -117,7 +117,7 @@ module.exports.newMembership = function(memberId, input, res){
 					res.json({success: false, msg: 'Member not found.'});
 				else{
 					var end = getEndDate(input.start, item.length);
-					var daysLeft = getDaysLeft(input.start, end);
+					var daysLeft = getDaysLeft(input.submitTime, end);
 					var debt = item.cost - ((input.amount)?input.amount:0);
 					member.totalDebt = member.totalDebt + debt;
 					member.memberships.unshift({

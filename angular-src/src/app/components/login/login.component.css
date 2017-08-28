@@ -1,8 +1,13 @@
 .login-background {
-    background-color: #00caf6;
-    background-image: url("../../assets/BGplaceholder.png");
-    background-repeat: repeat;
-    position: relative;
+    background: -moz-linear-gradient(270deg, #00caf6 0%, #001029 100%); /* ff3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #00caf6), color-stop(100%, #001029)); /* safari4+,chrome */
+    background: -webkit-linear-gradient(270deg, #00caf6 0%, #001029 100%); /* safari5.1+,chrome10+ */
+    background: -o-linear-gradient(270deg, #00caf6 0%, #001029 100%); /* opera 11.10+ */
+    background: -ms-linear-gradient(270deg, #00caf6 0%, #001029 100%); /* ie10+ */
+    background: linear-gradient(180deg, #00caf6 0%, #001029 100%); /* w3c */
+    background-position: relative;
+    background-size: contain;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00caf6', endColorstr='#001029',GradientType=0 ); /* ie6-9 */
 }
 
 #loginbox{  
