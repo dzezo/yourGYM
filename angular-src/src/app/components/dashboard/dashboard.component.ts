@@ -46,6 +46,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
 	ngOnInit() {
 		this.user = JSON.parse(localStorage.getItem('user'));
+		this.flashMessage.grayOut(true);
 		this.getStatistics();
 		this.getActiveMembers();
 		this.getPricelist();
@@ -212,7 +213,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 				// Turn off modal
 				this.modal.modal('hide');
 				// Send msg
-	  			this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+	  			this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 2000});
 	  			// Update view
 	  			this.members.unshift(data.member);
 	  			this.getStatistics();
@@ -220,7 +221,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 	  		else {
 	  			// Turn off modal
 				this.modal.modal('hide');
-	  			this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+	  			this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
 	  		}
 		}, err => {
 			console.log(err);
@@ -248,11 +249,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 					if(this.members[i].id == memberId)
 						this.members.splice(i,1);
 				}
-	  			this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+	  			this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 2000});
 	  			this.getStatistics();
 	  		}
 	  		else {
-	  			this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+	  			this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
 	  		}
 		}, err => {
 			console.log(err);

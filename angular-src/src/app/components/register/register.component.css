@@ -13,7 +13,7 @@
 #registerbox {  
     background: white;
     margin-top: 5%;
-    margin-bottom: 5%;
+    margin-bottom: 2%;
     padding: 0;   
     box-shadow: 0 8px 50px -2px #000; 
 }
@@ -44,4 +44,14 @@
 
 .glyphicon {
     font-size: 50px
+}
+
+.error-label{
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid;
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    border-radius: 4px;
 }

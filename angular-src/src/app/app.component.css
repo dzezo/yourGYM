@@ -6,3 +6,12 @@
 	overflow: auto;
 	padding-bottom: 30px /* Footer height */
 }
+
+.flash-msg{
+	width: 200px;
+	position: fixed;
+	z-index: 10;
+	right: 0;
+	margin-right: 10px;
+	bottom: 0;
+}

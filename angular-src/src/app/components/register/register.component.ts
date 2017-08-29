@@ -1,6 +1,5 @@
 import { Component, OnInit, AfterViewInit, ElementRef, HostListener } from '@angular/core';
 import { ValidateService } from '../../services/validate.service';
-import { FlashMessagesService } from 'angular2-flash-messages';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -20,8 +19,11 @@ export class RegisterComponent implements OnInit {
 
 	backgroundElement: any;
   	footerSize: any = 30;
+
+	// Error
+	error: Boolean = false;
+	errorMsg: String;
 	constructor(private validateService: ValidateService,
-				private flashMessage: FlashMessagesService,
 				private authService: AuthService,
 				private router: Router,
 				private elRef: ElementRef) { }
@@ -60,24 +62,26 @@ export class RegisterComponent implements OnInit {
 
 		// Required Fields
 		if(!this.validateService.validateRegister(user)){
-			this.flashMessage.show('Please fill in all the fields.', {cssClass: 'alert-danger', timeout: 3000});
+			this.error = true;
+			this.errorMsg = 'Please fill in all the fields.';
 			return false;
 		}
 
 		// Validate Email
 		if(!this.validateService.validateEmail(user.email)){
-			this.flashMessage.show('Please use a valid e-mail.', {cssClass: 'alert-danger', timeout: 3000});
+			this.error = true;
+			this.errorMsg = 'Please use a valid e-mail.';
 			return false;
 		}
 
 		// Register User
 		this.authService.registerUser(user).subscribe((data) => {
 			if(data.success){
-				this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
 				this.router.navigate(['/login']);
 			}
 			else{
-				this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+				this.error = true;
+				this.errorMsg = data.msg;
 				this.router.navigate(['/register']);
 			}
 		});

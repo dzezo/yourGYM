@@ -175,13 +175,13 @@ export class BusinessSettingsComponent implements OnInit, AfterViewInit {
 		this.priceSvc.addItemToPricelist(this.user.id, newItem).subscribe(data => {
 			if(data.success){
 				this.addModal.modal('hide');
-				this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+				this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 2000});
 				this.items.unshift(data.item);
 			}
 			else {
 	  			// Turn off modal
 	  			this.addModal.modal('hide');
-	  			this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+	  			this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
 	  		}
 		}, err => {
 			console.log(err);
@@ -196,10 +196,10 @@ export class BusinessSettingsComponent implements OnInit, AfterViewInit {
 					if(this.items[i]._id == itemId)
 						this.items.splice(i,1);
 				}
-				this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+				this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 2000});
 			}
 			else {
-				this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+				this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
 			}
 		}, err => {
 			console.log(err);
@@ -228,11 +228,11 @@ export class BusinessSettingsComponent implements OnInit, AfterViewInit {
 					if(this.items[i]._id == this.itemId)
 						this.items[i] = data.item;
 				}
-				this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+				this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 2000});
 		    }
 		    else{
 		    	this.editModal.modal('hide');
-		        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+		        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
 		        return false;
 		    }        
 		}, err =>{

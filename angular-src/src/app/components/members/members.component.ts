@@ -193,14 +193,14 @@ export class MembersComponent implements OnInit, AfterViewInit {
 				// Turn off modal
 				this.modal.modal('hide');
 				// Send msg
-	  			this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+	  			this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 2000});
 	  			// Update view
 	  			this.members.unshift(data.member);
 	  		}
 	  		else {
 	  			// Turn off modal
 				this.modal.modal('hide');
-	  			this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+	  			this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
 	  		}
 		}, err => {
 			console.log(err);
@@ -228,10 +228,10 @@ export class MembersComponent implements OnInit, AfterViewInit {
 					if(this.members[i].id == memberId)
 						this.members.splice(i,1);
 				}
-	  			this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+	  			this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 2000});
 	  		}
 	  		else {
-	  			this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+	  			this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
 	  		}
 		}, err => {
 			console.log(err);

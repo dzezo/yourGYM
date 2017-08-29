@@ -13,7 +13,9 @@
                 </div>
                 <div class="panel-body">
                     <form (submit)="onLoginSubmit()" class="form-horizontal" role="form">
-                        <flash-messages></flash-messages>
+                        <div *ngIf="error" class="input">
+                            <label class="error-label">{{errorMsg}}</label>
+                        </div>
                         <div class="input">
                             <input [(ngModel)]="username" type="text" class="form-control" name="username" placeholder="Username">
                         </div>
@@ -21,7 +23,7 @@
                             <input [(ngModel)]="password" type="password" class="form-control" name="password" placeholder="Password">
                         </div>
                         <div style="margin-top:10px" class="form">
-                            <input type="submit" class="btn btn-success btn-block" value="Sign in"> 
+                            <input type="submit" class="btn btn-success btn-block" value="Sign in">
                         </div>
                     </form>
                 </div>

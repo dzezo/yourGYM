@@ -209,7 +209,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       if(updatedMember.success){
         // Turn off modal
         this.editModal.modal('hide');
-        this.flashMessage.show(updatedMember.msg, {cssClass: 'alert-success', timeout: 3000});
+        this.flashMessage.show(updatedMember.msg, {cssClass: 'alert-success', timeout: 2000});
         this.memberName = updatedMember.member.name;
         this.memberPhone = updatedMember.member.phone;
         this.memberMail = updatedMember.member.email;
@@ -217,7 +217,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       else{
         // Turn off modal
         this.editModal.modal('hide');
-        this.flashMessage.show(updatedMember.msg, {cssClass: 'alert-danger', timeout: 3000});
+        this.flashMessage.show(updatedMember.msg, {cssClass: 'alert-danger', timeout: 2000});
         return false;
       }
     }, err =>{
@@ -272,7 +272,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         // Turn off modal
         this.membershipModal.modal('hide');
         // Send msg
-        this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+        this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 2000});
         // Update view
         this.memberships.unshift(data.member.memberships[0]);
         this.memberDebt = data.member.totalDebt;
@@ -280,7 +280,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       else {
         // Turn off modal
         this.membershipModal.modal('hide');
-        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
       }
     }, err => {
       console.log(err);
@@ -295,12 +295,12 @@ export class ProfileComponent implements OnInit, AfterViewInit {
           if(this.memberships[i]._id == membershipId)
             this.memberships.splice(i,1);
         }
-        this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+        this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 2000});
         // Update statistics
         this.memberDebt = data.newTotalDebt;
       }
       else {
-        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
       }
     }, err => {
       console.log(err);
@@ -326,7 +326,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         // Turn off modal
         this.paymentModal.modal('hide');
         // Send msg
-        this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+        this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 2000});
         // Update view 
         this.memberDebt = data.member.totalDebt;
         for(var i=0; i<this.memberships.length; i++){
@@ -339,7 +339,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       else {
         // Turn off modal
         this.paymentModal.modal('hide');
-        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
       }
     }, err => {
       console.log(err);
@@ -357,7 +357,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
               // Find payment log
               if(this.memberships[i].log[j]._id == paymentId)
                 this.memberships[i].log.splice(j,1);
-        this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
+        this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 2000});
         // Update view
         this.memberDebt = data.member.totalDebt;
         for(var i=0; i<this.memberships.length; i++){
@@ -367,7 +367,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         }
       }
       else {
-        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
       }
     }, err => {
       console.log(err);

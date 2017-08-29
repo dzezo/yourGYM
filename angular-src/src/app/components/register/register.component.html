@@ -13,7 +13,9 @@
                 </div>
                 <div class="panel-body">
                     <form (submit)="onRegisterSubmit()" class="form-horizontal" role="form">
-                        <flash-messages></flash-messages>
+                        <div *ngIf="error" class="input">
+                            <label class="error-label">{{errorMsg}}</label>
+                        </div>
                         <div class="input">
                             <input [(ngModel)]="name" type="name" class="form-control" name="name" placeholder="Name">
                         </div>
