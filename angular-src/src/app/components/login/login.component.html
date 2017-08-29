@@ -13,6 +13,7 @@
                 </div>
                 <div class="panel-body">
                     <form (submit)="onLoginSubmit()" class="form-horizontal" role="form">
+                        <flash-messages></flash-messages>
                         <div class="input">
                             <input [(ngModel)]="username" type="text" class="form-control" name="username" placeholder="Username">
                         </div>

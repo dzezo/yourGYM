@@ -129,23 +129,21 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Member Info</h4>
       </div>
-      <div class="modal-body">
-        <div class="col-md-12">
-          <form (keyup.enter)="updateMember(modName.value, modPhone.value, modMail.value)" >
-            <div class="form-group">
-              <label for="modal-name">Name: </label>
-              <input #modName type="text" class="form-control" id="modal-name" value={{memberName}} placeholder="Name">
-            </div>
-            <div class="form-group">
-              <label for="modal-phone">Phone: </label>
-              <input #modPhone type="text" class="form-control" id="modal-phone" value={{memberPhone}} placeholder="Phone">
-            </div>
-            <div class="form-group">
-              <label for="modal-mail">E-mail: </label>
-              <input #modMail type="text" class="form-control" id="modal-mail" value={{memberMail}} placeholder="E-mail">
-            </div>
-          </form>
-        </div>
+      <div class="modal-body col-md-12">
+        <form (keyup.enter)="updateMember(modName.value, modPhone.value, modMail.value)" >
+          <div class="form-group">
+            <label for="modal-name">Name: </label>
+            <input #modName type="text" class="form-control" id="modal-name" value={{memberName}} placeholder="Name">
+          </div>
+          <div class="form-group">
+            <label for="modal-phone">Phone: </label>
+            <input #modPhone type="text" class="form-control" id="modal-phone" value={{memberPhone}} placeholder="Phone">
+          </div>
+          <div class="form-group">
+            <label for="modal-mail">E-mail: </label>
+            <input #modMail type="text" class="form-control" id="modal-mail" value={{memberMail}} placeholder="E-mail">
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -166,45 +164,43 @@
         <h4 class="modal-title"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> New Membership</h4>
       </div>
       <!-- Modal Content -->
-      <div class="modal-body">
-        <div class="col-md-12">
-          <form (keyup.enter)="addNewMembership(modStart.value, modAmount.value)">
-            <div class="form-group">
-              <label for="modal-type">Type: </label>
-              <div class="dropdown">
-                <button id="modal-type" type="button" class="form-control" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  {{membershipType}}
-                  <span class="caret"></span>
-                </button>
-                <label *ngIf="errorType" for="modal-type" style="color: red; float: right; font-size: 10px;">
-                Please select membership type
-                </label>
-                <ul class="dropdown-menu" aria-labelledby="modal-type">
-                  <li *ngFor = "let membership of membershipTypes">
-                    <a (click)="membershipSelected(membership._id, membership.name, membership.cost)">
-                    {{membership.name}}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="modal-start">Start: </label>
-              <input #modStart type="date" class="form-control" id="modal-start">
-              <label *ngIf="errorDate" for="modal-start" style="color: red; float: right; font-size: 10px;">
-              Please select the date
+      <div class="modal-body col-md-12">
+        <form (keyup.enter)="addNewMembership(modStart.value, modAmount.value)">
+          <div class="form-group">
+            <label for="modal-type">Type: </label>
+            <div class="dropdown">
+              <button id="modal-type" type="button" class="form-control" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{membershipType}}
+                <span class="caret"></span>
+              </button>
+              <label *ngIf="errorType" for="modal-type" style="color: red; float: right; font-size: 10px;">
+              Please select membership type
               </label>
+              <ul class="dropdown-menu" aria-labelledby="modal-type">
+                <li *ngFor = "let membership of membershipTypes">
+                  <a (click)="membershipSelected(membership._id, membership.name, membership.cost)">
+                  {{membership.name}}
+                  </a>
+                </li>
+              </ul>
             </div>
-            <div class="form-group">
-              <label for="modal-cost">Cost: </label>
-              <input type="text" class="form-control" id="modal-cost" value={{membershipCost}} disabled="">
-            </div>
-            <div class="form-group">
-              <label for="modal-amount">Amount Paid: </label>
-              <input #modAmount type="text" class="form-control" id="modal-amount" placeholder="0">
-            </div>
-          </form>
-        </div>
+          </div>
+          <div class="form-group">
+            <label for="modal-start">Start: </label>
+            <input #modStart type="date" class="form-control" id="modal-start">
+            <label *ngIf="errorDate" for="modal-start" style="color: red; float: right; font-size: 10px;">
+            Please select the date
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="modal-cost">Cost: </label>
+            <input type="text" class="form-control" id="modal-cost" value={{membershipCost}} disabled="">
+          </div>
+          <div class="form-group">
+            <label for="modal-amount">Amount Paid: </label>
+            <input #modAmount type="text" class="form-control" id="modal-amount" placeholder="0">
+          </div>
+        </form>
       </div>
       <!-- Modal Content Ends -->
       <div class="modal-footer">
@@ -225,22 +221,20 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title"><span class="glyphicon glyphicon-tag" aria-hidden="true"></span> Payment</h4>
       </div>
-      <div class="modal-body">
-        <div class="col-md-12">
-          <form (keyup.enter)="addNewPayment(modPayDay.value, modPayAmount.value)">
-            <div class="form-group">
-              <label for="modal-payday">Date: </label>
-              <input #modPayDay type="date" class="form-control" id="modal-payday">
-              <label *ngIf="errorDate" for="modal-payday" style="color: red; float: right; font-size: 10px;">
-              Please select the date
-              </label>
-            </div>
-            <div class="form-group">
-              <label for="modal-pay-amount">Amount: </label>
-              <input #modPayAmount type="text" class="form-control" id="modal-pay-amount" placeholder="0">
-            </div>
-          </form>
-        </div>
+      <div class="modal-body col-md-12">
+        <form (keyup.enter)="addNewPayment(modPayDay.value, modPayAmount.value)">
+          <div class="form-group">
+            <label for="modal-payday">Date: </label>
+            <input #modPayDay type="date" class="form-control" id="modal-payday">
+            <label *ngIf="errorDate" for="modal-payday" style="color: red; float: right; font-size: 10px;">
+            Please select the date
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="modal-pay-amount">Amount: </label>
+            <input #modPayAmount type="text" class="form-control" id="modal-pay-amount" placeholder="0">
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

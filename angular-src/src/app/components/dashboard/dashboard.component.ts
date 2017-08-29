@@ -193,7 +193,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 		}
 		else
 			this.errorDate = false;
-
+		// Reformating Date
+	    var currentDate = new Date(Date.now());
+	    currentDate.setHours(0,0,0,0);
+	    // Creating Input
 		const newMember = {
 			name: name,
 			phone: phone,
@@ -201,7 +204,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 			start: start+'T00:00:00Z',
 			membershipId: this.membershipId,
 			amount: parseInt(amount),
-			submitTime: Date.now()
+			submitTime: currentDate
 		};
 
 		this.memSvc.addNewMember(this.user.id, newMember).subscribe(data => {

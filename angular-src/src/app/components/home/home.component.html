@@ -1,58 +1,25 @@
 <div class="home-background">
-  <div class="container col-md-8 col-md-offset-2">
-    <div id="myCarousel" class="carousel slide" data-ride="carousel">
-      <!-- indikatori -->
-      <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-      </ol>
-     <!-- sadrzaj -->
-      <div class="carousel-inner">
-        <div class="item active">
-          <img src="../../assets/carouselBG.png" class="img-responsive">
-          <div class="carousel-caption">
-            <div class="carouselPic">
-              <img src="assets/test.png" class="">
-            </div>
-            <div class="carouselText">
-              <h1>About Us 1</h1>
-              <h2>We are bla bla bla bla bla bla bla bla</h2>
-            </div>
-          </div>
+  <div class="container col-md-10 col-md-offset-1">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <h1 style="margin-top: 10px; line-height: 1.5;">
+          CREATE PRICELIST, ADD MEMBERS &amp;<br>
+          MANAGE THEM WITH EASE
+        </h1>
+        <h5>
+           With your gym you can track every membership and payment<br>
+           just click on member`s name to access their profile
+        </h5>
+        <div style="display: inline-flex; margin-top: 20px;">
+          <button [routerLink]="['/register']" type="button" class="btn btn-primary" style="padding: 15px 40px; font-size: 14px;">
+          GET STARTED
+          </button>
+          <label style="align-items: center; display:flex; font-weight: lighter; font-size: 11px; margin-left: 10px;">
+          Get started by signing up with us<br>
+          FREE of charge
+          </label>
         </div>
-        <div class="item">
-          <img src="../../assets/carouselBG.png" class="img-responsive">
-          <div class="carousel-caption">
-            <div class="carouselText">
-              <h1>About Us 2</h1>
-              <h2>We are bla bla bla bla bla bla bla bla</h2>
-            </div>
-            <div class="carouselPic">
-              <img src="assets/test.png" class="">
-            </div>
-          </div>
-        </div>
-        <div class="item">
-          <img src="../../assets/carouselBG.png" class="img-responsive">
-          <div class="carousel-caption">
-            <div class="carouselPic">
-              <img src="assets/test.png" class="">
-            </div>
-            <div class="carouselText">
-              <h1>About Us 3</h1>
-              <h2>We are bla bla bla bla bla bla bla bla</h2>
-            </div>
-          </div>
-        </div>
-      </div>    
-      <!-- kontrole -->      
-      <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-      </a>
-      <a class="right carousel-control" href="#myCarousel" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-      </a>
+      </div>
     </div>
   </div>
 </div>

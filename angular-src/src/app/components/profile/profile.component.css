@@ -184,7 +184,7 @@
 }
 
 .modal-body{
-  overflow: auto;
+  padding: 15px 30px;
 }
 
 .form-control{
@@ -193,7 +193,7 @@
 }
 
 .dropdown-menu{
-  max-height: 180px;
+  max-height: 280px;
   min-width: stretch;
   text-align: center;
   overflow: auto;
