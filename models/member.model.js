@@ -50,7 +50,7 @@ function getDaysLeft (currentDate, endDate){
 	var day_ms = 1000*60*60*24;
 	var current = new Date(currentDate);
 	var end = new Date(endDate);
-	return Math.floor((end.getTime() - current.getTime())/day_ms);
+	return Math.round((end.getTime() - current.getTime())/day_ms);
 }
 
 // Post
