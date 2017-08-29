@@ -47,8 +47,10 @@ export class DateService {
 	}
 
 	updateDate(userId){
+    var currentDate = new Date(Date.now());
+    currentDate.setHours(0,0,0,0);
 		var update = {
-			date: Date.now()
+			date: currentDate
 		}
 		var headers = new Headers();
 	    headers.append('Content-Type', 'application/json');
