@@ -46,7 +46,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
 	ngOnInit() {
 		this.user = JSON.parse(localStorage.getItem('user'));
-		this.flashMessage.grayOut(true);
 		this.getStatistics();
 		this.getActiveMembers();
 		this.getPricelist();
