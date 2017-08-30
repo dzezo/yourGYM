@@ -40,8 +40,10 @@ export class DateService {
 				}
 				currentDate = new Date(Date.now());
 				currentDay = currentDate.getDate();
-				if(this.initDate.getDate() != currentDay)
+				if(this.initDate.getDate() != currentDay){
+					this.initDate = currentDate;
 					callback(true);
+				}
 			}, 1000);
 		}
 	}

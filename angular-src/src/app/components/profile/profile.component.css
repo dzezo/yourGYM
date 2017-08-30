@@ -193,7 +193,7 @@
 }
 
 .dropdown-menu{
-  max-height: 280px;
+  max-height: 250px;
   min-width: stretch;
   text-align: center;
   overflow: auto;
