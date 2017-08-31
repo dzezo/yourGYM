@@ -31,6 +31,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 	errorName: Boolean = false;
 	errorType: Boolean = false;
 	errorDate: Boolean = false;
+	dateStart: any;
 	// Statistics
 	statMembers: String;
 	statActiveMembers: String;
@@ -53,13 +54,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 	}
 
 	ngAfterViewInit(){
+		// Modal
 		this.modal = $(this.elRef.nativeElement).find('#add-member-modal');
+		this.dateStart = $(this.elRef.nativeElement).find('#modal-start');
+		this.dateStart.datepicker();
+		// Sidebar
 		this.sidebarWrapper = $(this.elRef.nativeElement).find('.page-nav-wrapper');
 		this.sidebar = $(this.elRef.nativeElement).find('#page-nav');
 		this.contentContainer = $(this.elRef.nativeElement).find('.container')
-		// set Sidebar Height
+		// Set Sidebar Height
 		this.sidebarWrapper.css('height', (window.innerHeight) + 'px');
-		// set Sidebar Offset ( Init & Reroute )
+		// Set Sidebar Offset ( Init & Reroute )
 		var contentOffset = this.contentContainer.offset();
 		this.sidebarOffset = contentOffset.top - parseInt(this.contentContainer.css('margin-top'), 10);
 		// Adjust Scroll ( Init & Reroute )
@@ -201,7 +206,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 			name: name,
 			phone: phone,
 			email: email,
-			start: start+'T00:00:00Z',
+			start: this.dateSvc.reformatDate(start),
 			membershipId: this.membershipId,
 			amount: parseInt(amount),
 			submitTime: currentDate

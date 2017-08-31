@@ -44,6 +44,18 @@
 	margin-bottom: 2px !important;
 }
 
+.form-group .input-group .input-group-addon{
+	padding: 0;
+}
+
+.form-group .input-group .input-group-addon:hover{
+	background-color: #ceccc8;
+}
+
+.form-group .input-group .input-group-addon:active{
+	background-color: #dfd7ca;
+}
+
 .form-control{
 	height: 30px;
 	padding: 4px 16px;

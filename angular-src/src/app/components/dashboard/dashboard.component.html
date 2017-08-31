@@ -118,13 +118,22 @@
               </ul>
             </div>
           </div>
+          <!-- Date Start -->
           <div class="form-group">
             <label for="modal-start">Start: </label>
-            <input #modStart type="date" class="form-control" id="modal-start">
+            <!-- Date Input Start -->
+            <div id="modal-start" class="input-group date">
+             <input #modStart class="form-control" placeholder="mm/dd/yyyy" type="text"/>
+             <div class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar" style="padding: 0 15px;" aria-hidden="true"></span>
+             </div>
+            </div>
+            <!-- Date Input Ends -->
             <label *ngIf="errorDate" for="modal-start" style="color: red; float: right; font-size: 10px;">
             Please select the date
             </label>
           </div>
+          <!-- Date Start Ends -->
           <div class="form-group">
             <label for="modal-cost">Cost: </label>
             <input type="text" class="form-control" id="modal-cost" value="{{membershipCost}}" disabled="">

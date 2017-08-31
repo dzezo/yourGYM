@@ -42,6 +42,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   membershipId: String = "";
   membershipType: String = "Select Membership";
   membershipCost: String = "0";
+  dateStart: any;
+  payDay: any;
   // Error Flags
   errorType: Boolean = false;
   errorDate: Boolean = false;
@@ -70,6 +72,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.editModal = $(this.elRef.nativeElement).find('#edit-member-modal');
     this.membershipModal = $(this.elRef.nativeElement).find('#new-membership-modal');
     this.paymentModal = $(this.elRef.nativeElement).find('#payment-modal');
+    this.dateStart = $(this.elRef.nativeElement).find('#modal-start');
+    this.payDay = $(this.elRef.nativeElement).find('#modal-payday');
+    this.dateStart.datepicker();
+    this.payDay.datepicker();
     // Sidebar
     this.sidebarWrapper = $(this.elRef.nativeElement).find('.page-nav-wrapper');
     this.sidebar = $(this.elRef.nativeElement).find('#page-nav');
@@ -261,7 +267,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     currentDate.setHours(0,0,0,0);
     // Creating Input
     const newMembership = {
-      start: start+'T00:00:00Z',
+      start: this.dateSvc.reformatDate(start),
       membershipId: this.membershipId,
       amount: parseInt(amount),
       submitTime: currentDate
@@ -317,7 +323,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       this.errorDate = false;
 
     const newPayment = {
-      date: payDate + 'T00:00:00Z',
+      date: this.dateSvc.reformatDate(payDate),
       amount: parseInt(amount)
     };
 

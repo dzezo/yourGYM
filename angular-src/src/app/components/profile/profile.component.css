@@ -192,6 +192,18 @@
   padding: 4px 16px;
 }
 
+.form-group .input-group .input-group-addon{
+  padding: 0;
+}
+
+.form-group .input-group .input-group-addon:hover{
+  background-color: #ceccc8;
+}
+
+.form-group .input-group .input-group-addon:active{
+  background-color: #dfd7ca;
+}
+
 .dropdown-menu{
   max-height: 250px;
   min-width: stretch;
