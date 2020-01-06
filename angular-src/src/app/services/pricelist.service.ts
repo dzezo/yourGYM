@@ -10,26 +10,26 @@ export class PricelistService {
 	// Pricelist
 
 	getPricelist(userId){
-		return this.http.get('http://localhost:3000/pricelists/' + userId)
+		return this.http.get('pricelists/' + userId)
 		.map(res => res.json());
 	}
 
 	addItemToPricelist(userId, newItem){
 		var headers = new Headers();
 		headers.append('Content-Type', 'application/json');
-		return this.http.post('http://localhost:3000/pricelists/' + userId, JSON.stringify(newItem), {headers: headers})
+		return this.http.post('pricelists/' + userId, JSON.stringify(newItem), {headers: headers})
       	.map(res => res.json());
 	}
 
 	deleteItemFromPricelist(itemId){
-		return this.http.delete('http://localhost:3000/pricelists/item/' + itemId)
+		return this.http.delete('pricelists/item/' + itemId)
       	.map(res => res.json());
 	}
 	
 	updateItemFromPricelist(itemId, newItem){
 		var headers = new Headers();
 		headers.append('Content-Type', 'application/json');
-		return this.http.put('http://localhost:3000/pricelists/item/' + itemId, JSON.stringify(newItem), {headers: headers})
+		return this.http.put('pricelists/item/' + itemId, JSON.stringify(newItem), {headers: headers})
       	.map(res => res.json());
 	}
 

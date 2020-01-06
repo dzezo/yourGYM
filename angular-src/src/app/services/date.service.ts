@@ -77,7 +77,7 @@ export class DateService {
 		}
 		var headers = new Headers();
 	    headers.append('Content-Type', 'application/json');
-	    return this.http.put('http://localhost:3000/members/' + userId, JSON.stringify(update), {headers: headers})
+	    return this.http.put('members/' + userId, JSON.stringify(update), {headers: headers})
 	      .map(res => res.json());
 	}
 }

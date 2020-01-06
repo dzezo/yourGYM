@@ -24,7 +24,7 @@ var members = require('./routes/members');
 var pricelists = require('./routes/pricelists');
 
 // Port Number
-var port = 3000;
+var port = process.env.PORT || 8080;
 
 // CORS Middleware
 app.use(cors());
