@@ -8,14 +8,14 @@
     "start": "node app"
   },
   "dependencies": {
-  	"express": "4.15.3",
-  	"mongoose": "4.11.5",
-  	"bcryptjs": "2.4.3",
-  	"cors": "2.8.4",
-  	"jsonwebtoken": "7.4.2",
-  	"body-parser": "1.17.2",
-  	"passport": "0.3.2",
-  	"passport-jwt": "2.2.1"
+    "express": "4.15.3",
+    "mongoose": "4.11.5",
+    "bcryptjs": "2.4.3",
+    "cors": "2.8.4",
+    "jsonwebtoken": "7.4.2",
+    "body-parser": "1.17.2",
+    "passport": "0.3.2",
+    "passport-jwt": "2.2.1"
   },
   "author": "NBP Team",
   "license": "ISC"
