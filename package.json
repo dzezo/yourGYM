@@ -4,11 +4,13 @@
   "description": "Create and manage your gym members.",
   "main": "app.js",
   "engines": {
-    "node": "6.9.5"
+    "node": "6.9.5",
+    "npm": "6.13.4"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app"
+    "start": "node app",
+    "heroku-postbuild": "cd angular-src && npm install && ng serve"
   },
   "dependencies": {
     "express": "4.15.3",
