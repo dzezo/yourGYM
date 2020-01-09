@@ -45,9 +45,9 @@ app.use('/users', users);
 app.use('/members', members);
 app.use('/pricelists', pricelists);
 
-// Index Route
-app.get('/', function (req, res) {
-	res.send('Invalid Endpoint');
+// Path Location Strategy
+app.get('/*', function(req, res){
+	res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 // Start Server
