@@ -3,7 +3,7 @@
 }
 
 #content-wrapper{
-	overflow: auto;
+	overflow: hidden;
 	padding-bottom: 30px /* Footer height */
 }
 
