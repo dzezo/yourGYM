@@ -196,7 +196,7 @@ module.exports.removeMembership = function(memberId, membershipId, res){
 			if(err)
 				res.json({ success: false, msg: 'Failed to remove membership.' });
 			else
-				res.json({ success: true, msg: 'Membership is removed.', newTotalDebt: member.totalDebt });
+				res.json({ success: true, msg: 'Membership is removed.', member: member });
 		});
 	})
 }
