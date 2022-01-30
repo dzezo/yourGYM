@@ -181,9 +181,9 @@ module.exports.removeMember = function(memberId, callback){
 module.exports.removeMembership = function(memberId, membershipId, res){
 	Member.findById(memberId, function(err, member){
 		if (err) 
-			return res.json({success: false, msg: 'Member not found.'});
+			return res.status(404).json({success: false, msg: 'Member not found.'});
 		if (member.memberships.length == 1)
-			return res.json({success: false, msg: 'Member must have at least one membership.'});
+			return res.status(403).json({success: false, msg: 'Member must have at least one membership.'});
 		var counter = 0;
 		member.memberships.forEach(membership =>{
 			if(membership._id == membershipId){
